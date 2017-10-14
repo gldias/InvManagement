@@ -7,12 +7,10 @@ import java.util.List;
  */
 public class Order {
     private String id;
-    private List<Pallet> pallets;
     private String destination;
 
-    public Order(String id, List<Pallet> pallets, String destination) {
+    public Order(String id, String destination) {
         this.id = id;
-        this.pallets = pallets;
         this.destination = destination;
     }
 
@@ -22,14 +20,6 @@ public class Order {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public List<Pallet> getPallets() {
-        return pallets;
-    }
-
-    public void setPallets(List<Pallet> pallets) {
-        this.pallets = pallets;
     }
 
     public String getDestination() {
