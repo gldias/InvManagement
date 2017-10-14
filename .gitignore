@@ -28,6 +28,7 @@ build/
 cmake-build-debug/
 
 # Mongo Explorer plugin:
+/InvManagement.iml
 .idea/**/mongoSettings.xml
 
 ## File-based project format:
