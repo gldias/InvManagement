@@ -51,4 +51,21 @@ public class Order {
         double totalWeight = 0;
         return totalWeight;
     }
+
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+
+        if(!(o instanceof Order)){
+            return false;
+        }
+
+        Order order = (Order) o;
+        return order.getId().equals(this.getId());
+    }
+
+    public int hashCode(){
+        return id.hashCode();
+    }
 }

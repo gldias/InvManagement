@@ -36,4 +36,21 @@ public class Product extends Item {
         category = _category;
     }
 
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+
+        if(!(o instanceof Product)){
+            return false;
+        }
+
+        Product p = (Product) o;
+        return p.getSKU().equals(this.getSKU());
+    }
+
+    public int hashCode(){
+        return SKU.hashCode();
+    }
+
 }

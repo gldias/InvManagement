@@ -17,4 +17,21 @@ public class Part extends Item {
     public void setId(String _id){
         id = _id;
     }
+
+    public boolean equals(Object o){
+        if(this == o){
+            return true;
+        }
+
+        if(!(o instanceof Part)){
+            return false;
+        }
+
+        Part p = (Part) o;
+        return p.getId().equals(this.getId());
+    }
+
+    public int hashCode(){
+        return id.hashCode();
+    }
 }
