@@ -13,9 +13,19 @@
   <body>
 
     <ul>
-      <li> <button>View Products</button> </li>
+      <li> <button ONCLICK="redirectProduct()">View Products</button> </li>
       <li> <button>View Parts</button> </li>
       <li> <button>View Orders</button> </li>
+      <br/>
+      <%
+        // Example of java code in a jsp page
+        out.println("IP Address: " + request.getRemoteAddr());
+      %>
+      <script language="JavaScript">
+        function redirectProduct(){
+            window.location.href = 'products.jsp';
+        }
+      </script>
     </ul>
 
   </body>
