@@ -54,8 +54,7 @@ public class OrderManager {
      * @return a collection of orders
      */
     public Collection<Order> getOrders(){
-        return null;
-        //todo
+        return this.orders;
     }
 
     /**
@@ -78,12 +77,17 @@ public class OrderManager {
      * @return the updated order
      */
     public Order addToOrder(Order order, Product product,int quantity){
-        return null;
-        //todo
+        if(order.getItems().containsKey(product)){
+            order.getItems().put(product, order.getItems().get(product) + quantity);
+        }
+        else{
+            order.getItems().put(product, quantity);
+        }
+        return order;
     }
 
     /**
-     * Removes given quantity of a given froduct from a given order.
+     * Removes given quantity of a given product from a given order.
      *
      * @param order the order to remove from
      * @param product the product to remove a quantity of
@@ -91,8 +95,14 @@ public class OrderManager {
      * @return the updated order
      */
     public Order removeFromOrder(Order order, Product product, int quantity){
-        return null;
-        //todo
+        int orderQuantity = order.getItems().get(product);
+        if(orderQuantity < quantity){
+            order.getItems().remove(product);
+        }
+        else{
+            order.getItems().put(product, orderQuantity - quantity);
+        }
+        return order;
     }
 
     /**
@@ -102,7 +112,7 @@ public class OrderManager {
      * @return the removed order
      */
     public Order removeOrder(Order order){
-        return null;
-        //todo
+        this.orders.remove(order);
+        return order;
     }
 }
