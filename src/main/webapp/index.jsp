@@ -19,7 +19,7 @@
       <br/>
       <%
         // Example of java code in a jsp page
-        out.println("IP Address: " + request.getRemoteAddr());
+        System.out.println("IP Address: " + request.getRemoteAddr());
       %>
       <script language="JavaScript">
         function redirectProduct(){
