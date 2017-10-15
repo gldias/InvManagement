@@ -23,8 +23,7 @@ public class OrderManager {
      * @return created Order
      */
     public Order CreateOrder(){
-        return null;
-        //todo
+        return new Order();
     }
 
     /**

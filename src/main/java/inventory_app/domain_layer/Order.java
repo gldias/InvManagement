@@ -18,6 +18,12 @@ public class Order {
         this.destination = destination;
     }
 
+    public Order(){
+        this.id = "0";
+        this.items = new HashMap<>();
+        this.destination = "ND";
+    }
+
     public String getId() {
         return id;
     }
