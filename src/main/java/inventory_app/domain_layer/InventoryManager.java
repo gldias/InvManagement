@@ -3,10 +3,9 @@ package inventory_app.domain_layer;
 import java.util.*;
 
 /**
- * Responsible for managing inventory objects and the data mapper
+ * Responsible for managing item objects and their data mappers
  *
- * All inventory CRUD operations are done through this class
- * All organizing of part-whole relationships between inventory objects is done through this class
+ * All item related CRUD operations are done through this class
  */
 public class InventoryManager {
     Set<Part> parts;
