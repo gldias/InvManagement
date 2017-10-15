@@ -13,4 +13,8 @@ public class Part extends Item {
     public String getId() {
         return id;
     }
+
+    public void setId(String _id){
+        id = _id;
+    }
 }
