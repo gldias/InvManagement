@@ -6,4 +6,5 @@ package inventory_app.domain_layer;
 public abstract class Item {
     private double weight;
     private String name;
+    private int quantity;
 }
