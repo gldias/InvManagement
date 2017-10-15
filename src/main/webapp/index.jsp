@@ -11,6 +11,12 @@
     <title>Inventory Management</title>
   </head>
   <body>
-  Hello World
+
+    <ul>
+      <li> <button>View Products</button> </li>
+      <li> <button>View Parts</button> </li>
+      <li> <button>View Orders</button> </li>
+    </ul>
+
   </body>
 </html>
