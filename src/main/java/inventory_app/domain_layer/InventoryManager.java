@@ -1,5 +1,7 @@
 package inventory_app.domain_layer;
 
+import inventory_app.data_mappers.mapperInterface;
+
 import java.util.*;
 
 /**
@@ -8,24 +10,33 @@ import java.util.*;
  * All item related CRUD operations are done through this class
  */
 public class InventoryManager {
+
+    //data duplication necessary for performance
     Set<Part> parts;
     Set<Product> products;
-    Set<Order> orders;
+
+    mapperInterface partMapper;
+    mapperInterface productMapper;
 
     public InventoryManager(){
         //maybe change these to hashmaps? with SKU as the key?
         parts = new HashSet<>();
         products = new HashSet<>();
-        orders = new HashSet<>();
+
+        //todo replace these with actual Mappers
+        partMapper = null;
+        productMapper = null;
     }
 
     /**
      * Creates and stores a new product with default attributes.
      */
     public Product createProduct(){
-        //will have to have a different SKU each time?
-        return null;
-        //todo
+        Product p = new Product();
+
+        products.add(p);
+        productMapper.insert(p);
+        return p;
     }
 
     /**
@@ -37,8 +48,11 @@ public class InventoryManager {
      * @param weight weight of given product in pounds(Ibs)
      */
     public Product createProduct(String name, ProductCategory category, String SKU, double weight){
-        return null;
-        //todo
+        Product p = new Product(name, category, SKU, weight);
+
+        products.add(p);
+        productMapper.insert(p);
+        return p;
     }
 
     /**
@@ -47,16 +61,20 @@ public class InventoryManager {
      * @param SKU
      */
     public Product getProduct(String SKU){
+
+        for(Product p : products){
+            if(SKU == p.getSKU()){
+                return p;
+            }
+        }
         return null;
-        //todo
     }
 
     /**
      * Shows all products
      */
     public Collection<Product> getProducts(){
-        return null;
-        //todo
+        return products;
     }
 
     /**
@@ -74,8 +92,9 @@ public class InventoryManager {
      *  for each key mapped to true, it will narrow based on partial keywords
      */
     public Collection<Product> getProducts(HashMap<String,String> searchCriteria, HashMap<String, Boolean> partialMatch){
+        //
         return null;
-        //todo
+        //todo low priority
     }
 
     /**
@@ -87,8 +106,23 @@ public class InventoryManager {
      * @param weight weight of given product in pounds(Ibs)
      */
     public Product updateProduct(String name, ProductCategory category, String SKU, double weight){
-        return null;
-        //todo
+
+        /**
+        Product p = new Product(SKU, category, name, weight);
+
+        if(products.contains(p)) {
+            deleteProduct(p);
+            createProduct(SKU, category, name, weight);
+        }
+         */
+        Product product = getProduct(SKU);
+
+        if(product == null){
+            return null;
+        }
+
+        deleteProduct(SKU);
+        return createProduct(name, category, SKU, weight);
     }
 
     /**
@@ -96,8 +130,9 @@ public class InventoryManager {
      * @param SKU identifier of the product to be removed
      */
     public Product deleteProduct(String SKU){
-        return null;
-        //todo
+        Product p = getProduct(SKU);
+        deleteProduct(p);
+        return p;
     }
 
     /**
@@ -105,8 +140,8 @@ public class InventoryManager {
      * @param product the product to be removed
      */
     public Product deleteProduct(Product product){
-        return null;
-        //todo
+        products.remove(product);
+        return product;
     }
 
     /**
