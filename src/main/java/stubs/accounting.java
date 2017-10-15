@@ -5,10 +5,11 @@ package stubs;
  */
 public class accounting {
     /**
-     * Checks the funds available to inventory for parts orders
-     * @return the amount of fund left in our budget
+     * Stub for checking funds when making a parts order
+     * @param amount - the amount of money being requested
+     * @return bool - whether there are enough funds do the order or not
      */
-    public double checkFunds(){
-        return 10000000;
+    public boolean checkFunds(double amount){
+        return true;
     }
 }

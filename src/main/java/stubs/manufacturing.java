@@ -18,9 +18,9 @@ public class manufacturing {
 
     /**
      * Sends parts to manufacturing for use in products
-     * @param partID
-     * @param quantity
-     * @return
+     * @param partID - ID of the part
+     * @param quantity - Quantity of the part
+     * @return boolean representing whether they received parts or not
      */
     public boolean sendParts(String partID, int quantity){
         // Only fails when manufacturing can not confirm they received parts
