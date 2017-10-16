@@ -122,7 +122,10 @@ public class InventoryManager {
         }
 
         deleteProduct(SKU);
-        return createProduct(name, category, SKU, weight);
+
+        product = createProduct(name, category, SKU, weight);
+        productMapper.update(product);
+        return product;
     }
 
     /**
@@ -140,7 +143,10 @@ public class InventoryManager {
      * @param product the product to be removed
      */
     public Product deleteProduct(Product product){
+
         products.remove(product);
+        productMapper.delete(product);
+
         return product;
     }
 
@@ -148,8 +154,7 @@ public class InventoryManager {
      * Creates and stores a new product with default attributes.
      */
     public Part createPart(){
-        //will have to have a different SKU each time?
-        return null;
+
         //todo
     }
 

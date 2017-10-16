@@ -6,6 +6,10 @@ package inventory_app.domain_layer;
 public class Part extends Item {
     private String id;
 
+    public Part(){
+        id = "0000";
+    }
+
     public Part(String id) {
         this.id = id;
     }
