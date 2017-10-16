@@ -270,20 +270,156 @@ public class InventoryManager {
         return deletePart(part);
     }
 
-    public void addProducts(Product product, int quantity){
-        //todo
+    /**
+     * Adds to the quantity of a product stored
+     *
+     * @param product the product being added to
+     * @param quantity the quantity of the product added
+     * @return the product whose quantity increased
+     */
+    public Product addProducts(Product product, int quantity){
+        if(!products.contains(product)){
+            //throw exception here?
+            assert false;
+        }
+
+        product.addQuantity(quantity);
+
+        products.add(product);
+        productMapper.update(product);
+
+        return product;
     }
 
-    public void removeProducts(Product product, int quantity){
-        //todo
+    /**
+     * Adds to the quantity of a product stored
+     *
+     * @param SKU the SKU of the product being added to
+     * @param quantity the quantity of the product added
+     * @return the product whose quantity increased
+     */
+    public Product addProducts(String SKU, int quantity){
+        Product product = getProduct(SKU);
+
+        if(product == null){
+            return null;
+        }
+
+        return addProducts(product, quantity);
     }
 
-    public void addParts(Part part, int quantity){
-        //todo
+    /**
+     * Subtracts from the quantity of a product stored
+     *
+     * @param product the product being subtracted from
+     * @param quantity the quantity of the product subtracted
+     * @return the product whose quantity decreased
+     */
+    public Product removeProducts(Product product, int quantity){
+        if(!products.contains(product)){
+            //throw exception here?
+            assert false;
+        }
+
+        product.subtractQuantity(quantity);
+
+        products.add(product);
+        productMapper.update(product);
+
+        return product;
     }
 
-    public void removeParts(Part part, int quantity){
-        //todo
+    /**
+     * Subtracts from the quantity of a product stored
+     *
+     * @param SKU the SKU of the product being subtracted from
+     * @param quantity the quantity of the product subtracted
+     * @return the product whose quantity decreased
+     */
+    public Product removeProduct(String SKU, int quantity){
+        Product product = getProduct(SKU);
+
+        if(product == null){
+            return null;
+        }
+
+        return removeProducts(product, quantity);
+    }
+
+    /**
+     * Adds to the quantity of a part stored
+     *
+     * @param part the part being added to
+     * @param quantity the quantity of the part added
+     * @return the part whose quantity increased
+     */
+    public Part addParts(Part part, int quantity){
+        if(!parts.contains(part)){
+            //throw exception here?
+            assert false;
+        }
+
+        part.addQuantity(quantity);
+
+        parts.add(part);
+        partMapper.update(part);
+
+        return part;
+    }
+
+    /**
+     * Adds to the quantity of a part stored
+     *
+     * @param id the id of the part being added to
+     * @param quantity the quantity of the part added
+     * @return the part whose quantity increased
+     */
+    public Part addParts(String id, int quantity){
+        Part part = getPart(id);
+
+        if(part == null){
+            return null;
+        }
+
+        return addParts(part, quantity);
+    }
+
+    /**
+     * Subtracts from the quantity of a part stored
+     *
+     * @param part the part being subtracted from
+     * @param quantity the quantity of the part subtracted
+     * @return the part whose quantity decreased
+     */
+    public Part removeParts(Part part, int quantity){
+        if(!parts.contains(part)){
+            //throw exception here?
+            assert false;
+        }
+
+        part.subtractQuantity(quantity);
+
+        parts.add(part);
+        partMapper.update(part);
+
+        return part;
+    }
+
+    /**
+     * Subtracts from the quantity of a part stored
+     *
+     * @param id the id of the part being subtracted from
+     * @param quantity the quantity of the part subtracted
+     * @return the part whose quantity decreased
+     */
+    public Part removeParts(String id, int quantity){
+        Part part = getPart(id);
+
+        if(part == null){
+            return null;
+        }
+
+        return removeParts(part, quantity);
     }
 
 }
