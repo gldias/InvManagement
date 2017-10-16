@@ -18,6 +18,8 @@ public class InventoryManager {
     mapperInterface partMapper;
     mapperInterface productMapper;
 
+    private static InventoryManager staticManager;
+
     public InventoryManager(){
         //maybe change these to hashmaps? with SKU as the key?
         parts = new HashSet<>();
@@ -422,4 +424,7 @@ public class InventoryManager {
         return removeParts(part, quantity);
     }
 
+    public static InventoryManager getStaticManager() {
+        return staticManager;
+    }
 }
