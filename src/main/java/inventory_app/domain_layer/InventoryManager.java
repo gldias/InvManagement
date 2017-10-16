@@ -1,6 +1,6 @@
 package inventory_app.domain_layer;
 
-import inventory_app.data_mappers.mapperInterface;
+import inventory_app.data_mappers.*;
 
 import java.util.*;
 
@@ -26,8 +26,8 @@ public class InventoryManager {
         products = new HashSet<>();
 
         //todo replace these with actual Mappers
-        partMapper = null;
-        productMapper = null;
+        partMapper = new ItemDM();
+        productMapper = new ItemDM();
     }
 
     /**
