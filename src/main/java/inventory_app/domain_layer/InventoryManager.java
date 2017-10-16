@@ -154,7 +154,7 @@ public class InventoryManager {
      * Creates and stores a new product with default attributes.
      */
     public Part createPart(){
-
+        return null;
         //todo
     }
 
