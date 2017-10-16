@@ -14,7 +14,7 @@ public class Product extends Item {
         category = ProductCategory.FASHION;
     }
 
-    public Product(String _SKU, ProductCategory _category, String _name, double _weight) {
+    public Product(String _name, ProductCategory _category, String _SKU, double _weight) {
         super(_name,_weight);
         SKU = _SKU;
         category = _category;
