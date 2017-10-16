@@ -18,7 +18,7 @@ public class InventoryManager {
     mapperInterface partMapper;
     mapperInterface productMapper;
 
-    private static InventoryManager staticManager;
+    private static InventoryManager staticManager = new InventoryManager();
 
     public InventoryManager(){
         //maybe change these to hashmaps? with SKU as the key?
