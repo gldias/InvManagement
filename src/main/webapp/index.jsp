@@ -14,8 +14,8 @@
 
     <ul>
       <li> <button ONCLICK="redirectProduct()">View Products</button> </li>
-      <li> <button>View Parts</button> </li>
-      <li> <button>View Orders</button> </li>
+      <li> <button ONCLICK="redirectParts">View Parts</button> </li>
+      <li> <button ONCLICK="redirectOrders">View Orders</button> </li>
       <br/>
       <%
         // Example of java code in a jsp page
@@ -24,6 +24,12 @@
       <script language="JavaScript">
         function redirectProduct(){
             window.location.href = 'products.jsp';
+        }
+        function redirectParts(){
+            window.location.href = 'parts.jsp';
+        }
+        function redirectOrders(){
+            window.location.href = 'orders.jsp';
         }
       </script>
     </ul>
