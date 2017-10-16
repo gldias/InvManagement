@@ -150,13 +150,24 @@ public class InventoryManager {
         return product;
     }
 
+    public Part createPart(Part part){
+
+        parts.add(part);
+        partMapper.insert(part);
+
+        return part;
+    }
+
     /**
      * Creates and stores a new product with default attributes.
      */
     public Part createPart(){
-        return null;
-        //todo
+
+        Part part = new Part();
+
+        return createPart(part);
     }
+
 
     /**
      * Creates and stores a new product with specified attributes.
@@ -167,8 +178,10 @@ public class InventoryManager {
      * @param weight weight of given part in pounds(Ibs)
      */
     public Part createPart(String name, PartCategory category, String id, double weight){
-        return null;
-        //todo
+
+        Part part = new Part(id,category,name,weight);
+
+        return createPart(part);
     }
 
     /**
@@ -177,16 +190,20 @@ public class InventoryManager {
      * @param id
      */
     public Part getPart(String id){
+        for(Part p : parts){
+            if(p.getId().equals(id)){
+                return p;
+            }
+        }
+
         return null;
-        //todo
     }
 
     /**
      * Shows all products
      */
     public Collection<Part> getParts(){
-        return null;
-        //todo
+        return parts;
     }
 
     /**
@@ -205,7 +222,7 @@ public class InventoryManager {
      */
     public Collection<Part> getParts(HashMap<String,String> searchCriteria, HashMap<String, Boolean> partialMatch){
         return null;
-        //todo
+        //todo low priority
     }
 
     /**
@@ -217,17 +234,18 @@ public class InventoryManager {
      * @param weight weight of given part in pounds(Ibs)
      */
     public Part updatePart(String name, PartCategory category, String id, double weight){
-        return null;
-        //todo
-    }
+        Part oldPart = getPart(id);
 
-    /**
-     * removes given product from the system
-     * @param id identifier of the part to be removed
-     */
-    public Part deletePart(String id){
-        return null;
-        //todo
+        if(oldPart == null){
+            return null;
+        }
+
+        Part updatedPart = new Part(id, category, name, weight);
+
+        parts.add(updatedPart);
+        partMapper.update(updatedPart);
+
+        return updatedPart;
     }
 
     /**
@@ -235,7 +253,21 @@ public class InventoryManager {
      * @param part the product to be removed
      */
     public Part deletePart(Part part){
-        return null;
+
+        parts.add(part);
+        partMapper.delete(part);
+
+        return part;
+    }
+
+    /**
+     * removes given product from the system
+     * @param id identifier of the part to be removed
+     */
+    public Part deletePart(String id){
+        Part part = getPart(id);
+
+        return deletePart(part);
     }
 
     public void addProducts(Product product, int quantity){

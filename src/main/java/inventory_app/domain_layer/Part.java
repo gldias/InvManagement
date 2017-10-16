@@ -5,13 +5,17 @@ package inventory_app.domain_layer;
  */
 public class Part extends Item {
     private String id;
+    private PartCategory category;
 
     public Part(){
         id = "0000";
+        category = PartCategory.CASING;
     }
 
-    public Part(String id) {
+    public Part(String id, PartCategory category, String name, double weight) {
+        super(name, weight);
         this.id = id;
+        this.category = category;
     }
 
     public String getId() {
@@ -37,5 +41,13 @@ public class Part extends Item {
 
     public int hashCode(){
         return id.hashCode();
+    }
+
+    public PartCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(PartCategory category) {
+        this.category = category;
     }
 }
