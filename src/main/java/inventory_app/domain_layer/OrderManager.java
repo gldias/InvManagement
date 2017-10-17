@@ -1,5 +1,8 @@
 package inventory_app.domain_layer;
 
+import inventory_app.data_mappers.OrderDM;
+import inventory_app.data_mappers.mapperInterface;
+
 import java.util.*;
 
 /**
@@ -10,12 +13,15 @@ import java.util.*;
 public class OrderManager {
     Set<Order> orders;
 
+    mapperInterface orderMapper;
+
     private static int idCount = 1;
 
     private static OrderManager staticManagerO = new OrderManager();
 
     public OrderManager(){
         orders = new HashSet<>();
+        orderMapper = new OrderDM();
     }
 
     /**
@@ -23,10 +29,12 @@ public class OrderManager {
      *
      * @return created Order
      */
-    public Order CreateOrder(){
+    public Order CreateOrder(String id){
         Order o = new Order();
+        o.setId(id);
 
         orders.add(o);
+        orderMapper.insert(o);
 
         return o;
     }
@@ -43,6 +51,7 @@ public class OrderManager {
         idCount++;
 
         orders.add(o);
+        orderMapper.insert(o);
 
         return o;
         //autogen id?
@@ -89,6 +98,18 @@ public class OrderManager {
     }
 
     /**
+     * Updates the identified order with the given product values.
+     *
+     * @param items a hashmap listing the item ids the order is keeping track of
+     * @return the updated order
+     */
+    public Order updateOrder(String id, HashMap<Item,Integer> items){
+        Order order = getOrder(id);
+
+        return updateOrder(order,items);
+    }
+
+    /**
      * Adds given quantity of a given product to a given order.
      *
      * @param order the order to add to
@@ -96,7 +117,7 @@ public class OrderManager {
      * @param quantity the quantity of the product to add
      * @return the updated order
      */
-    public Order addToOrder(Order order, Product product,int quantity){
+    public Order addProductToOrder(Order order, Product product,int quantity){
         if(order.getItems().containsKey(product)){
             order.getItems().put(product, order.getItems().get(product) + quantity);
         }
@@ -107,6 +128,24 @@ public class OrderManager {
     }
 
     /**
+     * Adds given quantity of an identified product to an identified order.
+     *
+     * @param orderId the id of the order to add to
+     * @param SKU the product to add a quantity of
+     * @param quantity the quantity of the product to add
+     * @return the updated order
+     */
+    public Order addProductToOrder(String orderId, String SKU, int quantity){
+        Order order = getOrder(orderId);
+
+        InventoryManager inventoryManager = InventoryManager.getStaticManager();
+
+        Product product = inventoryManager.getProduct(SKU);
+
+        return addProductToOrder(order, product, quantity);
+    }
+
+    /**
      * Removes given quantity of a given product from a given order.
      *
      * @param order the order to remove from
@@ -114,7 +153,7 @@ public class OrderManager {
      * @param quantity the quantity of the product to remove
      * @return the updated order
      */
-    public Order removeFromOrder(Order order, Product product, int quantity){
+    public Order removeProductFromOrder(Order order, Product product, int quantity){
         int orderQuantity = order.getItems().get(product);
         if(orderQuantity < quantity){
             order.getItems().remove(product);
@@ -126,6 +165,97 @@ public class OrderManager {
     }
 
     /**
+     * Removes given quantity of an identified product from an identified order.
+     *
+     * @param orderId the order to remove from
+     * @param SKU the product to remove a quantity of
+     * @param quantity the quantity of the product to remove
+     * @return the updated order
+     */
+    public Order removeProductFromOrder(String orderId, String SKU, int quantity){
+        Order order = getOrder(orderId);
+
+        InventoryManager inventoryManager = InventoryManager.getStaticManager();
+
+        Product product = inventoryManager.getProduct(SKU);
+
+        return removeProductFromOrder(order,product,quantity);
+    }
+
+    /**
+     * Adds given quantity of a given part to a given order.
+     *
+     * @param order the order to add to
+     * @param part the part to add a quantity of
+     * @param quantity the quantity of the part to add
+     * @return the updated order
+     */
+    public Order addPartToOrder(Order order, Part part,int quantity){
+        if(order.getItems().containsKey(part)){
+            order.getItems().put(part, order.getItems().get(part) + quantity);
+        }
+        else{
+            order.getItems().put(part, quantity);
+        }
+        return order;
+    }
+
+    /**
+     * Adds given quantity of an identified part to an identified order.
+     *
+     * @param orderId the id of the order to add to
+     * @param partId the product to add a quantity of
+     * @param quantity the quantity of the product to add
+     * @return the updated order
+     */
+    public Order addPartToOrder(String orderId, String partId, int quantity){
+        Order order = getOrder(orderId);
+
+        InventoryManager inventoryManager = InventoryManager.getStaticManager();
+
+        Part part = inventoryManager.getPart(partId);
+
+        return addPartToOrder(order, part, quantity);
+    }
+
+    /**
+     * Removes given quantity of a given part from a given order.
+     *
+     * @param order the order to remove from
+     * @param part the part to remove a quantity of
+     * @param quantity the quantity of the part to remove
+     * @return the updated order
+     */
+    public Order removePartFromOrder(Order order, Part part, int quantity){
+        int orderQuantity = order.getItems().get(part);
+        if(orderQuantity < quantity){
+            order.getItems().remove(part);
+        }
+        else{
+            order.getItems().put(part, orderQuantity - quantity);
+        }
+        return order;
+    }
+
+    /**
+     * Removes given quantity of an identified part from an identified order.
+     *
+     * @param orderId the order to remove from
+     * @param partId the part to remove a quantity of
+     * @param quantity the quantity of the part to remove
+     * @return the updated order
+     */
+    public Order removePartFromOrder(String orderId, String partId, int quantity){
+        Order order = getOrder(orderId);
+
+        InventoryManager inventoryManager = InventoryManager.getStaticManager();
+
+        Part part = inventoryManager.getPart(partId);
+
+        return removePartFromOrder(order,part,quantity);
+    }
+
+    /**
      * Removes a given order from the system
      *
      * @param order the order to remove
@@ -134,6 +264,18 @@ public class OrderManager {
     public Order removeOrder(Order order){
         this.orders.remove(order);
         return order;
+    }
+
+    /**
+     * Removes a given order from the system
+     *
+     * @param orderId the id of the order to remove
+     * @return the removed order
+     */
+    public Order removeOrder(String orderId){
+        Order order = getOrder(orderId);
+
+        return removeOrder(order);
     }
 
     public static OrderManager getStaticManager(){
