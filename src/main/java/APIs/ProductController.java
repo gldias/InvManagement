@@ -1,13 +1,10 @@
 package APIs;
 
-import inventory_app.domain_layer.InventoryManager;
-import inventory_app.domain_layer.OrderManager;
-import inventory_app.domain_layer.ProductCategory;
+import inventory_app.domain_layer.*;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import static spark.Spark.*;
 
@@ -17,9 +14,10 @@ public class ProductController {
 
     @GET
     @Path("/products/{sku}")
-    public String getProductInfo(@PathParam("sku") String sku) {
-        String name = InventoryManager.getStaticManager().getProduct(sku).getName();
-        return "<User>" + "<Name>" + sku + " " + name + "</Name>" + "</User>";
+    @Produces(MediaType.APPLICATION_JSON)
+    public Product getProductInfo(@PathParam("sku") String sku) {
+        Product product = InventoryManager.getStaticManager().getProduct(sku);
+        return product;
     }
 
     @GET
@@ -34,21 +32,27 @@ public class ProductController {
 
     @GET
     @Path("/parts/{id}/{quantity}")
-    public String requestMaterials(@PathParam("id") String partID, @PathParam("quantity") int quantity) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean requestMaterials(@PathParam("id") String partID, @PathParam("quantity") int quantity) {
         //TODO: EDGE CASES NOT FUNCTIONING WELL
+        boolean confirmed = false;
         int currentQuantity = InventoryManager.getStaticManager().getPart(partID).getQuantity();
-        String name = InventoryManager.getStaticManager().getPart(partID).getName();
+
         if (currentQuantity > quantity) {
             InventoryManager.getStaticManager().removeParts(partID, quantity);
-            return "<User>" + "<Name>" + partID + " " + name + " removed" + " " + quantity + " times" + "</Name>" + "</User>";
+            confirmed = true;
+            return confirmed;
         }
-        return "<User>" + "<Name>" + "Not enough " + partID + " " + name + "</Name>" + "</User>";
+        return confirmed;
     }
 
-    @GET
+    @POST
     @Path("/newOrder/{prodID}/{orderID}")
-    public String newOrder(@PathParam("prodID") String sku, @PathParam("orderID") String orderID) {
-
-        return "<User>" + "<Name>" + sku + "</Name>" + "</User>";
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response newOrder(@PathParam("prodID") String sku, @PathParam("orderID") String orderID) {
+        //TODO: Create Order through OrderManager when it is complete. Also, refine parameters in Order creation
+        Order order = new Order();
+        String result = "Order saved: " + order.getId();
+        return Response.status(201).entity(result).build();
     }
 }
