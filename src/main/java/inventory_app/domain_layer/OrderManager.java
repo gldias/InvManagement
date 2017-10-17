@@ -1,9 +1,6 @@
 package inventory_app.domain_layer;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Responsible for managing Order objects and their data mapper
@@ -12,6 +9,10 @@ import java.util.Set;
  */
 public class OrderManager {
     Set<Order> orders;
+
+    private static int idCount = 1;
+
+    private static OrderManager staticManagerO = new OrderManager();
 
     public OrderManager(){
         orders = new HashSet<>();
@@ -23,18 +24,28 @@ public class OrderManager {
      * @return created Order
      */
     public Order CreateOrder(){
-        return new Order();
+        Order o = new Order();
+
+        orders.add(o);
+
+        return o;
     }
 
     /**
      * Creates and stores a new order with given products and quantities.
      *
-     * @param products a hashmap of Products in the order (key) and their quantities (value)
+     * @param destination a string signifying the order's destination
+     * @param items a hashmap of Products in the order (key) and their quantities (value)
      * @return created Order
      */
-    public Order CreateOrder(HashMap<Product,Integer> products){
-        return null;
-        //todo
+    public Order CreateOrder(HashMap<Item,Integer> items, String destination){
+        Order o = new Order("" + idCount, items, destination);
+        idCount++;
+
+        orders.add(o);
+
+        return o;
+        //todo no destination in constructor
         //autogen id?
     }
 
@@ -45,8 +56,13 @@ public class OrderManager {
      * @return identified order
      */
     public Order getOrder(String id){
+        for(Order o : orders){
+            if(o.getId().equals(id)){
+                return o;
+            }
+        }
+
         return null;
-        //todo
     }
 
     /**
@@ -60,12 +76,18 @@ public class OrderManager {
     /**
      * Updates a given order with the given product values.
      *
-     * @param products
+     * @param items a hashmap listing the items the order is keeping track of
      * @return the updated order
      */
-    public Order updateOrder(Order order, HashMap<Product,Integer> products){
+    public Order updateOrder(Order order, HashMap<Item,Integer> items){
+        for(Order o : orders){
+            if(order.getId().equals(o.getId())){
+                o.setItems(items);
+            }
+        }
+
         return null;
-        //todo
+        //todo "check if looking up by id or sending full order" "Item was Product in hashmap?" "no update: create?"
     }
 
     /**
