@@ -29,7 +29,7 @@ public class OrderManager {
      *
      * @return created Order
      */
-    public Order CreateOrder(String id){
+    public Order createOrder(String id){
         Order o = new Order();
         o.setId(id);
 
@@ -46,7 +46,7 @@ public class OrderManager {
      * @param items a hashmap of Products in the order (key) and their quantities (value)
      * @return created Order
      */
-    public Order CreateOrder(HashMap<Item,Integer> items, String destination){
+    public Order createOrder(HashMap<Item,Integer> items, String destination){
         Order o = new Order("" + idCount, items, destination);
         idCount++;
 

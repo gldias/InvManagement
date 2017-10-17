@@ -1,6 +1,7 @@
 package APIs;
 
 import inventory_app.domain_layer.InventoryManager;
+import inventory_app.domain_layer.OrderManager;
 import inventory_app.domain_layer.PartCategory;
 import inventory_app.domain_layer.ProductCategory;
 
@@ -25,6 +26,14 @@ public class MyApplication extends Application {
         InventoryManager.getStaticManager().createPart("TestPart2", PartCategory.SCREEN, "0002", 0.01);
         InventoryManager.getStaticManager().createPart("TestPart3", PartCategory.ANTENNA, "0003", 0.01);
 
+        OrderManager.getStaticManager().createOrder("01");
+        OrderManager.getStaticManager().addPartToOrder("01","0001",200);
+        OrderManager.getStaticManager().addPartToOrder("01","0002",150);
+
+
+        OrderManager.getStaticManager().createOrder("02");
+        OrderManager.getStaticManager().addProductToOrder("02","0001",20);
+        OrderManager.getStaticManager().addProductToOrder("02","0002",3);
 
         classes.add(ProductController.class);
         return classes;
