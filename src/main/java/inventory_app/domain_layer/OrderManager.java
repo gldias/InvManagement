@@ -45,7 +45,6 @@ public class OrderManager {
         orders.add(o);
 
         return o;
-        //todo no destination in constructor
         //autogen id?
     }
 
@@ -87,7 +86,6 @@ public class OrderManager {
         }
 
         return null;
-        //todo "check if looking up by id or sending full order" "Item was Product in hashmap?" "no update: create?"
     }
 
     /**
@@ -136,5 +134,9 @@ public class OrderManager {
     public Order removeOrder(Order order){
         this.orders.remove(order);
         return order;
+    }
+
+    public static OrderManager getStaticManager(){
+        return staticManagerO;
     }
 }
