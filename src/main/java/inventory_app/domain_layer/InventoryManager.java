@@ -75,7 +75,7 @@ public class InventoryManager {
     /**
      * Shows all products
      */
-    public Collection<Product> getProducts(){
+    public Set<Product> getProducts(){
         return products;
     }
 
@@ -204,7 +204,7 @@ public class InventoryManager {
     /**
      * Shows all products
      */
-    public Collection<Part> getParts(){
+    public Set<Part> getParts(){
         return parts;
     }
 
