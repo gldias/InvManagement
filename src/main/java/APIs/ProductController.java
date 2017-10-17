@@ -46,7 +46,7 @@ public class ProductController {
         return confirmed;
     }
 
-    @POST
+    @GET
     @Path("/newOrder/{prodID}/{orderID}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newOrder(@PathParam("prodID") String sku, @PathParam("orderID") String orderID) {
