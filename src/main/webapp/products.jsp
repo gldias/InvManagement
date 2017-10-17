@@ -1,3 +1,4 @@
+<%@ page import="inventory_app.Application" %>
 <%--
   Created by IntelliJ IDEA.
   User: Hunter

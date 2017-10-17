@@ -1,4 +1,5 @@
-<%@ page import="inventory_app.Application" %><%--
+<%@ page import="inventory_app.Application" %>
+<%--
   Created by IntelliJ IDEA.
   User: guidi
   Date: 10/14/2017
