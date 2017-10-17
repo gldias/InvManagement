@@ -1,4 +1,6 @@
 <%@ page import="inventory_app.Application" %>
+<%@ page import="inventory_app.domain_layer.Product" %>
+<%@ page import="inventory_app.domain_layer.InventoryManager" %>
 <%--
   Created by IntelliJ IDEA.
   User: Hunter
@@ -17,12 +19,23 @@
         <th>Name</th>
         <th>Category</th>
         <th>SKU</th>
+        <th>Weight</th>
+        <th>Quantity</th>
     </tr>
+    <%
+        InventoryManager manager = InventoryManager.getStaticManager();
+        for(Product p : manager.getProducts()){
+    %>
     <tr>
-        <%
-            // TODO Populate the table
-        %>
+        <td><%=p.getName()%></td>
+        <td><%=p.getCategory()%></td>
+        <td><%=p.getSKU()%></td>
+        <td><%=p.getWeight()%></td>
+        <td><%=p.getQuantity()%></td>
     </tr>
+    <%
+        }
+    %>
 </table>
 </body>
 </html>
