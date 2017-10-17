@@ -244,6 +244,7 @@ public class InventoryManager {
 
         Part updatedPart = new Part(id, category, name, weight);
 
+        parts.remove(oldPart);
         parts.add(updatedPart);
         partMapper.update(updatedPart);
 
@@ -256,7 +257,7 @@ public class InventoryManager {
      */
     public Part deletePart(Part part){
 
-        parts.add(part);
+        parts.remove(part);
         partMapper.delete(part);
 
         return part;
@@ -338,7 +339,7 @@ public class InventoryManager {
      * @param quantity the quantity of the product subtracted
      * @return the product whose quantity decreased
      */
-    public Product removeProduct(String SKU, int quantity){
+    public Product removeProducts(String SKU, int quantity){
         Product product = getProduct(SKU);
 
         if(product == null){
