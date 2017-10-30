@@ -1,8 +1,5 @@
 package inventory_app;
-import inventory_app.domain_layer.InventoryManager;
-import inventory_app.domain_layer.PartCategory;
-import inventory_app.domain_layer.Product;
-import inventory_app.domain_layer.ProductCategory;
+import inventory_app.domain_layer.*;
 
 import static spark.Spark.*;
 
@@ -22,8 +19,6 @@ public class Application{
         manager.createPart("TestPart2", PartCategory.SCREEN, "0002", 0.01);
         manager.createPart("TestPart3", PartCategory.ANTENNA, "0003", 0.01);
 
-        System.out.println(manager.getPart("0001").getQuantity());
-        manager.removeParts("0001", 9);
-        System.out.println(manager.getPart("0001").getQuantity());
+        Order order = new Order();
     }
 }
