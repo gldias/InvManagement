@@ -5,13 +5,12 @@ package stubs;
  */
 
 public class sales {
-    /**
-     * Stub for confirming an order
-     * @param id - the order ID
-     * @return boolean - whether the order is confirmed or not
-     */
-    public boolean confirmOrder(String id){
-        return true;
+        /**
+         * Stub for confirming an order
+         * @param id - the order ID
+         */
+    public void confirmOrder(String id){
+
     }
 
     /**
