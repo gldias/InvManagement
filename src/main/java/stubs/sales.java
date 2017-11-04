@@ -13,11 +13,4 @@ public class sales {
 
     }
 
-    /**
-     * Stub for updating sales on the price of a product based on the components
-     * @param id - the ID of the product
-     * @param price - the base price
-     */
-    public void getProductBasePrice(String id, double price){}
-
 }
