@@ -41,7 +41,7 @@ public class ProductController {
     @GET
     @Path("/parts/{id}/{quantity}")
     @Produces(MediaType.APPLICATION_JSON)
-    public HashMap<String, Boolean> requestMaterials(@PathParam("id") String partID, @PathParam("quantity") int quantity) {
+    public HashMap<String, Boolean> requestParts(@PathParam("id") String partID, @PathParam("quantity") int quantity) {
         HashMap<String, Boolean> result = new HashMap<>();
         result.put("confirmed", false);
         int currentQuantity = InventoryManager.getStaticManager().getPart(partID).getQuantity();
