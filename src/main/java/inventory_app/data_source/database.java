@@ -40,7 +40,7 @@ public class database {
             writeResultSet(resultSet);
 
             // PreparedStatements can use variables and are more efficient
-            preparedStatement = connect.prepareStatement("INSERT INTO parts VALUES (12, 'PSU', 200, 65, 3)");
+            preparedStatement = connect.prepareStatement("INSERT INTO parts VALUES (13, 'GPU', 1000, 250, 5)");
 /*
             // "myuser, webpage, datum, summary, COMMENTS from feedback.comments");
             // Parameters start with 1
@@ -49,7 +49,8 @@ public class database {
             preparedStatement.setString(3, "TestWebpage");
             preparedStatement.setDate(4, new java.sql.Date(2009, 12, 11));
             preparedStatement.setString(5, "TestSummary");
-            preparedStatement.setString(6, "TestComment");*/
+            preparedStatement.setString(6, "TestComment");
+*/
             preparedStatement.executeUpdate();
             System.out.println("Insert PSU");
 /*
@@ -67,9 +68,10 @@ public class database {
             System.out.println("Reprint...");
 
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("ClassNotFound error...");
             System.exit(1);
         }catch(SQLException e) {
+            System.out.println("SQL error...");
             System.exit(2);
         } finally {
             close();
@@ -101,11 +103,11 @@ public class database {
             int summary = resultSet.getInt("quantity");
             int date = resultSet.getInt("buy_price");
             int comment = resultSet.getInt("weight");
-            System.out.println("ID: " + user);
-            System.out.println("Name: " + website);
-            System.out.println("Quantity: " + summary);
-            System.out.println("Price: " + date);
-            System.out.println("Weight: " + comment);
+            System.out.print("ID: " + user);
+            System.out.print(", Name: " + website);
+            System.out.print(", Quantity: " + summary);
+            System.out.print(", Price: " + date);
+            System.out.println(", Weight: " + comment);
         }
     }
 
