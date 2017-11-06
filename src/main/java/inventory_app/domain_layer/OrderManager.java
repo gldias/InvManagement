@@ -281,6 +281,7 @@ public class OrderManager {
     }
 
     public void confirmOrderWithSales(String order_id){
+        //confirm order?
         sales.getSales().confirmOrder(order_id);
     }
 

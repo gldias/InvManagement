@@ -55,7 +55,8 @@ public class manufacturing {
         boolean success = occasionalFailure(index);
 
         if(success){
-            new ProductController().sendOrderFulfillment(String.format("%s/%d/internal",productID,quantity));
+            new ProductController().sendOrderFulfillment(String.format("{ " +
+                    "\"product_sku\": \"%s\", \"quantity\": %d, \"flag\": \"internal\"}",productID,quantity));
         }
 
         return success;

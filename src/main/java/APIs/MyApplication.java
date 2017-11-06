@@ -35,6 +35,8 @@ public class MyApplication extends Application {
         OrderManager.getStaticManager().addProductToOrder("02","0001",20);
         OrderManager.getStaticManager().addProductToOrder("02","0002",3);
 
+        OrderManager.getStaticManager().orderProductsFromManufacturing("0001", 7, "headgear");
+
         classes.add(ProductController.class);
         return classes;
     }
