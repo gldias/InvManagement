@@ -15,7 +15,6 @@ public class sales {
      * @param id - the order ID
      */
     public void confirmOrder(String id){
-
     }
 
     public static sales getSales(){

@@ -7,7 +7,26 @@ public class manufacturing {
 
     private static manufacturing singleManufacturing = null;
 
+    private int orderSuccessCursor;
+
+    private int sendPartsSuccessCursor;
+
     private manufacturing(){
+        orderSuccessCursor = 0;
+        sendPartsSuccessCursor = 0;
+    }
+
+    /**
+     * Simulates deterministic occasional failure, given a cursor position
+     *
+     * @param cursor location in the array
+     * @return result at cursor location
+     */
+    private boolean occasionalFailure(int cursor){
+        boolean[] successArray = {true, true, false, true, true};
+
+        return successArray[cursor];
+
 
     }
 
@@ -19,8 +38,17 @@ public class manufacturing {
      * @return boolean representing whether manufacturing started or not
      */
     public boolean orderRequest(String productID, int quantity, String orderType){
-        // Would only fail in cases where manufacturing could not receive the request
-        return true;
+
+        int index = orderSuccessCursor;
+
+        orderSuccessCursor++;
+
+        //loops cursor
+        if(orderSuccessCursor > 4){
+            orderSuccessCursor = 0;
+        }
+
+        return occasionalFailure(index);
     }
 
     /**
@@ -31,8 +59,17 @@ public class manufacturing {
      */
     public boolean sendParts(String partID, int quantity){
         // Only fails when manufacturing can not confirm they received parts
-        // for sake of simulation manufacturing has 100% uptime
-        return true;
+
+        int index = sendPartsSuccessCursor;
+
+        sendPartsSuccessCursor++;
+
+        //loops cursor
+        if(sendPartsSuccessCursor > 4){
+            sendPartsSuccessCursor = 0;
+        }
+
+        return occasionalFailure(index);
     }
 
     public static manufacturing getManufacturing(){
@@ -41,5 +78,9 @@ public class manufacturing {
         }
 
         return singleManufacturing;
+    }
+
+    public static void resetManufacturing(){
+        singleManufacturing = null;
     }
 }
