@@ -38,6 +38,7 @@ public class ItemDM implements mapperInterface {
                     ", " + product.getName() +
                     ", " + product.getQuantity() +
                     ", " + product.getCategory() +
+                    ", " + /*product.getRefurbished()*/0 +
                     ", " + product.getWeight() + ")";
         }
 
@@ -79,6 +80,7 @@ public class ItemDM implements mapperInterface {
                     " name = " + product.getName() +
                     ", quantity = " + product.getQuantity() +
                     ", class = " + product.getCategory() +
+                    ", " + /*product.getRefurbished()*/0 +
                     ", weight = " + product.getWeight() +
                     " WHERE part_id = " + product.getSKU();
         }
