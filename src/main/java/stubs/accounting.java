@@ -41,4 +41,8 @@ public class accounting {
 
         return singleAccounting;
     }
+
+    public static void resetAccounting(){
+        singleAccounting = null;
+    }
 }

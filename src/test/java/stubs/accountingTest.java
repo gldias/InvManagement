@@ -1,5 +1,6 @@
 package stubs;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +15,12 @@ public class accountingTest {
 
     @Before
     public void setup(){
-        accountingStub = new accounting();
+        accountingStub = accounting.getAccounting();
+    }
+
+    @After
+    public void teardown(){
+        accounting.resetAccounting();
     }
 
     @Test
