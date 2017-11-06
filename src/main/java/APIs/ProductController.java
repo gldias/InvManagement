@@ -70,6 +70,7 @@ public class ProductController {
         toOrder.put(product, quantity);
 
         Order order = OrderManager.getStaticManager().createOrder(toOrder, destination);
+        OrderManager.getStaticManager().confirmOrderWithSales(order.getId());
 
         HashMap<String, String> result = new HashMap<>();
         result.put("orderID", order.getId());

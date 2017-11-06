@@ -2,6 +2,8 @@ package inventory_app.domain_layer;
 
 import inventory_app.data_mappers.OrderDM;
 import inventory_app.data_mappers.mapperInterface;
+import stubs.manufacturing;
+import stubs.sales;
 
 import java.util.*;
 
@@ -276,6 +278,10 @@ public class OrderManager {
         Order order = getOrder(orderId);
 
         return removeOrder(order);
+    }
+
+    public void confirmOrderWithSales(String order_id){
+        sales.getSales().confirmOrder(order_id);
     }
 
     public static OrderManager getStaticManager(){
