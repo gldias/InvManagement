@@ -1,5 +1,9 @@
 package stubs;
 
+import APIs.ProductController;
+
+import static org.eclipse.jetty.webapp.Origin.API;
+
 /**
  * Stub for API calls inventory_app will make to the manufacturing silo
  */
@@ -48,7 +52,13 @@ public class manufacturing {
             orderSuccessCursor = 0;
         }
 
-        return occasionalFailure(index);
+        boolean success = occasionalFailure(index);
+
+        if(success){
+            new ProductController().sendOrderFulfillment(String.format("%s,%d,%s",productID,quantity,orderType));
+        }
+
+        return success;
     }
 
     /**

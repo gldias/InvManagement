@@ -284,6 +284,20 @@ public class OrderManager {
         sales.getSales().confirmOrder(order_id);
     }
 
+    public boolean orderProductsFromManufacturing(String sku, int quantity, String orderType){
+        return manufacturing.getManufacturing().orderRequest(sku,quantity,orderType);
+    }
+
+    public boolean sendPartsToManufacturing(String part_id, int quantity){
+        boolean success =  manufacturing.getManufacturing().sendParts(part_id,quantity);
+
+        if(success){
+            InventoryManager.getStaticManager().removeParts(part_id,quantity);
+        }
+
+        return success;
+    }
+
     public static OrderManager getStaticManager(){
         return staticManagerO;
     }
