@@ -4,6 +4,13 @@ package stubs;
  * Stub for API calls inventory_app will make to the manufacturing silo
  */
 public class manufacturing {
+
+    private static manufacturing singleManufacturing = null;
+
+    private manufacturing(){
+
+    }
+
     /**
      * Requests an order to manufacturing, whether refurb, internal, or order ID
      * @param productID - the ID of the product
@@ -26,5 +33,13 @@ public class manufacturing {
         // Only fails when manufacturing can not confirm they received parts
         // for sake of simulation manufacturing has 100% uptime
         return true;
+    }
+
+    public static manufacturing getManufacturing(){
+        if(singleManufacturing == null){
+            singleManufacturing = new manufacturing();
+        }
+
+        return singleManufacturing;
     }
 }

@@ -7,8 +7,9 @@ public class accounting {
 
     private int funds;
     private static double epsilon = .000001;
+    public static accounting singleAccounting = null;
 
-    public accounting(){
+    private accounting(){
         funds = 2000;
     }
 
@@ -31,5 +32,13 @@ public class accounting {
         }
 
         return false;
+    }
+
+    public static accounting getAccounting(){
+        if(singleAccounting == null){
+            singleAccounting  = new accounting();
+        }
+
+        return singleAccounting;
     }
 }
