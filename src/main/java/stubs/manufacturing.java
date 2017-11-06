@@ -55,7 +55,7 @@ public class manufacturing {
         boolean success = occasionalFailure(index);
 
         if(success){
-            new ProductController().sendOrderFulfillment(String.format("%s/%d/%s",productID,quantity,orderType));
+            new ProductController().sendOrderFulfillment(String.format("%s/%d/internal",productID,quantity));
         }
 
         return success;
