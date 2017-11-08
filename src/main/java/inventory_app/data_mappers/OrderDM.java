@@ -33,10 +33,10 @@ public class OrderDM implements mapperInterface {
         Order order = (Order) o;
         for (int i = 0; i < order.getItems().size(); i++) {
             if (order.getItems().keySet().toArray()[i] instanceof Product) {
-                //Print statements for debugging purposes
+                /*Print statements for debugging purposes
                 System.out.println(order.getId());
                 System.out.println(((Product)order.getItems().keySet().toArray()[0]).getSKU());
-                System.out.println((int)order.getItems().values().toArray()[i]);
+                System.out.println((int)order.getItems().values().toArray()[i]); */
 
                 line = "INSERT INTO 'product_orders' ('order_id', 'product_id', 'quantity') VALUES(?, ?, ?)";
                 try {
@@ -52,10 +52,10 @@ public class OrderDM implements mapperInterface {
             }
 
             else if (order.getItems().keySet().toArray()[i] instanceof Part) {
-                //Print statements for debugging purposes
+                /*Print statements for debugging purposes
                 System.out.println(order.getId());
                 System.out.println(((Part)order.getItems().keySet().toArray()[0]).getId());
-                System.out.println((int)order.getItems().values().toArray()[i]);
+                System.out.println((int)order.getItems().values().toArray()[i]); */
 
                 line = "INSERT INTO 'part_orders' ('order_id', 'part_id', 'quantity') VALUES(?, ?, ?)";
                 try {
@@ -71,7 +71,6 @@ public class OrderDM implements mapperInterface {
                 }
             }
 
-            else { return false; }
         }
         close();
 
@@ -96,21 +95,20 @@ public class OrderDM implements mapperInterface {
         Order order = (Order) o;
 
         for (int i = 0; i < order.getItems().size(); i++) {
-            if (order.getItems().keySet().toArray()[0] instanceof Product) {
+            if (order.getItems().keySet().toArray()[i] instanceof Product) {
                 line = "UPDATE product_orders SET" +
                         " quantity = " + order.getItems().values().toArray()[i] +
                         " WHERE order_id = " + order.getId() +
                         " AND product_id = " + ((Product) order.getItems().keySet().toArray()[i]).getSKU();
             }
 
-            else if (order.getItems().keySet().toArray()[0] instanceof Part) {
+            else if (order.getItems().keySet().toArray()[i] instanceof Part) {
                 line = "UPDATE part_orders SET" +
                         " quantity = " + order.getItems().values().toArray()[i] +
                         " WHERE order_id = " + order.getId() +
-                        " AND part_id = " + ((Product) order.getItems().keySet().toArray()[i]).getSKU();
+                        " AND part_id = " + ((Part) order.getItems().keySet().toArray()[i]).getId();
             }
 
-            else { return false; }
 
             try {
                 preparedStatement = connect.prepareStatement(line);
@@ -144,8 +142,6 @@ public class OrderDM implements mapperInterface {
 
         else if (order.getItems().keySet().toArray()[0] instanceof Part)
             line = "DELETE FROM part_orders WHERE order_id = " + order.getId();
-
-        else { return false; }
 
 
         try {

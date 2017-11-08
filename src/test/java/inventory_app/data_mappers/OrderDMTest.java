@@ -35,13 +35,14 @@ public class OrderDMTest {
 
     @Test
     public void testUpdateOrder() {
-
+        order0.setId("0002");
+        assertEquals(true, dm.update(order0));
     }
 
     @Test
     public void testDeleteOrder() {
-        //dm.insert(this.order0);
-        //Order orderToDelete = this.order0;
-        //assertEquals(true, dm.delete(orderToDelete));
+        dm.insert(this.order0);
+        Order orderToDelete = this.order0;
+        assertEquals(true, dm.delete(orderToDelete));
     }
 }
