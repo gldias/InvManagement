@@ -60,6 +60,23 @@ public class OrderManager {
     }
 
     /**
+     * Creates and stores a new order with given products and quantities.
+     *
+     * @param destination a string signifying the order's destination
+     * @param items a hashmap of Products in the order (key) and their quantities (value)
+     * @return created Order
+     */
+    public Order createOrder(String order_id, HashMap<Item,Integer> items, String destination){
+        Order o = new Order(order_id, items, destination);
+
+        orders.add(o);
+        orderMapper.insert(o);
+
+        return o;
+        //autogen id?
+    }
+
+    /**
      * Returns the order with the given id.
      *
      * @param id an Order's identifier
@@ -89,7 +106,7 @@ public class OrderManager {
      * @param items a hashmap listing the items the order is keeping track of
      * @return the updated order
      */
-    public Order updateOrder(Order order, HashMap<Item,Integer> items){
+    private Order updateOrder(Order order, HashMap<Item,Integer> items){
         for(Order o : orders){
             if(order.getId().equals(o.getId())){
                 o.setItems(items);
@@ -119,7 +136,7 @@ public class OrderManager {
      * @param quantity the quantity of the product to add
      * @return the updated order
      */
-    public Order addProductToOrder(Order order, Product product,int quantity){
+    private Order addProductToOrder(Order order, Product product,int quantity){
         if(order.getItems().containsKey(product)){
             order.getItems().put(product, order.getItems().get(product) + quantity);
         }
@@ -155,7 +172,7 @@ public class OrderManager {
      * @param quantity the quantity of the product to remove
      * @return the updated order
      */
-    public Order removeProductFromOrder(Order order, Product product, int quantity){
+    private Order removeProductFromOrder(Order order, Product product, int quantity){
         int orderQuantity = order.getItems().get(product);
         if(orderQuantity < quantity){
             order.getItems().remove(product);
@@ -192,7 +209,7 @@ public class OrderManager {
      * @param quantity the quantity of the part to add
      * @return the updated order
      */
-    public Order addPartToOrder(Order order, Part part,int quantity){
+    private Order addPartToOrder(Order order, Part part,int quantity){
         if(order.getItems().containsKey(part)){
             order.getItems().put(part, order.getItems().get(part) + quantity);
         }
@@ -228,7 +245,7 @@ public class OrderManager {
      * @param quantity the quantity of the part to remove
      * @return the updated order
      */
-    public Order removePartFromOrder(Order order, Part part, int quantity){
+    private Order removePartFromOrder(Order order, Part part, int quantity){
         int orderQuantity = order.getItems().get(part);
         if(orderQuantity < quantity){
             order.getItems().remove(part);
@@ -263,7 +280,7 @@ public class OrderManager {
      * @param order the order to remove
      * @return the removed order
      */
-    public Order removeOrder(Order order){
+    private Order removeOrder(Order order){
         this.orders.remove(order);
         return order;
     }
