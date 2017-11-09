@@ -28,6 +28,22 @@ public class Order {
         return id;
     }
 
+    public int getQuantity(String id){
+
+        Part testPart = new Part(id,PartCategory.SCREEN,"name",0.0);
+
+        if(items.get(testPart) != null)
+            return items.get(testPart);
+
+        Product testProduct = new Product("name",ProductCategory.FASHION,id,0.0);
+
+        if(items.get(testProduct) != null){
+            return items.get(testProduct);
+        }
+
+        return 0;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -50,7 +66,7 @@ public class Order {
 
     /**
      * Calculates the total weight of the items in the order
-     * NOTE: Functionality is currently stubbed out
+     * NOTE: currently not functional (no use for this yet)
      * @return totalWeight
      */
     public double getTotalWeight() {

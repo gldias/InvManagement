@@ -174,7 +174,7 @@ public class OrderManager {
      */
     private Order removeProductFromOrder(Order order, Product product, int quantity){
         int orderQuantity = order.getItems().get(product);
-        if(orderQuantity < quantity){
+        if(orderQuantity <= quantity){
             order.getItems().remove(product);
         }
         else{
@@ -247,7 +247,7 @@ public class OrderManager {
      */
     private Order removePartFromOrder(Order order, Part part, int quantity){
         int orderQuantity = order.getItems().get(part);
-        if(orderQuantity < quantity){
+        if(orderQuantity <= quantity){
             order.getItems().remove(part);
         }
         else{
