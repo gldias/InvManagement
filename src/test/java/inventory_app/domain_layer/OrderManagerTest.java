@@ -13,13 +13,13 @@ public class OrderManagerTest extends ManagerTest{
     protected OrderManager orders;
 
     @Before
-    public void setup() throws Exception {
+    public void setUp2() throws Exception {
         orders = new OrderManager();
         System.out.println("setup complete");
     }
 
     @Test
-    public void createEmptyOrder() throws Exception {
+    public void testCreateEmptyOrder() throws Exception {
         orders.createOrder("001");
         assertTrue(orders.getOrder("001").getItems().isEmpty());
     }
@@ -49,14 +49,14 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void createOrderCreates() throws Exception {
+    public void testCreateOrderCreates() throws Exception {
         Item testItem = createPartOrder();
 
         assertTrue(orders.getOrder("001").getItems().containsKey(testItem));
     }
 
     @Test
-    public void createOrderQuantity() throws Exception {
+    public void testCreateOrderQuantity() throws Exception {
 
         createPartOrder();
 
@@ -68,7 +68,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void createOrderNoExtra() throws Exception {
+    public void testCreateOrderNoExtra() throws Exception {
 
         createPartOrder();
 
@@ -80,7 +80,8 @@ public class OrderManagerTest extends ManagerTest{
 
         HashMap<Item,Integer> items = new HashMap<>();
 
-        Part testPart = new Part("0002",PartCategory.SCREEN,"Name",.0);
+        Part testPart = new Part("0002",PartCategory.SCREEN,
+                "Name",.0);
 
         items.put(testPart,12);
 
@@ -91,7 +92,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void updateOrderAddsNewItems() throws Exception {
+    public void testUpdateOrderAddsNewItems() throws Exception {
 
         Item testItem = updatePartOrder();
 
@@ -100,7 +101,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void updateOrderReplacesOldItems() throws Exception {
+    public void testUpdateOrderReplacesOldItems() throws Exception {
 
         Item testItem = updatePartOrder();
 
@@ -108,7 +109,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void addProductToOrderOnce() throws Exception {
+    public void testAddProductToOrderOnce() throws Exception {
 
         createProductOrder();
 
@@ -119,7 +120,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void addProductToOrderTwice() throws Exception {
+    public void testAddProductToOrderTwice() throws Exception {
 
         createProductOrder();
 
@@ -132,7 +133,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void addPartToOrderOnce() throws Exception {
+    public void testAddPartToOrderOnce() throws Exception {
 
         createPartOrder();
 
@@ -143,7 +144,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void addPartToOrderTwice() throws Exception {
+    public void testAddPartToOrderTwice() throws Exception {
 
         createPartOrder();
 
@@ -156,7 +157,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void removeProductFromOrderPartially() throws Exception {
+    public void testRemoveProductFromOrderPartially() throws Exception {
 
         createProductOrder();
 
@@ -169,7 +170,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void removeProductFromOrderCompletely() throws Exception {
+    public void testRemoveProductFromOrderCompletely() throws Exception {
 
         createProductOrder();
 
@@ -183,7 +184,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void removeProductFromOrderBadId() throws Exception {
+    public void testRemoveProductFromOrderBadId() throws Exception {
 
         createProductOrder();
 
@@ -200,7 +201,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void removePartFromOrderPartially() throws Exception {
+    public void testRemovePartFromOrderPartially() throws Exception {
 
         createPartOrder();
 
@@ -212,7 +213,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void removePartFromOrderCompletely() throws Exception {
+    public void testRemovePartFromOrderCompletely() throws Exception {
 
         createPartOrder();
 
@@ -225,7 +226,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void removePartFromOrderBadId() throws Exception {
+    public void testRemovePartFromOrderBadId() throws Exception {
 
         createPartOrder();
 
@@ -242,7 +243,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void removeOrder() throws Exception {
+    public void testRemoveOrder() throws Exception {
 
         createPartOrder();
 
@@ -253,7 +254,7 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
-    public void removeOrderBadId() throws Exception {
+    public void testRemoveOrderBadId() throws Exception {
 
         createPartOrder();
 
@@ -262,7 +263,5 @@ public class OrderManagerTest extends ManagerTest{
         assertEquals(1,orders.getOrders().size());
 
     }
-
-
 
 }
