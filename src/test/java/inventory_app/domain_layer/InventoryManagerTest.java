@@ -41,7 +41,8 @@ public class InventoryManagerTest extends ManagerTest{
 
     @Test
     public void testUpdateProductSuccess() throws Exception {
-        manager.updateProduct("Reversible Jacket", ProductCategory.COMFORT, "C0001N",10.0);
+        manager.updateProduct("Reversible Jacket",
+                ProductCategory.COMFORT, "C0001N",10.0);
         Product product = manager.getProduct("C0001N");
         assertEquals("Reversible Jacket", product.getName());
         assertEquals(10.0,product.getWeight(),.1);
@@ -50,7 +51,8 @@ public class InventoryManagerTest extends ManagerTest{
     @Test
     public void testUpdateProductFailure() throws Exception {
         //Uses an unused SKU in update
-        manager.updateProduct("Reversible Jacket", ProductCategory.COMFORT, "C0001R",10.0);
+        manager.updateProduct("Reversible Jacket",
+                ProductCategory.COMFORT, "C0001R",10.0);
         Product product = manager.getProduct("C0001R");
         assertEquals(null, product);
     }
@@ -103,7 +105,8 @@ public class InventoryManagerTest extends ManagerTest{
 
     @Test
     public void testUpdatePartSuccess() throws Exception {
-        manager.updatePart("Type A Battery", PartCategory.BATTERY, "0002", 0.3);
+        manager.updatePart("Type A Battery",
+                PartCategory.BATTERY, "0002", 0.3);
         Part part = manager.getPart("0002");
         assertEquals("Type A Battery", part.getName());
         assertEquals(.3, part.getWeight(),.01);
@@ -111,13 +114,14 @@ public class InventoryManagerTest extends ManagerTest{
 
     @Test
     public void testUpdatePartFailure() throws Exception {
-        manager.updatePart("Type A Battery", PartCategory.BATTERY, "0012", 0.3);
+        manager.updatePart("Type A Battery",
+                PartCategory.BATTERY, "0012", 0.3);
         Part part = manager.getPart("0012");
         assertEquals(null, part);
     }
 
     @Test
-    public void deletePartSuccess() throws Exception {
+    public void testDeletePartSuccess() throws Exception {
         manager.deletePart("0003");
         Part part = manager.getPart("0003");
 
@@ -125,7 +129,7 @@ public class InventoryManagerTest extends ManagerTest{
     }
 
     @Test
-    public void deletePartFailure() throws Exception {
+    public void testDeletePartFailure() throws Exception {
         manager.deletePart("0004");
 
         int numberOfParts = manager.getParts().size();
