@@ -9,15 +9,22 @@ public abstract class Item {
     private double weight;
     private int quantity;
 
-    public Item(){
+    public Item() {
         weight = 0;
         name = "item";
         quantity = 0;
     }
 
-    public Item(String _name, double _weight){
+    public Item(String _name, double _weight) {
         name = _name;
         weight = _weight;
+        quantity = 0;
+    }
+
+    public Item(String _name, double _weight, int _quantity) {
+        name = _name;
+        weight = _weight;
+        quantity = _quantity;
     }
 
     public String getName() {
@@ -32,29 +39,26 @@ public abstract class Item {
         return quantity;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    //TODO delete after fixing classes that use this setter
+    public void setName(String _name){
+        name = _name;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    //TODO delete after fixing classes that use this setter
+    public void setWeight(double _weight){
+        weight = _weight;
     }
 
-    public int addQuantity(int _quantity){
+    //TODO delete after fixing classes that use this setter
+    public void setQuantity(int _quantity){
+        quantity = _quantity;
+    }
+
+    public int addQuantity(int _quantity) {
         return (quantity += _quantity);
     }
 
-    public int subtractQuantity(int _quantity){
+    public int subtractQuantity(int _quantity) {
         return (quantity -= _quantity);
     }
-
-
-
-
-
-
-
-
-
-
 }

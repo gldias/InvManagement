@@ -8,14 +8,31 @@ public class Product extends Item {
     private ProductCategory category;
 
     //todo eventually we may wish to make every identifier on a default construction unique
-    public Product(){
+    public Product() {
         super();
-        SKU = "000";
+        SKU = "F0000N";
         category = ProductCategory.FASHION;
     }
 
+    /**
+     * Used to make a new product to add to the database
+     *
+     * @param _name - product name. Used in Item superclass
+     * @param _category - product category as an enum
+     * @param _SKU - 6-character product identifier
+     * @param _weight - product weight. Used in Item superclass
+     */
     public Product(String _name, ProductCategory _category, String _SKU, double _weight) {
-        super(_name,_weight);
+        super(_name, _weight);
+        SKU = _SKU;
+        category = _category;
+    }
+
+    /**
+     * Used to recreate a line from the database easier
+     */
+    public Product(String _name, ProductCategory _category, String _SKU, double _weight, int _quantity) {
+        super(_name, _weight, _quantity);
         SKU = _SKU;
         category = _category;
     }
@@ -28,20 +45,29 @@ public class Product extends Item {
         return category;
     }
 
+    public boolean getRefurbished(){
+        if(SKU.charAt(5) == 82) {
+            return true;
+        }
+        return false;
+    }
+
+    //TODO delete after fixing classes that use this setter
     public void setSKU(String _SKU){
         SKU = _SKU;
     }
 
+    //TODO delete after fixing classes that use this setter
     public void setCategory(ProductCategory _category){
         category = _category;
     }
 
-    public boolean equals(Object o){
-        if(this == o){
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
 
-        if(!(o instanceof Product)){
+        if (!(o instanceof Product)) {
             return false;
         }
 
@@ -49,8 +75,7 @@ public class Product extends Item {
         return p.getSKU().equals(this.getSKU());
     }
 
-    public int hashCode(){
+    public int hashCode() {
         return SKU.hashCode();
     }
-
 }

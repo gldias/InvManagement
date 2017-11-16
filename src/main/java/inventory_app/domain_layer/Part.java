@@ -6,32 +6,80 @@ package inventory_app.domain_layer;
 public class Part extends Item {
     private String id;
     private PartCategory category;
+    private int price;
 
-    public Part(){
+    public Part() {
         id = "0000";
         category = PartCategory.CASING;
     }
 
-    public Part(String id, PartCategory category, String name, double weight) {
-        super(name, weight);
-        this.id = id;
-        this.category = category;
+    /**
+     * Used to make a new product to add to the database
+     *
+     * @param _id - 4-character part identifier
+     * @param _category - part category
+     * @param _name - part name. Used in Item superclass
+     * @param _price - part purchase price
+     * @param _weight - part weight. Used in Item superclass
+     */
+    public Part(String _id, PartCategory _category, String _name, int _price, double _weight) {
+        super(_name, _weight);
+        id = _id;
+        category = _category;
+        price = _price;
+    }
+
+    //TODO delete after fixing classes that use this constructor
+    public Part(String _id, PartCategory _category, String _name, double _weight) {
+        super(_name, _weight);
+        id = _id;
+        category = _category;
+        price = 0;
+    }
+
+    /**
+     * Used to recreate a line from the database easier
+     */
+    public Part(String _id, PartCategory _category, String _name, int _price, double _weight, int _quantity) {
+        super(_name, _weight, _quantity);
+        id = _id;
+        category = _category;
+        price = _price;
     }
 
     public String getId() {
         return id;
     }
 
+    public PartCategory getCategory() {
+        return category;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    //TODO delete after fixing classes that use this setter
     public void setId(String _id){
         id = _id;
     }
 
-    public boolean equals(Object o){
-        if(this == o){
+    //TODO delete after fixing classes that use this setter
+    public void setCategory(PartCategory _category){
+        category = _category;
+    }
+
+    //TODO delete after fixing classes that use this setter
+    public void setprice(int _price){
+        price = _price;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
 
-        if(!(o instanceof Part)){
+        if (!(o instanceof Part)) {
             return false;
         }
 
@@ -39,15 +87,7 @@ public class Part extends Item {
         return p.getId().equals(this.getId());
     }
 
-    public int hashCode(){
+    public int hashCode() {
         return id.hashCode();
-    }
-
-    public PartCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(PartCategory category) {
-        this.category = category;
     }
 }
