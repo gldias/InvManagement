@@ -5,9 +5,9 @@ import inventory_app.domain_layer.*;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-public class ItemDMTest {
+public class ItemDataMapperTest {
 
-    ItemDM dm = new ItemDM();
+    ItemDataMapper dm = new ItemDataMapper();
 
     Product product0 = new Product();
     Part part0 = new Part();

@@ -26,8 +26,8 @@ public class InventoryManager {
         products = new HashSet<>();
 
         //todo replace these with actual Mappers
-        partMapper = new ItemDM();
-        productMapper = new ItemDM();
+        partMapper = new ItemDataMapper();
+        productMapper = new ItemDataMapper();
     }
 
     /**

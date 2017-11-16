@@ -7,9 +7,9 @@ import inventory_app.domain_layer.Product;
 import java.sql.*;
 
 /**
- * OrderDM is the bridge between storing orders in the domain and in the Database.
+ * OrderDataMapper is the bridge between storing orders in the domain and in the Database.
  */
-public class OrderDM implements mapperInterface {
+public class OrderDataMapper implements mapperInterface {
     private Connection connect;
     private Statement statement;
     private PreparedStatement preparedStatement;
@@ -79,7 +79,7 @@ public class OrderDM implements mapperInterface {
 
 
     /**
-     * Updates an object already in the Database
+     * Updates an object already in the database
      * @param o Object to be updated
      * @return True if operation is successful
      */
@@ -167,6 +167,10 @@ public class OrderDM implements mapperInterface {
     }
 
 
+    /**
+     * Makes a connection with the database.  Has to be called before each operation
+     * @return True if successful
+     */
     private boolean connectToDB(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -183,6 +187,10 @@ public class OrderDM implements mapperInterface {
         return true;
     }
 
+
+    /**
+     * Closes the connection with the database
+     */
     private void close() {
         try {
             if(resultSet != null){
