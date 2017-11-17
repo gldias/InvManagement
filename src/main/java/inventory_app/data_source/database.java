@@ -1,6 +1,9 @@
 package inventory_app.data_source;
 
 import com.sun.org.apache.xpath.internal.SourceTree;
+import inventory_app.data_mappers.ItemDM;
+import inventory_app.domain_layer.Part;
+import inventory_app.domain_layer.PartCategory;
 
 import java.sql.*;
 
@@ -19,7 +22,9 @@ public class database {
     }
 
     public static void main(String[] args) {
-        (new database()).readDataBase();
+        Part p = new Part("1023", PartCategory.RAM, "Floppy", 45, 1.4);
+        System.out.println(new ItemDM().insert(p));
+        //(new database()).readDataBase();
     }
 
     public void readDataBase() /*throws Exception*/ {
@@ -40,7 +45,7 @@ public class database {
             writeResultSet(resultSet);
 
             // PreparedStatements can use variables and are more efficient
-            preparedStatement = connect.prepareStatement("INSERT INTO parts VALUES (13, 'GPU', 1000, 250, 5)");
+            preparedStatement = connect.prepareStatement("INSERT INTO parts VALUES ('7341', 'The CPU', 225, 800, 2.3)");
 /*
             // "myuser, webpage, datum, summary, COMMENTS from feedback.comments");
             // Parameters start with 1
@@ -66,11 +71,12 @@ public class database {
             resultSet = statement.executeQuery("SELECT * FROM parts");
             writeMetaData(resultSet);
             System.out.println("Reprint...");
+            writeResultSet(resultSet);
 
         } catch (ClassNotFoundException e) {
             System.out.println("ClassNotFound error...");
             System.exit(1);
-        }catch(SQLException e) {
+        } catch (SQLException e) {
             System.out.println("SQL error...");
             System.exit(2);
         } finally {

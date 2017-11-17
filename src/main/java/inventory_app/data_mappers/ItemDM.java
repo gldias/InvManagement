@@ -25,11 +25,10 @@ public class ItemDM implements mapperInterface {
 
         if (o instanceof Part) {
             Part part = (Part) o;
-            //todo fix parts table
-            line = "INSERT INTO parts VALUES(" + part.getId() +
-                    ", " + part.getName() +
-                    ", " + part.getQuantity() +
-                    ", " + /*part.getPrice()*/100 +
+            line = "INSERT INTO parts VALUES('" + part.getId() +
+                    "', '" + part.getName() +
+                    "', " + part.getQuantity() +
+                    ", " + part.getPrice() +
                     ", " + part.getWeight() + ")";
         } else if (o instanceof Product) {
             Product product = (Product) o;
@@ -38,20 +37,27 @@ public class ItemDM implements mapperInterface {
                     ", " + product.getName() +
                     ", " + product.getQuantity() +
                     ", " + product.getCategory() +
-                    ", " + /*product.getRefurbished()*/0 +
+                    ", " + product.getRefurbished() +
                     ", " + product.getWeight() + ")";
         }
 
         try {
             preparedStatement = connect.prepareStatement(line);
-            preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Insertion error...");
-            return false;
-        } finally {
+            System.out.println("ItemDM insertion error...prepareStatement");
             close();
+            return false;
         }
 
+        try {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("ItemDM insertion error...executeUpdate");
+            close();
+            return false;
+        }
+
+        close();
         return true;
     }
 
@@ -89,7 +95,7 @@ public class ItemDM implements mapperInterface {
             preparedStatement = connect.prepareStatement(line);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Update error...");
+            System.out.println("ItemDM update error...");
             return false;
         } finally {
             close();
@@ -121,7 +127,7 @@ public class ItemDM implements mapperInterface {
             preparedStatement = connect.prepareStatement(line);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Deletion error...");
+            System.out.println("ItemDM deletion error...");
             return false;
         } finally {
             close();
@@ -136,10 +142,10 @@ public class ItemDM implements mapperInterface {
             connect = DriverManager.getConnection(
                     "jdbc:mysql://vm343a.se.rit.edu:3333/inventorymanagement?user=GroupA&password=SWEN343");
         } catch (ClassNotFoundException e){
-            System.out.println("JConnector error...");
+            System.out.println("ItemDM JConnector error...");
             return false;
         } catch (SQLException e){
-            System.out.println("Connection error...");
+            System.out.println("ItemDM connection error...");
             return false;
         }
 
