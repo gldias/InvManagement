@@ -7,7 +7,7 @@ public class Product extends Item {
     private String SKU;
     private ProductCategory category;
 
-    //todo eventually we may wish to make every identifier on a default construction unique
+    //TODO delete after fixing classes that use this constructor
     public Product() {
         super();
         SKU = "F0000N";

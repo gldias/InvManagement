@@ -9,6 +9,7 @@ public abstract class Item {
     private double weight;
     private int quantity;
 
+    //TODO delete after fixing classes that use this constructor
     public Item() {
         weight = 0;
         name = "item";

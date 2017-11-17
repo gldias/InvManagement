@@ -8,6 +8,7 @@ public class Part extends Item {
     private PartCategory category;
     private int price;
 
+    //TODO delete after fixing classes that use this constructor
     public Part() {
         id = "0000";
         category = PartCategory.CASING;
