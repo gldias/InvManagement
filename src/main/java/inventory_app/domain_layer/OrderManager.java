@@ -1,6 +1,6 @@
 package inventory_app.domain_layer;
 
-import inventory_app.data_mappers.OrderDM;
+import inventory_app.data_mappers.OrderDataMapper;
 import inventory_app.data_mappers.mapperInterface;
 import stubs.manufacturing;
 import stubs.sales;
@@ -23,7 +23,7 @@ public class OrderManager {
 
     public OrderManager(){
         orders = new HashSet<>();
-        orderMapper = new OrderDM();
+        orderMapper = new OrderDataMapper();
     }
 
     /**

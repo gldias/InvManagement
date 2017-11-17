@@ -7,9 +7,9 @@ import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrderDMTest {
+public class OrderDataMapperTest {
 
-    OrderDM dm = new OrderDM();
+    OrderDataMapper dm = new OrderDataMapper();
 
     Order order0 = new Order();
     Map<Item, Integer> items0 = new HashMap<Item, Integer>();

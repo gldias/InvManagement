@@ -6,14 +6,20 @@ import inventory_app.domain_layer.Product;
 import java.sql.*;
 
 /**
- * ItemDM is the bridge between storing items in the domain and in the database.
+ * ItemDataMapper is the bridge between storing items in the domain and in the database.
  */
-public class ItemDM implements mapperInterface {
+public class ItemDataMapper implements mapperInterface {
     private Connection connect;
     private Statement statement;
     private PreparedStatement preparedStatement;
     private ResultSet resultSet;
 
+
+    /**
+     * Takes an object, determines if it is a product or a part, and adds it to the appropriate table.
+     * @param o Product or part
+     * @return True if successful
+     */
     @Override
     public boolean insert(Object o) {
         if (!connectToDB()) {
@@ -61,6 +67,12 @@ public class ItemDM implements mapperInterface {
         return true;
     }
 
+
+    /**
+     * Updates a row in the database
+     * @param o The new version of the object being updated
+     * @return True if successful
+     */
     @Override
     public boolean update(Object o) {
         if (!connectToDB()) {
@@ -104,6 +116,11 @@ public class ItemDM implements mapperInterface {
         return true;
     }
 
+    /**
+     * Removes a row from the database
+     * @param o
+     * @return True if successful
+     */
     @Override
     public boolean delete(Object o) {
         if (!connectToDB()) {
@@ -136,6 +153,10 @@ public class ItemDM implements mapperInterface {
         return true;
     }
 
+    /**
+     * Makes a connection with the database.  Has to be called before each operation
+     * @return True if successful
+     */
     private boolean connectToDB(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -152,6 +173,9 @@ public class ItemDM implements mapperInterface {
         return true;
     }
 
+    /**
+     * Closes the connection with the database
+     */
     private void close() {
         try {
             if(resultSet != null){
