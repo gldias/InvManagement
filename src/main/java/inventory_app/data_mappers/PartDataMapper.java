@@ -29,23 +29,23 @@ public class PartDataMapper extends InventoryDataMapper {
         return true;
     }
 
-    //TODO test
+    //TODO figure out why quantity column doesn't allow numbers greater than 100
     public boolean update(Part part) {
         if (!connectToDB()) {
             close();
             return false;
         }
 
-        //todo fix to match table
         String line = "UPDATE parts SET" +
-                " name = " + part.getName() +
-                ", quantity = " + part.getQuantity() +
-                ", buy_price = " + /*part.getPrice()*/100 +
+                " name = '" + part.getName() +
+                "', quantity = " + part.getQuantity() +
+                ", buy_price = " + part.getPrice() +
                 ", weight = " + part.getWeight() +
-                " WHERE part_id = " + part.getId();
+                " WHERE part_id = '" + part.getId() + "'";
 
         try {
             preparedStatement = connect.prepareStatement(line);
+            System.out.println(preparedStatement.toString());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("PartDataMapper update error...");
@@ -57,7 +57,6 @@ public class PartDataMapper extends InventoryDataMapper {
         return true;
     }
 
-    //TODO test
     public boolean delete(Part part) {
         if (!connectToDB()) {
             close();

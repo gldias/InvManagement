@@ -23,10 +23,10 @@ public class Part extends Item {
      * @param _price - part purchase price
      * @param _weight - part weight. Used in Item superclass
      */
-    public Part(String _id, PartCategory _category, String _name, int _price, double _weight) {
+    public Part(String _id, String _name, /*PartCategory _category,*/ int _price, double _weight) {
         super(_name, _weight);
         id = _id;
-        category = _category;
+        //category = _category;
         price = _price;
     }
 
@@ -41,10 +41,10 @@ public class Part extends Item {
     /**
      * Used to recreate a line from the database easier
      */
-    public Part(String _id, PartCategory _category, String _name, int _price, double _weight, int _quantity) {
+    public Part(String _id, String _name, int _quantity, /*PartCategory _category,*/ int _price, double _weight) {
         super(_name, _weight, _quantity);
         id = _id;
-        category = _category;
+        //category = _category;
         price = _price;
     }
 
