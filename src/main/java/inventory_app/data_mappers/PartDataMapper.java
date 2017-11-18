@@ -2,6 +2,7 @@ package inventory_app.data_mappers;
 import inventory_app.domain_layer.Part;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class PartDataMapper extends InventoryDataMapper {
     public boolean insert(Part part) {
@@ -29,7 +30,7 @@ public class PartDataMapper extends InventoryDataMapper {
         return true;
     }
 
-    //TODO figure out why quantity column doesn't allow numbers greater than 100
+    //TODO change DB trigger
     public boolean update(Part part) {
         if (!connectToDB()) {
             close();
@@ -45,7 +46,6 @@ public class PartDataMapper extends InventoryDataMapper {
 
         try {
             preparedStatement = connect.prepareStatement(line);
-            System.out.println(preparedStatement.toString());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("PartDataMapper update error...");
@@ -63,7 +63,7 @@ public class PartDataMapper extends InventoryDataMapper {
             return false;
         }
 
-        String line = "DELETE FROM parts WHERE part_id = " + part.getId();
+        String line = "DELETE FROM parts WHERE part_id = '" + part.getId() +"'";
 
         try {
             preparedStatement = connect.prepareStatement(line);
@@ -76,5 +76,58 @@ public class PartDataMapper extends InventoryDataMapper {
         }
 
         return true;
+    }
+
+    public Part findById(String partId){
+        Part toReturn = new Part("0000", "DNE", 0, 0, 0.0);
+
+        if (!connectToDB()) {
+            close();
+            return toReturn;
+        }
+
+        try {
+            statement = connect.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM parts WHERE part_id = '" + partId + "'");
+            resultSet.next();
+            String id = resultSet.getString("part_id");
+            String name = resultSet.getString("name");
+            int quantity = resultSet.getInt("quantity");
+            int price = resultSet.getInt("buy_price");
+            double weight = resultSet.getDouble("weight");
+            toReturn = new Part(id, name, quantity, price, weight);
+        } catch(SQLException e) {
+            System.out.println("PartDataMapper findById error...");
+            close();
+        }
+
+        return toReturn;
+    }
+
+    public ArrayList<Part> getTable() {
+        ArrayList<Part> toReturn = new ArrayList<>();
+
+        if (!connectToDB()) {
+            close();
+            return toReturn;
+        }
+
+        try {
+            statement = connect.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM parts");
+            while(resultSet.next()){
+                String id = resultSet.getString("part_id");
+                String name = resultSet.getString("name");
+                int quantity = resultSet.getInt("quantity");
+                int price = resultSet.getInt("buy_price");
+                double weight = resultSet.getDouble("weight");
+                toReturn.add(new Part(id, name, quantity, price, weight));
+            }
+        } catch(SQLException e) {
+            System.out.println("PartDataMapper getTable error...");
+            close();
+        }
+
+        return toReturn;
     }
 }
