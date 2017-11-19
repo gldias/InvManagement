@@ -5,8 +5,13 @@ public class ValidationResults {
     private final boolean valid;
     private final String errorMessage;
 
-    public ValidationResults(boolean _valid, String _errorMessage){
-        valid = _valid;
+    public ValidationResults(){
+        valid = true;
+        errorMessage = "";
+    }
+
+    public ValidationResults(String _errorMessage){
+        valid = false;
         errorMessage = _errorMessage;
 
     }
@@ -17,6 +22,10 @@ public class ValidationResults {
 
     public String getErrorMessage(){
         return errorMessage;
+    }
+
+    public String identifier(){
+        return "";
     }
 
 

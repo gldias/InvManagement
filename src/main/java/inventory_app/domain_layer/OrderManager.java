@@ -2,9 +2,11 @@ package inventory_app.domain_layer;
 
 import inventory_app.data_mappers.OrderDataMapper;
 import inventory_app.data_mappers.mapperInterface;
+import inventory_app.domain_layer.validation.ValidationResults;
 import stubs.manufacturing;
 import stubs.sales;
 
+import javax.validation.Valid;
 import java.util.*;
 
 /**
@@ -31,14 +33,15 @@ public class OrderManager {
      *
      * @return created Order
      */
-    public Order createOrder(String id){
+    public ValidationResults createOrder(String id){
         Order o = new Order();
         o.setId(id);
 
         orders.add(o);
         orderMapper.insert(o);
 
-        return o;
+        //todo
+        return new ValidationResults();
     }
 
     /**
@@ -48,14 +51,15 @@ public class OrderManager {
      * @param items a hashmap of Products in the order (key) and their quantities (value)
      * @return created Order
      */
-    public Order createOrder(HashMap<Item,Integer> items, String destination){
+    public ValidationResults createOrder(HashMap<Item,Integer> items, String destination){
         Order o = new Order("" + idCount, items, destination);
         idCount++;
 
         orders.add(o);
         orderMapper.insert(o);
 
-        return o;
+        //todo
+        return new ValidationResults();
         //autogen id?
     }
 
@@ -66,13 +70,14 @@ public class OrderManager {
      * @param items a hashmap of Products in the order (key) and their quantities (value)
      * @return created Order
      */
-    public Order createOrder(String order_id, HashMap<Item,Integer> items, String destination){
+    public ValidationResults createOrder(String order_id, HashMap<Item,Integer> items, String destination){
         Order o = new Order(order_id, items, destination);
 
         orders.add(o);
         orderMapper.insert(o);
 
-        return o;
+        //todo
+        return new ValidationResults();
         //autogen id?
     }
 
@@ -106,14 +111,15 @@ public class OrderManager {
      * @param items a hashmap listing the items the order is keeping track of
      * @return the updated order
      */
-    private Order updateOrder(Order order, HashMap<Item,Integer> items){
+    private ValidationResults updateOrder(Order order, HashMap<Item,Integer> items){
         for(Order o : orders){
             if(order.getId().equals(o.getId())){
                 o.setItems(items);
             }
         }
 
-        return null;
+        //todo
+        return new ValidationResults();
     }
 
     /**
@@ -122,7 +128,7 @@ public class OrderManager {
      * @param items a hashmap listing the item ids the order is keeping track of
      * @return the updated order
      */
-    public Order updateOrder(String id, HashMap<Item,Integer> items){
+    public ValidationResults updateOrder(String id, HashMap<Item,Integer> items){
         Order order = getOrder(id);
 
         return updateOrder(order,items);
@@ -136,14 +142,16 @@ public class OrderManager {
      * @param quantity the quantity of the product to add
      * @return the updated order
      */
-    private Order addProductToOrder(Order order, Product product,int quantity){
+    private ValidationResults addProductToOrder(Order order, Product product,int quantity){
         if(order.getItems().containsKey(product)){
             order.getItems().put(product, order.getItems().get(product) + quantity);
         }
         else{
             order.getItems().put(product, quantity);
         }
-        return order;
+
+        //todo
+        return new ValidationResults();
     }
 
     /**
@@ -154,7 +162,7 @@ public class OrderManager {
      * @param quantity the quantity of the product to add
      * @return the updated order
      */
-    public Order addProductToOrder(String orderId, String SKU, int quantity){
+    public ValidationResults addProductToOrder(String orderId, String SKU, int quantity){
         Order order = getOrder(orderId);
 
         InventoryManager inventoryManager = InventoryManager.getStaticManager();
@@ -172,7 +180,7 @@ public class OrderManager {
      * @param quantity the quantity of the product to remove
      * @return the updated order
      */
-    private Order removeProductFromOrder(Order order, Product product, int quantity){
+    private ValidationResults removeProductFromOrder(Order order, Product product, int quantity){
         int orderQuantity = order.getItems().get(product);
         if(orderQuantity <= quantity){
             order.getItems().remove(product);
@@ -180,7 +188,9 @@ public class OrderManager {
         else{
             order.getItems().put(product, orderQuantity - quantity);
         }
-        return order;
+
+        //todo
+        return new ValidationResults();
     }
 
     /**
@@ -191,7 +201,7 @@ public class OrderManager {
      * @param quantity the quantity of the product to remove
      * @return the updated order
      */
-    public Order removeProductFromOrder(String orderId, String SKU, int quantity){
+    public ValidationResults removeProductFromOrder(String orderId, String SKU, int quantity){
         Order order = getOrder(orderId);
 
         InventoryManager inventoryManager = InventoryManager.getStaticManager();
@@ -209,14 +219,16 @@ public class OrderManager {
      * @param quantity the quantity of the part to add
      * @return the updated order
      */
-    private Order addPartToOrder(Order order, Part part,int quantity){
+    private ValidationResults addPartToOrder(Order order, Part part,int quantity){
         if(order.getItems().containsKey(part)){
             order.getItems().put(part, order.getItems().get(part) + quantity);
         }
         else{
             order.getItems().put(part, quantity);
         }
-        return order;
+
+        //todo
+        return new ValidationResults();
     }
 
     /**
@@ -227,13 +239,14 @@ public class OrderManager {
      * @param quantity the quantity of the product to add
      * @return the updated order
      */
-    public Order addPartToOrder(String orderId, String partId, int quantity){
+    public ValidationResults addPartToOrder(String orderId, String partId, int quantity){
         Order order = getOrder(orderId);
 
         InventoryManager inventoryManager = InventoryManager.getStaticManager();
 
         Part part = inventoryManager.getPart(partId);
 
+        //todo
         return addPartToOrder(order, part, quantity);
     }
 
@@ -245,7 +258,7 @@ public class OrderManager {
      * @param quantity the quantity of the part to remove
      * @return the updated order
      */
-    private Order removePartFromOrder(Order order, Part part, int quantity){
+    private ValidationResults removePartFromOrder(Order order, Part part, int quantity){
         int orderQuantity = order.getItems().get(part);
         if(orderQuantity <= quantity){
             order.getItems().remove(part);
@@ -253,7 +266,9 @@ public class OrderManager {
         else{
             order.getItems().put(part, orderQuantity - quantity);
         }
-        return order;
+
+        //todo
+        return new ValidationResults();
     }
 
     /**
@@ -264,7 +279,7 @@ public class OrderManager {
      * @param quantity the quantity of the part to remove
      * @return the updated order
      */
-    public Order removePartFromOrder(String orderId, String partId, int quantity){
+    public ValidationResults removePartFromOrder(String orderId, String partId, int quantity){
         Order order = getOrder(orderId);
 
         InventoryManager inventoryManager = InventoryManager.getStaticManager();
@@ -280,9 +295,10 @@ public class OrderManager {
      * @param order the order to remove
      * @return the removed order
      */
-    private Order removeOrder(Order order){
+    private ValidationResults removeOrder(Order order){
         this.orders.remove(order);
-        return order;
+        //todo
+        return new ValidationResults();
     }
 
     /**
@@ -291,7 +307,7 @@ public class OrderManager {
      * @param orderId the id of the order to remove
      * @return the removed order
      */
-    public Order removeOrder(String orderId){
+    public ValidationResults removeOrder(String orderId){
         Order order = getOrder(orderId);
 
         return removeOrder(order);

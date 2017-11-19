@@ -1,7 +1,9 @@
 package inventory_app.domain_layer;
 
 import inventory_app.data_mappers.*;
+import inventory_app.domain_layer.validation.*;
 
+import javax.validation.Valid;
 import java.util.*;
 
 /**
@@ -41,6 +43,18 @@ public class InventoryManager {
         return p;
     }
 
+    private ValidationResults createProduct(Product product){
+
+        ValidationResults vr = validateProduct(product);
+
+        if(vr.isValid()){
+            products.add(product);
+            productMapper.insert(product);
+        }
+
+        return vr;
+    }
+
     /**
      * Creates and stores a new product with specified attributes.
      *
@@ -49,12 +63,10 @@ public class InventoryManager {
      * @param SKU product identifier
      * @param weight weight of given product in pounds(Ibs)
      */
-    public Product createProduct(String name, ProductCategory category, String SKU, double weight){
+    public ValidationResults createProduct(String name, ProductCategory category, String SKU, double weight){
         Product p = new Product(name, category, SKU, weight);
 
-        products.add(p);
-        productMapper.insert(p);
-        return p;
+        return createProduct(p);
     }
 
     /**
@@ -93,7 +105,7 @@ public class InventoryManager {
      *
      *  for each key mapped to true, it will narrow based on partial keywords
      */
-    public Collection<Product> getProducts(HashMap<String,String> searchCriteria, HashMap<String, Boolean> partialMatch){
+    private Collection<Product> getProducts(HashMap<String,String> searchCriteria, HashMap<String, Boolean> partialMatch){
         //
         return null;
         //todo low priority
@@ -107,7 +119,7 @@ public class InventoryManager {
      * @param SKU product identifier
      * @param weight weight of given product in pounds(Ibs)
      */
-    public Product updateProduct(String name, ProductCategory category, String SKU, double weight){
+    public ValidationResults updateProduct(String name, ProductCategory category, String SKU, double weight){
 
         /**
         Product p = new Product(SKU, category, name, weight);
@@ -120,50 +132,62 @@ public class InventoryManager {
         Product product = getProduct(SKU);
 
         if(product == null){
-            return null;
+            return new ValidationResults(String.format("Product with SKU %s does not exist",SKU));
         }
 
         deleteProduct(SKU);
 
-        product = createProduct(name, category, SKU, weight);
-        productMapper.update(product);
-        return product;
-    }
+        product = new Product(name, category, SKU, weight);
 
-    /**
-     * removes given product from the system
-     * @param SKU identifier of the product to be removed
-     */
-    public Product deleteProduct(String SKU){
-        Product p = getProduct(SKU);
-        deleteProduct(p);
-        return p;
+        createProduct(product);
+        productMapper.update(product);
+
+        return new ValidationResults();
     }
 
     /**
      * removes given product from the system
      * @param product the product to be removed
      */
-    public Product deleteProduct(Product product){
+    private ValidationResults deleteProduct(Product product){
 
         products.remove(product);
         productMapper.delete(product);
 
-        return product;
+        //todo actually validate this
+        return new ValidationResults();
     }
 
-    public Part createPart(Part part){
+    /**
+     * removes given product from the system
+     * @param SKU identifier of the product to be removed
+     */
+    public ValidationResults deleteProduct(String SKU){
+        Product p = getProduct(SKU);
 
-        parts.add(part);
-        partMapper.insert(part);
+        if(p == null){
+            return new ValidationResults(String.format("Product with SKU %s does not exist",SKU));
+        }
 
-        return part;
+        return deleteProduct(p);
+    }
+
+    private ValidationResults createPart(Part part){
+
+        ValidationResults vr = validatePart(part);
+
+        if(vr.isValid()) {
+            parts.add(part);
+            partMapper.insert(part);
+        }
+
+        return vr;
     }
 
     /**
      * Creates and stores a new product with default attributes.
      */
-    public Part createPart(){
+    public ValidationResults createPart(){
 
         Part part = new Part();
 
@@ -179,7 +203,7 @@ public class InventoryManager {
      * @param id part identifier
      * @param weight weight of given part in pounds(Ibs)
      */
-    public Part createPart(String name, PartCategory category, String id, double weight){
+    public ValidationResults createPart(String name, PartCategory category, String id, double weight){
 
         Part part = new Part(id,category,name,weight);
 
@@ -222,7 +246,7 @@ public class InventoryManager {
      *
      *  for each key mapped to true, it will narrow based on partial keywords
      */
-    public Collection<Part> getParts(HashMap<String,String> searchCriteria, HashMap<String, Boolean> partialMatch){
+    private Collection<Part> getParts(HashMap<String,String> searchCriteria, HashMap<String, Boolean> partialMatch){
         return null;
         //todo low priority
     }
@@ -235,11 +259,11 @@ public class InventoryManager {
      * @param id part identifier
      * @param weight weight of given part in pounds(Ibs)
      */
-    public Part updatePart(String name, PartCategory category, String id, double weight){
+    public ValidationResults updatePart(String name, PartCategory category, String id, double weight){
         Part oldPart = getPart(id);
 
         if(oldPart == null){
-            return null;
+            return new ValidationResults(String.format("Part with ID %s does not exist",id));
         }
 
         Part updatedPart = new Part(id, category, name, weight);
@@ -248,28 +272,34 @@ public class InventoryManager {
         parts.add(updatedPart);
         partMapper.update(updatedPart);
 
-        return updatedPart;
+        return new ValidationResults();
     }
 
     /**
      * removes given product from the system
      * @param part the product to be removed
      */
-    public Part deletePart(Part part){
+    private ValidationResults deletePart(Part part){
 
         parts.remove(part);
         partMapper.delete(part);
 
-        return part;
+        //todo actually validate this
+        return new ValidationResults();
     }
 
     /**
      * removes given product from the system
      * @param id identifier of the part to be removed
      */
-    public Part deletePart(String id){
+    public ValidationResults deletePart(String id){
         Part part = getPart(id);
 
+        if(part == null){
+            return new ValidationResults(String.format("Part with ID %s does not exist",id));
+        }
+
+        //todo actually validate this
         return deletePart(part);
     }
 
@@ -280,10 +310,10 @@ public class InventoryManager {
      * @param quantity the quantity of the product added
      * @return the product whose quantity increased
      */
-    public Product addProducts(Product product, int quantity){
+    private ValidationResults addProducts(Product product, int quantity){
         if(!products.contains(product)){
             //throw exception here?
-            assert false;
+            return new ValidationResults("Product does not exist");
         }
 
         product.addQuantity(quantity);
@@ -291,7 +321,8 @@ public class InventoryManager {
         products.add(product);
         productMapper.update(product);
 
-        return product;
+        //todo actually validate
+        return new ValidationResults();
     }
 
     /**
@@ -301,11 +332,11 @@ public class InventoryManager {
      * @param quantity the quantity of the product added
      * @return the product whose quantity increased
      */
-    public Product addProducts(String SKU, int quantity){
+    public ValidationResults addProducts(String SKU, int quantity){
         Product product = getProduct(SKU);
 
         if(product == null){
-            return null;
+            return new ValidationResults(String.format("Product with SKU %s does not exist",SKU));
         }
 
         return addProducts(product, quantity);
@@ -318,10 +349,10 @@ public class InventoryManager {
      * @param quantity the quantity of the product subtracted
      * @return the product whose quantity decreased
      */
-    public Product removeProducts(Product product, int quantity){
+    private ValidationResults removeProducts(Product product, int quantity){
         if(!products.contains(product)){
             //throw exception here?
-            assert false;
+            return new ValidationResults("Product does not exist");
         }
 
         product.subtractQuantity(quantity);
@@ -329,7 +360,8 @@ public class InventoryManager {
         products.add(product);
         productMapper.update(product);
 
-        return product;
+        //todo actually validate this
+        return new ValidationResults();
     }
 
     /**
@@ -339,11 +371,11 @@ public class InventoryManager {
      * @param quantity the quantity of the product subtracted
      * @return the product whose quantity decreased
      */
-    public Product removeProducts(String SKU, int quantity){
+    public ValidationResults removeProducts(String SKU, int quantity){
         Product product = getProduct(SKU);
 
         if(product == null){
-            return null;
+            return new ValidationResults(String.format("Product with SKU %s does not exist",SKU));
         }
 
         return removeProducts(product, quantity);
@@ -356,10 +388,10 @@ public class InventoryManager {
      * @param quantity the quantity of the part added
      * @return the part whose quantity increased
      */
-    public Part addParts(Part part, int quantity){
+    private ValidationResults addParts(Part part, int quantity){
         if(!parts.contains(part)){
             //throw exception here?
-            assert false;
+            return new ValidationResults(String.format("Part does not exist"));
         }
 
         part.addQuantity(quantity);
@@ -367,7 +399,8 @@ public class InventoryManager {
         parts.add(part);
         partMapper.update(part);
 
-        return part;
+        //todo actually validate this
+        return new ValidationResults();
     }
 
     /**
@@ -377,11 +410,11 @@ public class InventoryManager {
      * @param quantity the quantity of the part added
      * @return the part whose quantity increased
      */
-    public Part addParts(String id, int quantity){
+    public ValidationResults addParts(String id, int quantity){
         Part part = getPart(id);
 
         if(part == null){
-            return null;
+            return new ValidationResults(String.format("Part with ID %s does not exist",id));
         }
 
         return addParts(part, quantity);
@@ -394,10 +427,9 @@ public class InventoryManager {
      * @param quantity the quantity of the part subtracted
      * @return the part whose quantity decreased
      */
-    public Part removeParts(Part part, int quantity){
+    private ValidationResults removeParts(Part part, int quantity){
         if(!parts.contains(part)){
-            //throw exception here?
-            assert false;
+            return new ValidationResults("Part does not exist");
         }
 
         part.subtractQuantity(quantity);
@@ -405,7 +437,8 @@ public class InventoryManager {
         parts.add(part);
         partMapper.update(part);
 
-        return part;
+        //todo actually validate this
+        return new ValidationResults();
     }
 
     /**
@@ -415,14 +448,76 @@ public class InventoryManager {
      * @param quantity the quantity of the part subtracted
      * @return the part whose quantity decreased
      */
-    public Part removeParts(String id, int quantity){
+    public ValidationResults removeParts(String id, int quantity){
         Part part = getPart(id);
 
         if(part == null){
-            return null;
+            return new ValidationResults(String.format("Part with ID %s does not exist",id));
         }
 
         return removeParts(part, quantity);
+    }
+
+    private ValidationResults validateItem(Item i){
+        StringLengthFloorValidator slfv = new StringLengthFloorValidator(1);
+        DoubleNotNegativeValidator dnnv = new DoubleNotNegativeValidator();
+
+        List<ValidationResults> resultList = new ArrayList<>();
+
+        resultList.add(slfv.validate(i.getName()));
+        resultList.add(dnnv.validate(i.getWeight()));
+
+        ValidationResults result = new ValidationResults();
+
+        for(ValidationResults vr : resultList){
+            if(!vr.isValid()){
+                return vr;
+            }
+        }
+
+        return result;
+    }
+
+    private ValidationResults validateProduct(Product p){
+        SKUValidator skuv = new SKUValidator();
+        NotNullValidator nnv = new NotNullValidator();
+
+        List<ValidationResults> resultList = new ArrayList<>();
+
+        resultList.add(skuv.validate(p.getSKU()));
+        resultList.add(nnv.validate(p.getCategory()));
+        resultList.add(validateItem(p));
+
+        ValidationResults result = new ValidationResults();
+
+        for(ValidationResults vr : resultList){
+            if(!vr.isValid()){
+                return vr;
+            }
+        }
+
+        return result;
+    }
+
+    private ValidationResults validatePart(Part p){
+        IDValidator idv = new IDValidator();
+        NotNullValidator nnv = new NotNullValidator();
+
+        List<ValidationResults> resultList = new ArrayList<>();
+
+        resultList.add(idv.validate(p.getId()));
+        resultList.add(nnv.validate(p.getCategory()));
+        resultList.add(validateItem(p));
+
+        ValidationResults result = new ValidationResults();
+
+        for(ValidationResults vr : resultList){
+            if(!vr.isValid()){
+                return vr;
+            }
+        }
+
+        return result;
     }
 
     public static InventoryManager getStaticManager() {
