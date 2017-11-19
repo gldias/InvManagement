@@ -1,5 +1,6 @@
 package inventory_app.domain_layer;
 
+import inventory_app.domain_layer.validation.ValidationResults;
 import org.junit.*;
 
 import java.util.HashSet;
@@ -171,6 +172,200 @@ public class InventoryManagerTest extends ManagerTest{
         Part part = manager.getPart("0001");
 
         assertEquals(20,part.getQuantity());
+    }
+
+    @Test
+    public void testCreateValidProduct(){
+        ValidationResults vr = manager.createProduct("newProduct", ProductCategory.COMFORT, "C1234N", 1.0);
+        assertTrue(vr.isSuccess());
+        manager.deleteProduct("C1234N");
+    }
+
+    @Test
+    public void testCreateNamelessProductInvalid(){
+        ValidationResults vr = manager.createProduct("", ProductCategory.COMFORT, "C1234N", 1.0);
+        assertFalse(vr.isSuccess());
+        manager.deleteProduct("C1234N");
+    }
+
+    @Test
+    public void testCreateProductLongIdInvalid(){
+        ValidationResults vr = manager.createProduct("newProduct", ProductCategory.COMFORT, "C12345N", 1.0);
+        assertFalse(vr.isSuccess());
+        manager.deleteProduct("C12345N");
+    }
+
+    @Test
+    public void testCreateProductShortIdInvalid(){
+        ValidationResults vr = manager.createProduct("newProduct", ProductCategory.COMFORT, "C123N", 1.0);
+        assertFalse(vr.isSuccess());
+        manager.deleteProduct("C123N");
+    }
+
+    @Test
+    public void testCreateProductNonNumericIdInvalid(){
+        ValidationResults vr = manager.createProduct("newProduct", ProductCategory.COMFORT, "C12t4N", 1.0);
+        assertFalse(vr.isSuccess());
+        manager.deleteProduct("C12t4N");
+    }
+
+    @Test
+    public void testCreateProductNullCategoryInvalid(){
+        ValidationResults vr = manager.createProduct("newProduct", null, "C1234N", 1.0);
+        assertFalse(vr.isSuccess());
+        manager.deleteProduct("C1234N");
+    }
+
+    @Test
+    public void testCreateProductNegativeWeightInvalid(){
+        ValidationResults vr = manager.createProduct("newProduct", null, "C1234N", -.1);
+        assertFalse(vr.isSuccess());
+        manager.deleteProduct("C1234N");
+    }
+
+    @Test
+    public void testUpdateProductValid(){
+        ValidationResults vr = manager.updateProduct("newProduct", ProductCategory.COMFORT, "F0001N", 1.0);
+        assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void testUpdateProductInvalid(){
+        ValidationResults vr = manager.updateProduct("newProduct", ProductCategory.COMFORT, "C1234N", 1.0);
+        assertFalse(vr.isSuccess());
+    }
+
+    @Test
+    public void testDeleteProductValid(){
+        ValidationResults vr = manager.deleteProduct("F0001N");
+        assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void testDeleteProductInvalid(){
+        ValidationResults vr = manager.deleteProduct("C1234N");
+        assertFalse(vr.isSuccess());
+    }
+
+    @Test
+    public void testAddProductsValid(){
+        ValidationResults vr = manager.addProducts("F0001N",10);
+        assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void testAddProductsInvalid(){
+        ValidationResults vr = manager.addProducts("C1234N",10);
+        assertFalse(vr.isSuccess());
+    }
+
+    @Test
+    public void testRemoveProductsValid(){
+        ValidationResults vr = manager.removeProducts("F0001N",1);
+        assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void testRemoveProductsInvalid(){
+        ValidationResults vr = manager.removeProducts("C1234N",1);
+        assertFalse(vr.isSuccess());
+    }
+
+    @Test
+    public void testCreateValidPart(){
+        ValidationResults vr = manager.createPart("newPart", PartCategory.SCREEN, "1234", 1.0);
+        assertTrue(vr.isSuccess());
+        manager.deletePart("1234");
+    }
+
+    @Test
+    public void testCreateNamelessPartInvalid(){
+        ValidationResults vr = manager.createPart("", PartCategory.SCREEN, "1234", 1.0);
+        assertFalse(vr.isSuccess());
+        manager.deletePart("1234");
+    }
+
+    @Test
+    public void testCreatePartLongIdInvalid(){
+        ValidationResults vr = manager.createPart("newPart", PartCategory.SCREEN, "12345", 1.0);
+        assertFalse(vr.isSuccess());
+        manager.deletePart("12345");
+    }
+
+    @Test
+    public void testCreatePartShortIdInvalid(){
+        ValidationResults vr = manager.createPart("newPart", PartCategory.SCREEN, "123", 1.0);
+        assertFalse(vr.isSuccess());
+        manager.deletePart("123");
+    }
+
+    @Test
+    public void testCreatePartNonNumericIdInvalid(){
+        ValidationResults vr = manager.createPart("newPart", PartCategory.SCREEN, "12t4", 1.0);
+        assertFalse(vr.isSuccess());
+        manager.deletePart("12t4");
+    }
+
+    @Test
+    public void testCreatePartNullCategoryInvalid(){
+        ValidationResults vr = manager.createPart("newPart", null, "1234", 1.0);
+        assertFalse(vr.isSuccess());
+        manager.deletePart("1234");
+    }
+
+    @Test
+    public void testCreatePartNegativeWeightInvalid(){
+        ValidationResults vr = manager.createProduct("newPart", null, "1234", -.1);
+        assertFalse(vr.isSuccess());
+        manager.deletePart("1234");
+    }
+
+    @Test
+    public void testUpdatePartValid(){
+        ValidationResults vr = manager.updatePart("newPart", PartCategory.SCREEN, "0001", 1.0);
+        assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void testUpdatePartInvalid(){
+        ValidationResults vr = manager.updatePart("newPart", PartCategory.SCREEN, "1234", 1.0);
+        assertFalse(vr.isSuccess());
+    }
+
+    @Test
+    public void testDeletePartValid(){
+        ValidationResults vr = manager.deletePart("0001");
+        assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void testDeletePartInvalid(){
+        ValidationResults vr = manager.deletePart("1234");
+        assertFalse(vr.isSuccess());
+    }
+
+    @Test
+    public void testAddPartsValid(){
+        ValidationResults vr = manager.addParts("0001",10);
+        assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void testAddPartsInvalid(){
+        ValidationResults vr = manager.addParts("1234",10);
+        assertFalse(vr.isSuccess());
+    }
+
+    @Test
+    public void testRemovePartsValid(){
+        ValidationResults vr = manager.removeParts("0001",1);
+        assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void testRemovePartsInvalid(){
+        ValidationResults vr = manager.removeParts("1234",1);
+        assertFalse(vr.isSuccess());
     }
 
     @After
