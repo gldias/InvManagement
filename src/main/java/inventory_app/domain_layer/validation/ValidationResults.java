@@ -2,22 +2,22 @@ package inventory_app.domain_layer.validation;
 
 public class ValidationResults {
 
-    private final boolean valid;
+    private final boolean success;
     private final String errorMessage;
 
     public ValidationResults(){
-        valid = true;
+        success = true;
         errorMessage = "";
     }
 
     public ValidationResults(String _errorMessage){
-        valid = false;
+        success = false;
         errorMessage = _errorMessage;
 
     }
 
-    public boolean isValid(){
-        return valid;
+    public boolean isSuccess(){
+        return success;
     }
 
     public String getErrorMessage(){

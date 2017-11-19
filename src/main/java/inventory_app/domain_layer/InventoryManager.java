@@ -47,7 +47,7 @@ public class InventoryManager {
 
         ValidationResults vr = validateProduct(product);
 
-        if(vr.isValid()){
+        if(vr.isSuccess()){
             products.add(product);
             productMapper.insert(product);
         }
@@ -176,7 +176,7 @@ public class InventoryManager {
 
         ValidationResults vr = validatePart(part);
 
-        if(vr.isValid()) {
+        if(vr.isSuccess()) {
             parts.add(part);
             partMapper.insert(part);
         }
@@ -470,7 +470,7 @@ public class InventoryManager {
         ValidationResults result = new ValidationResults();
 
         for(ValidationResults vr : resultList){
-            if(!vr.isValid()){
+            if(!vr.isSuccess()){
                 return vr;
             }
         }
@@ -491,7 +491,7 @@ public class InventoryManager {
         ValidationResults result = new ValidationResults();
 
         for(ValidationResults vr : resultList){
-            if(!vr.isValid()){
+            if(!vr.isSuccess()){
                 return vr;
             }
         }
@@ -512,7 +512,7 @@ public class InventoryManager {
         ValidationResults result = new ValidationResults();
 
         for(ValidationResults vr : resultList){
-            if(!vr.isValid()){
+            if(!vr.isSuccess()){
                 return vr;
             }
         }
