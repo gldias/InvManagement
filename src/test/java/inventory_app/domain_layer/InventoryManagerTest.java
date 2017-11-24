@@ -182,6 +182,14 @@ public class InventoryManagerTest extends ManagerTest{
     }
 
     @Test
+    public void testCreateValidProductReturnsProduct(){
+        ValidationResults vr = manager.createProduct("newProduct", ProductCategory.COMFORT, "C1234N", 1.0);
+        Product p = (Product) vr.getValidatedObject();
+        assertEquals("newProduct",p.getName());
+        manager.deleteProduct("C1234N");
+    }
+
+    @Test
     public void testCreateNamelessProductInvalid(){
         ValidationResults vr = manager.createProduct("", ProductCategory.COMFORT, "C1234N", 1.0);
         assertFalse(vr.isSuccess());
@@ -230,6 +238,15 @@ public class InventoryManagerTest extends ManagerTest{
     }
 
     @Test
+    public void testUpdateProductValidReturnsProduct(){
+        ValidationResults vr = manager.updateProduct("newProduct", ProductCategory.COMFORT, "F0001N", 1.0);
+
+        Product p = (Product) vr.getValidatedObject();
+
+        assertEquals("F0001N",p.getSKU());
+    }
+
+    @Test
     public void testUpdateProductInvalid(){
         ValidationResults vr = manager.updateProduct("newProduct", ProductCategory.COMFORT, "C1234N", 1.0);
         assertFalse(vr.isSuccess());
@@ -239,6 +256,15 @@ public class InventoryManagerTest extends ManagerTest{
     public void testDeleteProductValid(){
         ValidationResults vr = manager.deleteProduct("F0001N");
         assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void testDeleteProductValidReturnsProduct(){
+        ValidationResults vr = manager.deleteProduct("F0001N");
+
+        Product p = (Product) vr.getValidatedObject();
+
+        assertEquals("F0001N",p.getSKU());
     }
 
     @Test
@@ -275,6 +301,17 @@ public class InventoryManagerTest extends ManagerTest{
     public void testCreateValidPart(){
         ValidationResults vr = manager.createPart("newPart", PartCategory.SCREEN, "1234", 1.0);
         assertTrue(vr.isSuccess());
+        manager.deletePart("1234");
+    }
+
+    @Test
+    public void testCreateValidPartReturnsPart(){
+        ValidationResults vr = manager.createPart("newPart", PartCategory.SCREEN, "1234", 1.0);
+
+        Part p = (Part) vr.getValidatedObject();
+
+        assertEquals("1234",p.getId());
+
         manager.deletePart("1234");
     }
 
@@ -327,6 +364,15 @@ public class InventoryManagerTest extends ManagerTest{
     }
 
     @Test
+    public void testUpdatePartValidReturnsPart(){
+        ValidationResults vr = manager.updatePart("newPart", PartCategory.SCREEN, "0001", 1.0);
+
+        Part p = (Part) vr.getValidatedObject();
+
+        assertEquals("0001", p.getId());
+    }
+
+    @Test
     public void testUpdatePartInvalid(){
         ValidationResults vr = manager.updatePart("newPart", PartCategory.SCREEN, "1234", 1.0);
         assertFalse(vr.isSuccess());
@@ -336,6 +382,15 @@ public class InventoryManagerTest extends ManagerTest{
     public void testDeletePartValid(){
         ValidationResults vr = manager.deletePart("0001");
         assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void testDeletePartValidReturnsPart(){
+        ValidationResults vr = manager.deletePart("0001");
+
+        Part p = (Part) vr.getValidatedObject();
+
+        assertEquals("0001",p.getId());
     }
 
     @Test
