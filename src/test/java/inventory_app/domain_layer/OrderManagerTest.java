@@ -270,6 +270,28 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     @Test
+    public void removeOrderValid(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.removeOrder("001");
+
+        assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void removeOrderInvalid(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.removeOrder("002");
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
     public void testAddNewOrderValid(){
 
         ValidationResults vr = orders.createOrder("001");
@@ -543,29 +565,6 @@ public class OrderManagerTest extends ManagerTest{
         orders.addPartToOrder("001","0001",1);
 
         ValidationResults vr = orders.removePartFromOrder("001","0001", 2);
-
-        assertFalse(vr.isSuccess());
-
-        orders.removeOrder("001");
-
-    }
-
-    @Test
-    public void removeOrderValid(){
-
-        orders.createOrder("001");
-
-        ValidationResults vr = orders.removeOrder("001");
-
-        assertTrue(vr.isSuccess());
-    }
-
-    @Test
-    public void removeOrderInvalid(){
-
-        orders.createOrder("001");
-
-        ValidationResults vr = orders.removeOrder("002");
 
         assertFalse(vr.isSuccess());
 

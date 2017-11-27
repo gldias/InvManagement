@@ -35,6 +35,14 @@ public class OrderManager {
      */
     public ValidationResults createOrder(String id){
         Order o = new Order();
+
+        Order testOrder = getOrder(id);
+
+        if(testOrder != null){
+            return new ValidationResults(String.format("Order %s already exists",id));
+        }
+
+
         o.setId(id);
 
         orders.add(o);
@@ -47,30 +55,20 @@ public class OrderManager {
     /**
      * Creates and stores a new order with given products and quantities.
      *
-     * @param destination a string signifying the order's destination
-     * @param items a hashmap of Products in the order (key) and their quantities (value)
-     * @return created Order
-     */
-    public ValidationResults createOrder(HashMap<Item,Integer> items, String destination){
-        Order o = new Order("" + idCount, items, destination);
-        idCount++;
-
-        orders.add(o);
-        orderMapper.insert(o);
-
-        //todo
-        return new ValidationResults();
-        //autogen id?
-    }
-
-    /**
-     * Creates and stores a new order with given products and quantities.
+     *  IMPORTANT: Only test methods should use this method. To be replaced.
      *
      * @param destination a string signifying the order's destination
      * @param items a hashmap of Products in the order (key) and their quantities (value)
      * @return created Order
      */
     public ValidationResults createOrder(String order_id, HashMap<Item,Integer> items, String destination){
+
+        List<Item> ItemList = new ArrayList<>();
+
+        for(Item i: ItemList){
+
+        }
+
         Order o = new Order(order_id, items, destination);
 
         orders.add(o);
@@ -125,6 +123,8 @@ public class OrderManager {
     /**
      * Updates the identified order with the given product values.
      *
+     * NOTE: Only use this is test methods
+     *
      * @param items a hashmap listing the item ids the order is keeping track of
      * @return the updated order
      */
@@ -143,6 +143,15 @@ public class OrderManager {
      * @return the updated order
      */
     private ValidationResults addProductToOrder(Order order, Product product,int quantity){
+
+        if(quantity < 0){
+            return new ValidationResults(String.format("Removal quantity %d is negative",quantity));
+        }
+
+        if(quantity == 0){
+            return new ValidationResults(String.format("Removal quantity %d is 0",quantity));
+        }
+
         if(order.getItems().containsKey(product)){
             order.getItems().put(product, order.getItems().get(product) + quantity);
         }
@@ -165,9 +174,17 @@ public class OrderManager {
     public ValidationResults addProductToOrder(String orderId, String SKU, int quantity){
         Order order = getOrder(orderId);
 
+        if(order == null){
+            return new ValidationResults(String.format("Order %s is invalid",orderId));
+        }
+
         InventoryManager inventoryManager = InventoryManager.getStaticManager();
 
         Product product = inventoryManager.getProduct(SKU);
+
+        if(product == null){
+            return new ValidationResults(String.format("SKU %s is invalid",SKU));
+        }
 
         return addProductToOrder(order, product, quantity);
     }
@@ -181,7 +198,21 @@ public class OrderManager {
      * @return the updated order
      */
     private ValidationResults removeProductFromOrder(Order order, Product product, int quantity){
+
+        if(quantity < 0){
+            return new ValidationResults(String.format("Removal quantity %d is negative",quantity));
+        }
+
+        if(quantity == 0){
+            return new ValidationResults(String.format("Removal quantity %d is 0",quantity));
+        }
+
         int orderQuantity = order.getItems().get(product);
+
+        if(orderQuantity < quantity){
+            return new ValidationResults(String.format("Removal quantity %d is greater than stored quantity %d",quantity, orderQuantity));
+        }
+
         if(orderQuantity <= quantity){
             order.getItems().remove(product);
         }
@@ -204,9 +235,17 @@ public class OrderManager {
     public ValidationResults removeProductFromOrder(String orderId, String SKU, int quantity){
         Order order = getOrder(orderId);
 
+        if(order == null){
+            return new ValidationResults(String.format("Order %s is invalid",orderId));
+        }
+
         InventoryManager inventoryManager = InventoryManager.getStaticManager();
 
         Product product = inventoryManager.getProduct(SKU);
+
+        if(product == null){
+            return new ValidationResults(String.format("SKU %s is invalid",SKU));
+        }
 
         return removeProductFromOrder(order,product,quantity);
     }
@@ -220,6 +259,15 @@ public class OrderManager {
      * @return the updated order
      */
     private ValidationResults addPartToOrder(Order order, Part part,int quantity){
+
+        if(quantity < 0){
+            return new ValidationResults(String.format("Removal quantity %d is negative",quantity));
+        }
+
+        if(quantity == 0){
+            return new ValidationResults(String.format("Removal quantity %d is 0",quantity));
+        }
+
         if(order.getItems().containsKey(part)){
             order.getItems().put(part, order.getItems().get(part) + quantity);
         }
@@ -242,9 +290,17 @@ public class OrderManager {
     public ValidationResults addPartToOrder(String orderId, String partId, int quantity){
         Order order = getOrder(orderId);
 
+        if(order == null){
+            return new ValidationResults(String.format("Order %s is invalid",orderId));
+        }
+
         InventoryManager inventoryManager = InventoryManager.getStaticManager();
 
         Part part = inventoryManager.getPart(partId);
+
+        if(part == null){
+            return new ValidationResults(String.format("Part ID %s is invalid",partId));
+        }
 
         //todo
         return addPartToOrder(order, part, quantity);
@@ -259,15 +315,28 @@ public class OrderManager {
      * @return the updated order
      */
     private ValidationResults removePartFromOrder(Order order, Part part, int quantity){
+
+        if(quantity < 0){
+            return new ValidationResults(String.format("Removal quantity %d is negative",quantity));
+        }
+
+        if(quantity == 0){
+            return new ValidationResults(String.format("Removal quantity %d is 0",quantity));
+        }
+
         int orderQuantity = order.getItems().get(part);
-        if(orderQuantity <= quantity){
+
+        if(orderQuantity < quantity){
+            return new ValidationResults(String.format("Removal quantity %d is greater than stored quantity %d",quantity, orderQuantity));
+        }
+
+        if(orderQuantity == quantity){
             order.getItems().remove(part);
         }
         else{
             order.getItems().put(part, orderQuantity - quantity);
         }
 
-        //todo
         return new ValidationResults();
     }
 
@@ -282,9 +351,17 @@ public class OrderManager {
     public ValidationResults removePartFromOrder(String orderId, String partId, int quantity){
         Order order = getOrder(orderId);
 
+        if(order == null){
+            return new ValidationResults(String.format("Order %s is invalid",orderId));
+        }
+
         InventoryManager inventoryManager = InventoryManager.getStaticManager();
 
         Part part = inventoryManager.getPart(partId);
+
+        if(part == null){
+            return new ValidationResults(String.format("Part ID %s is invalid",partId));
+        }
 
         return removePartFromOrder(order,part,quantity);
     }
@@ -296,8 +373,12 @@ public class OrderManager {
      * @return the removed order
      */
     private ValidationResults removeOrder(Order order){
-        this.orders.remove(order);
-        //todo
+        boolean orderExisted = this.orders.remove(order);
+
+        if(!orderExisted){
+            return new ValidationResults(String.format("Given order does not exist"));
+        }
+
         return new ValidationResults();
     }
 
