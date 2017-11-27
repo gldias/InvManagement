@@ -1,24 +1,30 @@
 package inventory_app.data_mappers;
 
-import inventory_app.domain_layer.Part;
 import inventory_app.domain_layer.Product;
 
 import java.sql.SQLException;
 
 public class ProductDataMapper extends InventoryDataMapper {
-    //TODO test
     public boolean insert(Product product) {
         if (!connectToDB()) {
             close();
             return false;
         }
 
-        //TODO fix to match table
-        String line = "INSERT INTO products VALUES(" + product.getSKU() +
-                ", " + product.getName() +
-                ", " + product.getQuantity() +
-                ", " + product.getCategory() +
-                ", " + product.getRefurbished() +
+        String line = "INSERT INTO products VALUES" +
+                "('" + product.getSKU().substring(1, 5) + "'" +
+                ", '" + product.getName() + "'";
+
+        if(product.getSKU().charAt(5) == 'N') {
+            line += ", " + product.getQuantity() +
+                    ", " + 0;
+        }
+        else if(product.getSKU().charAt(5) == 'R') {
+            line += ", " + 0 +
+                    ", " + product.getQuantity();
+        }
+
+        line += ", '" + product.getSKU().charAt(0) + "'" +
                 ", " + product.getWeight() + ")";
 
         try {
@@ -26,13 +32,11 @@ public class ProductDataMapper extends InventoryDataMapper {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("ProductDataMapper insertion error...");
-            close();
             return false;
         } finally {
             close();
         }
 
-        close();
         return true;
     }
 
@@ -43,14 +47,20 @@ public class ProductDataMapper extends InventoryDataMapper {
             return false;
         }
 
-        //TODO fix to match table
         String line = "UPDATE products SET" +
-                " name = " + product.getName() +
-                ", quantity = " + product.getQuantity() +
-                ", class = " + product.getCategory() +
-                ", " + /*product.getRefurbished()*/0 +
+                " name = '" + product.getName() + "'";
+
+        //if(product.getSKU().charAt(5) == 'N') {
+            line += ", new_quantity = " + product.getQuantity();
+        //}
+        //else if(product.getSKU().charAt(5) == 'R') {
+            line += ", refurb_quantity = " + product.getQuantity();
+        //}
+
+        line += ", category = '" + product.getSKU().charAt(0) + "'" +
                 ", weight = " + product.getWeight() +
-                " WHERE part_id = " + product.getSKU();
+                " WHERE product_id = '" + product.getSKU().substring(1, 5) + "'";
+        System.out.println(line);
 
         try {
             preparedStatement = connect.prepareStatement(line);
