@@ -11,9 +11,9 @@ public class PartDataMapper extends InventoryDataMapper {
             return false;
         }
 
-        String line = "INSERT INTO parts VALUES('" + part.getId() +
-                "', '" + part.getName() +
-                "', " + part.getQuantity() +
+        String line = "INSERT INTO parts VALUES('" + part.getId() + "'" +
+                ", '" + part.getName() + "'" +
+                ", " + part.getQuantity() +
                 ", " + part.getPrice() +
                 ", " + part.getWeight() + ")";
 
@@ -30,7 +30,6 @@ public class PartDataMapper extends InventoryDataMapper {
         return true;
     }
 
-    //TODO change DB trigger
     public boolean update(Part part) {
         if (!connectToDB()) {
             close();
@@ -38,8 +37,8 @@ public class PartDataMapper extends InventoryDataMapper {
         }
 
         String line = "UPDATE parts SET" +
-                " name = '" + part.getName() +
-                "', quantity = " + part.getQuantity() +
+                " name = '" + part.getName() + "'" +
+                ", quantity = " + part.getQuantity() +
                 ", buy_price = " + part.getPrice() +
                 ", weight = " + part.getWeight() +
                 " WHERE part_id = '" + part.getId() + "'";
@@ -98,6 +97,7 @@ public class PartDataMapper extends InventoryDataMapper {
             toReturn = new Part(id, name, quantity, price, weight);
         } catch(SQLException e) {
             System.out.println("PartDataMapper findById error...");
+        } finally {
             close();
         }
 
@@ -125,6 +125,10 @@ public class PartDataMapper extends InventoryDataMapper {
             }
         } catch(SQLException e) {
             System.out.println("PartDataMapper getTable error...");
+            toReturn = new ArrayList<Part>();
+            toReturn.add(new Part("0000", "DNE", 0, 0, 0.0));
+            return toReturn;
+        } finally {
             close();
         }
 

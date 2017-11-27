@@ -46,7 +46,7 @@ public class Product extends Item {
     }
 
     public boolean getRefurbished(){
-        if(SKU.charAt(5) == 82) {
+        if(SKU.charAt(5) == 'R') {
             return true;
         }
         return false;
