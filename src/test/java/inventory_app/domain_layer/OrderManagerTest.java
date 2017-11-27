@@ -1,5 +1,6 @@
 package inventory_app.domain_layer;
 
+import inventory_app.domain_layer.validation.ValidationResults;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,6 +23,7 @@ public class OrderManagerTest extends ManagerTest{
     public void testCreateEmptyOrder() throws Exception {
         orders.createOrder("001");
         assertTrue(orders.getOrder("001").getItems().isEmpty());
+        orders.removeOrder("001");
     }
 
     private Part createPartOrder(){
@@ -53,6 +55,8 @@ public class OrderManagerTest extends ManagerTest{
         Item testItem = createPartOrder();
 
         assertTrue(orders.getOrder("001").getItems().containsKey(testItem));
+
+        orders.removeOrder("001");
     }
 
     @Test
@@ -64,6 +68,8 @@ public class OrderManagerTest extends ManagerTest{
         //      (default construction)
         orders.getOrder("001");
         assertEquals(3,orders.getOrder("001").getQuantity("0000"));
+
+        orders.removeOrder("001");
 
     }
 
@@ -261,6 +267,309 @@ public class OrderManagerTest extends ManagerTest{
         orders.removeOrder("002");
 
         assertEquals(1,orders.getOrders().size());
+    }
+
+    @Test
+    public void testAddNewOrderValid(){
+
+        ValidationResults vr = orders.createOrder("001");
+
+        assertTrue(vr.isSuccess());
+
+        orders.removeOrder("001");
+
+    }
+
+    @Test
+    public void testAddExistingOrderInvalid(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.createOrder("001");
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+
+    }
+
+    @Test
+    public void testAddProductToOrderValidSku(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.addProductToOrder("001","F0001N",1);
+
+        assertTrue(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void testAddProductToOrderInvalidSku(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.addProductToOrder("001","0", 1);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void testAddProductToOrderInvalidOrder(){
+
+        ValidationResults vr = orders.addProductToOrder("0","F0001N",1);
+
+        assertFalse(vr.isSuccess());
+    }
+
+    @Test
+    public void testAddProductToOrderQuantity0Invalid(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.addProductToOrder("001","F0001N",0);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void testAddProductToOrderQuantityNegativeInvalid(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.addProductToOrder("001","F0001N",-1);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void addPartToOrderValidId(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.addPartToOrder("001","0001",1);
+
+        assertTrue(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void addPartToOrderInvalidId(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.addPartToOrder("001","0",1);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void addPartToOrderInvalidOrder(){
+
+        ValidationResults vr = orders.addPartToOrder("001","0001",1);
+
+        assertFalse(vr.isSuccess());
+    }
+
+    @Test
+    public void addPartToOrderQuantity0Invalid(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.addPartToOrder("001","0001",0);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void addPartToOrderQuantityNegativeInvalid(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.addPartToOrder("001","0001",-1);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void removeProductFromOrderValidSku(){
+
+        orders.createOrder("001");
+
+        orders.addProductToOrder("001","F0001N",1);
+
+        ValidationResults vr = orders.removeProductFromOrder("001", "F0001N", 1);
+
+        assertTrue(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void removeProductFromOrderInvalidSku(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.removeProductFromOrder("001", "0", 1);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void removeProductFromOrderInvalidOrder(){
+
+        ValidationResults vr = orders.removeProductFromOrder("0", "F0001N", 1);
+
+        assertFalse(vr.isSuccess());
+    }
+
+    @Test
+    public void removeProductFromOrderQuantity0Invalid(){
+
+        orders.createOrder("001");
+
+        orders.addProductToOrder("001","F0001N",1);
+
+        ValidationResults vr = orders.removeProductFromOrder("001", "F0001N", 0);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void removeProductFromOrderQuantityNegativeInvalid(){
+
+        orders.createOrder("001");
+
+        orders.addProductToOrder("001","F0001N",1);
+
+        ValidationResults vr = orders.removeProductFromOrder("001", "F0001N", -1);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void removeProductFromOrderQuantityGreaterThanStoredInvalid(){
+
+        orders.createOrder("001");
+
+        orders.addProductToOrder("001","F0001N",1);
+
+        ValidationResults vr = orders.removeProductFromOrder("001", "F0001N", 2);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void removePartFromOrderValidId(){
+
+        orders.createOrder("001");
+
+        orders.addPartToOrder("001","0001",1);
+
+        ValidationResults vr = orders.removePartFromOrder("001","0001", 1);
+
+        assertTrue(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void removePartFromOrderInvalidId(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.removePartFromOrder("001","0", 1);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void removePartFromOrderQuantity0Invalid(){
+
+        orders.createOrder("001");
+
+        orders.addPartToOrder("001","0001",1);
+
+        ValidationResults vr = orders.removePartFromOrder("001","0001", 0);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void removePartFromOrderQuantityNegativeInvalid(){
+
+        orders.createOrder("001");
+
+        orders.addPartToOrder("001","0001",1);
+
+        ValidationResults vr = orders.removePartFromOrder("001","0001", -1);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+    }
+
+    @Test
+    public void removePartFromOrderQuantityGreaterThanStoredInvalid(){
+
+        orders.createOrder("001");
+
+        orders.addPartToOrder("001","0001",1);
+
+        ValidationResults vr = orders.removePartFromOrder("001","0001", 2);
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
+
+    }
+
+    @Test
+    public void removeOrderValid(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.removeOrder("001");
+
+        assertTrue(vr.isSuccess());
+    }
+
+    @Test
+    public void removeOrderInvalid(){
+
+        orders.createOrder("001");
+
+        ValidationResults vr = orders.removeOrder("002");
+
+        assertFalse(vr.isSuccess());
+
+        orders.removeOrder("001");
 
     }
 
