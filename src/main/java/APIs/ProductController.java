@@ -31,11 +31,15 @@ public class ProductController {
         int quantity = obj.getInt("quantity");
         String flag = obj.getString("flag");
 
+        //todo
+        /**
         Product product = InventoryManager.getStaticManager().addProducts(sku, quantity);
 
         HashMap<String, String> result = new HashMap<>();
         result.put("productID", product.getSKU());
         return  Response.status(200).entity(result).build();
+         **/
+        return null; //temporary
     }
 
     @GET
@@ -69,11 +73,15 @@ public class ProductController {
         Product product = InventoryManager.getStaticManager().getProduct(sku);
         toOrder.put(product, quantity);
 
+        //todo
+        /**
         Order order = OrderManager.getStaticManager().createOrder(toOrder, destination);
         OrderManager.getStaticManager().confirmOrderWithSales(order.getId());
 
         HashMap<String, String> result = new HashMap<>();
         result.put("orderID", order.getId());
         return Response.status(200).entity(result).build();
+         **/
+        return null; //temporary
     }
 }

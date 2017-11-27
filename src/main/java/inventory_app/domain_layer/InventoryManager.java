@@ -52,6 +52,8 @@ public class InventoryManager {
             productMapper.insert(product);
         }
 
+        vr.setValidatedObject(product);
+
         return vr;
     }
 
@@ -142,7 +144,11 @@ public class InventoryManager {
         createProduct(product);
         productMapper.update(product);
 
-        return new ValidationResults();
+        ValidationResults vr = new ValidationResults();
+
+        vr.setValidatedObject(product);
+
+        return vr;
     }
 
     /**
@@ -154,8 +160,11 @@ public class InventoryManager {
         products.remove(product);
         productMapper.delete(product);
 
-        //todo actually validate this
-        return new ValidationResults();
+        ValidationResults vr = new ValidationResults();
+
+        vr.setValidatedObject(product);
+
+        return vr;
     }
 
     /**
@@ -180,6 +189,8 @@ public class InventoryManager {
             parts.add(part);
             partMapper.insert(part);
         }
+
+        vr.setValidatedObject(part);
 
         return vr;
     }
@@ -272,7 +283,11 @@ public class InventoryManager {
         parts.add(updatedPart);
         partMapper.update(updatedPart);
 
-        return new ValidationResults();
+        ValidationResults vr = new ValidationResults();
+
+        vr.setValidatedObject(updatedPart);
+
+        return vr;
     }
 
     /**
@@ -285,7 +300,11 @@ public class InventoryManager {
         partMapper.delete(part);
 
         //todo actually validate this
-        return new ValidationResults();
+        ValidationResults vr = new ValidationResults();
+
+        vr.setValidatedObject(part);
+
+        return vr;
     }
 
     /**
