@@ -14,22 +14,37 @@ import java.util.*;
 public class InventoryManager {
 
     //data duplication necessary for performance
-    Set<Part> parts;
+    //Set<Part> parts;
     Set<Product> products;
 
-    mapperInterface partMapper;
-    mapperInterface productMapper;
+    PartDataMapper partMapper;
+    ProductDataMapper productMapper;
 
     private static InventoryManager staticManager = new InventoryManager();
 
     public InventoryManager(){
         //maybe change these to hashmaps? with SKU as the key?
-        parts = new HashSet<>();
+        //parts = new HashSet<>();
         products = new HashSet<>();
 
         //todo replace these with actual Mappers
-        partMapper = new ItemDataMapper();
-        productMapper = new ItemDataMapper();
+        partMapper = new PartDataMapper();
+        productMapper = new ProductDataMapper();
+    }
+
+    /**
+     * Constructor with dependency injection
+     *
+     * @param _partMapper
+     */
+    public InventoryManager(PartDataMapper _partMapper){
+        //maybe change these to hashmaps? with SKU as the key?
+        //parts = new HashSet<>();
+        products = new HashSet<>();
+
+        //todo replace these with actual Mappers
+        partMapper = _partMapper;
+        productMapper = new ProductDataMapper();
     }
 
     /**
@@ -186,23 +201,12 @@ public class InventoryManager {
         ValidationResults vr = validatePart(part);
 
         if(vr.isSuccess()) {
-            parts.add(part);
             partMapper.insert(part);
         }
 
         vr.setValidatedObject(part);
 
         return vr;
-    }
-
-    /**
-     * Creates and stores a new product with default attributes.
-     */
-    public ValidationResults createPart(){
-
-        Part part = new Part();
-
-        return createPart(part);
     }
 
 
@@ -227,20 +231,15 @@ public class InventoryManager {
      * @param id
      */
     public Part getPart(String id){
-        for(Part p : parts){
-            if(p.getId().equals(id)){
-                return p;
-            }
-        }
 
-        return null;
+        return partMapper.findById(id);
     }
 
     /**
      * Shows all products
      */
-    public Set<Part> getParts(){
-        return parts;
+    public ArrayList<Part> getParts(){
+        return partMapper.getTable();
     }
 
     /**
@@ -279,8 +278,6 @@ public class InventoryManager {
 
         Part updatedPart = new Part(id, category, name, weight);
 
-        parts.remove(oldPart);
-        parts.add(updatedPart);
         partMapper.update(updatedPart);
 
         ValidationResults vr = new ValidationResults();
@@ -296,10 +293,8 @@ public class InventoryManager {
      */
     private ValidationResults deletePart(Part part){
 
-        parts.remove(part);
         partMapper.delete(part);
 
-        //todo actually validate this
         ValidationResults vr = new ValidationResults();
 
         vr.setValidatedObject(part);
@@ -318,7 +313,6 @@ public class InventoryManager {
             return new ValidationResults(String.format("Part with ID %s does not exist",id));
         }
 
-        //todo actually validate this
         return deletePart(part);
     }
 
@@ -340,7 +334,6 @@ public class InventoryManager {
         products.add(product);
         productMapper.update(product);
 
-        //todo actually validate
         return new ValidationResults();
     }
 
@@ -379,7 +372,6 @@ public class InventoryManager {
         products.add(product);
         productMapper.update(product);
 
-        //todo actually validate this
         return new ValidationResults();
     }
 
@@ -408,17 +400,14 @@ public class InventoryManager {
      * @return the part whose quantity increased
      */
     private ValidationResults addParts(Part part, int quantity){
-        if(!parts.contains(part)){
+        if(!getParts().contains(part)){
             //throw exception here?
             return new ValidationResults(String.format("Part does not exist"));
         }
 
         part.addQuantity(quantity);
-
-        parts.add(part);
         partMapper.update(part);
 
-        //todo actually validate this
         return new ValidationResults();
     }
 
@@ -447,16 +436,13 @@ public class InventoryManager {
      * @return the part whose quantity decreased
      */
     private ValidationResults removeParts(Part part, int quantity){
-        if(!parts.contains(part)){
+        if(getParts().contains(part)){
             return new ValidationResults("Part does not exist");
         }
 
         part.subtractQuantity(quantity);
-
-        parts.add(part);
         partMapper.update(part);
 
-        //todo actually validate this
         return new ValidationResults();
     }
 
