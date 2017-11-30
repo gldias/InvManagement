@@ -4,6 +4,7 @@ import inventory_app.domain_layer.Part;
 import java.sql.*;
 import java.util.ArrayList;
 
+//TODO PartCategory necessary??
 public class PartDataMapper extends InventoryDataMapper {
     public boolean insert(Part part) {
         if (!connectToDB()) {
@@ -94,6 +95,7 @@ public class PartDataMapper extends InventoryDataMapper {
             int quantity = resultSet.getInt("quantity");
             int price = resultSet.getInt("buy_price");
             double weight = resultSet.getDouble("weight");
+
             toReturn = new Part(id, name, quantity, price, weight);
         } catch(SQLException e) {
             System.out.println("PartDataMapper findById error...");
@@ -121,11 +123,12 @@ public class PartDataMapper extends InventoryDataMapper {
                 int quantity = resultSet.getInt("quantity");
                 int price = resultSet.getInt("buy_price");
                 double weight = resultSet.getDouble("weight");
+
                 toReturn.add(new Part(id, name, quantity, price, weight));
             }
         } catch(SQLException e) {
             System.out.println("PartDataMapper getTable error...");
-            toReturn = new ArrayList<Part>();
+            toReturn = new ArrayList<>();
             toReturn.add(new Part("0000", "DNE", 0, 0, 0.0));
             return toReturn;
         } finally {

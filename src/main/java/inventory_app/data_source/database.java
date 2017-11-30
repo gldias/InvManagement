@@ -1,11 +1,16 @@
 package inventory_app.data_source;
 
 import com.sun.org.apache.xpath.internal.SourceTree;
-import inventory_app.data_mappers.ItemDM;
+import inventory_app.data_mappers.ItemDataMapper;
+import inventory_app.data_mappers.PartDataMapper;
+import inventory_app.data_mappers.ProductDataMapper;
 import inventory_app.domain_layer.Part;
 import inventory_app.domain_layer.PartCategory;
+import inventory_app.domain_layer.Product;
+import inventory_app.domain_layer.ProductCategory;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class database {
 
@@ -22,8 +27,21 @@ public class database {
     }
 
     public static void main(String[] args) {
-        Part p = new Part("1023", PartCategory.RAM, "Floppy", 45, 1.4);
-        System.out.println(new ItemDM().insert(p));
+        /*Part part = new Part("111", "5.5\" screen", 100, 30, 1.2);
+        new PartDataMapper().update(part);*/
+        //System.out.println(new PartDataMapper().findById("11"));
+        /*ArrayList<Part> parts = (new PartDataMapper().getTable());
+        for(Part p : parts){
+            System.out.println(p);
+        }*/
+
+        /*Product prod = new Product("FitBit", ProductCategory.ACTIVE, "A1337R", 0.9, 700);
+        System.out.println(new ProductDataMapper().findBySKU(prod.getSKU()));*/
+        ArrayList<Product> prod = (new ProductDataMapper().getTable());
+        for(Product p : prod){
+            System.out.println(p);
+        }
+
         //(new database()).readDataBase();
     }
 
