@@ -1,5 +1,6 @@
 package inventory_app.domain_layer;
 
+import inventory_app.data_mappers.InventoryDataMapper;
 import inventory_app.data_mappers.OrderDataMapper;
 import inventory_app.data_mappers.mapperInterface;
 import inventory_app.domain_layer.validation.ValidationResults;
@@ -17,7 +18,7 @@ import java.util.*;
 public class OrderManager {
     Set<Order> orders;
 
-    mapperInterface orderMapper;
+    OrderDataMapper orderMapper;
 
     private static int idCount = 1;
 

@@ -79,7 +79,7 @@ public class InventoryManager {
     public Product getProduct(String SKU){
 
         for(Product p : products){
-            if(SKU.equals(p.getSKU())){
+            if(SKU.equals(p.getSKU()) || SKU.equals(p.getSKU().substring(1,5))){
                 return p;
             }
         }
