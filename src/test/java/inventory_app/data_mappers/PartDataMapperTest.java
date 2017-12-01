@@ -31,13 +31,21 @@ public class PartDataMapperTest {
 
     @Test
     public void testUpdate() {
+        partDM.insert(part0);
         part0.setName("antenna");
         assertEquals(true, partDM.update(part0));
     }
 
     @Test
+    public void testFind() {
+        partDM.insert(part0);
+        assertEquals(part0, partDM.findById(part0.getId()));
+    }
+
+    @Test
     @After
     public void testDelete() {
+        partDM.insert(part0);
         assertEquals(true, partDM.delete(part0));
     }
 }

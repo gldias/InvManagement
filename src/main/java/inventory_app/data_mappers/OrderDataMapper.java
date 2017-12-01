@@ -113,20 +113,34 @@ public class OrderDataMapper extends InventoryDataMapper {
         return true;
     }
 
-    public Order findProductOrder(String orderId) {
+
+    /**
+     * Returns an order object read from the database using the given order Id
+     * @param orderId The ID of the order to be read from the database
+     * @return The order object read from the database
+     * FIXME: (12/1/2017) Order object needs a hashmap, which needs items as its keys,
+     * FIXME: which means parts and products will need to be pulled from the InventoryManager.
+     * FIXME: Petition to make the hashmap use SKUs as its keys.
+     */
+    public Order findOrder(String orderId) {
         if (!connectToDB()) {
             close();
             return null;
         }
 
-        Order toReturn = new Order("0000", new HashMap<>(), "DNE");
+        Order toReturn = new Order("0000", new HashMap<>(), "ND");
         HashMap<Item, Integer> hashMapToReturn = new HashMap<>();
         String id = "";
 
         try {
             statement = connect.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM product_orders" +
-                    " WHERE order_id = '" + orderId + "'");
+            String product_line = "SELECT * FROM product_orders" +
+                    " WHERE order_id = '" + orderId + "'";
+
+            String part_line = "SELECT * FROM part_orders" +
+                    " WHERE order_id = '" + orderId + "'";
+
+            resultSet = statement.executeQuery(product_line);
             while (resultSet.next()) {
                 id = resultSet.getString("order_id");
                 String productId = resultSet.getString("product_id");
@@ -135,30 +149,8 @@ public class OrderDataMapper extends InventoryDataMapper {
                 Item item = InventoryManager.getStaticManager().getProduct(productId);
                 hashMapToReturn.put(item, quantity);
             }
-            toReturn = new Order(id, hashMapToReturn, "idk");
-        } catch(SQLException e) {
-            System.out.println("OrderDataMapper findById error...");
-        } finally {
-            close();
-        }
 
-        return null;
-    }
-
-    public Order findPartOrder(String orderId) {
-        if (!connectToDB()) {
-            close();
-            return null;
-        }
-
-        Order toReturn = new Order("0000", new HashMap<>(), "DNE");
-        HashMap<Item, Integer> hashMapToReturn = new HashMap<>();
-        String id = "";
-
-        try {
-            statement = connect.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM part_orders" +
-                    " WHERE order_id = '" + orderId + "'");
+            resultSet = statement.executeQuery(part_line);
             while (resultSet.next()) {
                 id = resultSet.getString("order_id");
                 String partId = resultSet.getString("part_id");
@@ -167,7 +159,8 @@ public class OrderDataMapper extends InventoryDataMapper {
                 Item item = InventoryManager.getStaticManager().getPart(partId);
                 hashMapToReturn.put(item, quantity);
             }
-            toReturn = new Order(id, hashMapToReturn, "idk");
+            toReturn.setId(id);
+            toReturn.setItems(hashMapToReturn);
         } catch(SQLException e) {
             System.out.println("OrderDataMapper findById error...");
         } finally {

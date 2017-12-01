@@ -62,7 +62,6 @@ public class ProductDataMapper extends InventoryDataMapper {
         line += ", category = '" + product.getSKU().charAt(0) + "'" +
                 ", weight = " + product.getWeight() +
                 " WHERE product_id = '" + product.getSKU().substring(1, 5) + "'";
-        System.out.println(line);
 
         try {
             preparedStatement = connect.prepareStatement(line);
