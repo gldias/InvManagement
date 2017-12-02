@@ -2,6 +2,7 @@ package APIs;
 
 import inventory_app.domain_layer.*;
 
+import inventory_app.domain_layer.validation.ValidationResults;
 import org.json.JSONObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,56 +13,96 @@ import java.util.HashMap;
 @Path("request")
 public class ProductController {
 
-    //TODO: Error Responses
-
+    /**
+     * Gets product information for a given SKU
+     * @param sku - SKU of product to look for
+     * @return product information in JSON format
+     */
     @GET
     @Path("/products/{sku}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Product getProductInfo(@PathParam("sku") String sku) {
+    public Response getProductInfo(@PathParam("sku") String sku) {
         Product product = InventoryManager.getStaticManager().getProduct(sku);
-        return product;
+
+        //If product does not exist (sku was invalid)
+        if (product == null) {
+            ValidationResults validationResults = new ValidationResults("Product could not be found");
+            return Response.status(400).entity(validationResults).build();
+        }
+
+        return Response.status(200).entity(product).build();
     }
 
+    /**
+     * Notifies Inventory that an order has been fulfilled.
+     * More of a product is added to our inventory.
+     * @param jsonRequest - contains information about order fulfillment
+     * @return product SKU in JSON format
+     */
     @POST
     @Path("/orderFulfill/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response sendOrderFulfillment(String jsonRequest) {
+        //Retrieve all of the information passed in via JSON
         JSONObject obj = new JSONObject(jsonRequest);
         String sku = obj.getString("product_sku");
         int quantity = obj.getInt("quantity");
         String flag = obj.getString("flag");
 
-        //todo
-        /**
-        Product product = InventoryManager.getStaticManager().addProducts(sku, quantity);
+        //Adds more of specified product to our database
+        ValidationResults validationResults = InventoryManager.getStaticManager().addProducts(sku, quantity);
+
+        //If product does not exist (sku was invalid)
+        if (!validationResults.isSuccess()) {
+            return Response.status(400).entity(validationResults).build();
+        }
 
         HashMap<String, String> result = new HashMap<>();
+        Product product = InventoryManager.getStaticManager().getProduct(sku);
         result.put("productID", product.getSKU());
         return  Response.status(200).entity(result).build();
-         **/
-        return null; //temporary
     }
 
+    /**
+     * Allows Manufacturing to get more parts from Inventory, if we have enough in stock.
+     * @param partID - part to retrieve
+     * @param quantity - quantity requested
+     * @return success message in JSON format
+     */
     @GET
     @Path("/parts/{id}/{quantity}")
     @Produces(MediaType.APPLICATION_JSON)
-    public HashMap<String, Boolean> requestParts(@PathParam("id") String partID, @PathParam("quantity") int quantity) {
-        HashMap<String, Boolean> result = new HashMap<>();
-        result.put("confirmed", false);
-        int currentQuantity = InventoryManager.getStaticManager().getPart(partID).getQuantity();
+    public Response requestParts(@PathParam("id") String partID, @PathParam("quantity") int quantity) {
+        ValidationResults result = new ValidationResults("Oops! Something went wrong.");
 
+        Part part = InventoryManager.getStaticManager().getPart(partID);
+        //If part does not exist (id was invalid)
+        if (part == null) {
+            ValidationResults validationResults = new ValidationResults("Part could not be found");
+            return Response.status(400).entity(validationResults).build();
+        }
+
+        int currentQuantity = part.getQuantity();
+
+        //We can only send parts if we have the same amount, or more, in stock
         if (currentQuantity >= quantity) {
             InventoryManager.getStaticManager().removeParts(partID, quantity);
-            result.put("confirmed", true);
-            return result;
+            ValidationResults validationResults = new ValidationResults();
+            return Response.status(200).entity(validationResults).build();
         }
-        return result;
+        return Response.status(400).entity(result).build();
     }
 
+    /**
+     * Creates a new order for a product.
+     * @param jsonRequest - information about order
+     * @return newly created Order's ID in JSON format
+     */
     @POST
     @Path("/newOrder/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newOrder(String jsonRequest) {
+        //Retrieve all of the information passed in via JSON
         JSONObject obj = new JSONObject(jsonRequest);
         String sku = obj.getString("product_sku");
         int quantity = obj.getInt("quantity");
@@ -71,17 +112,24 @@ public class ProductController {
         //Create HashMap of Product to Quantity
         HashMap<Item, Integer> toOrder = new HashMap<>();
         Product product = InventoryManager.getStaticManager().getProduct(sku);
+
+        //If product does not exist (sku is invalid)
+        if (product == null) {
+            ValidationResults validationResults = new ValidationResults("Product could not be found");
+            return Response.status(400).entity(validationResults).build();
+        }
+
         toOrder.put(product, quantity);
 
-        //todo
-        /**
-        Order order = OrderManager.getStaticManager().createOrder(toOrder, destination);
+        //Create the Order object and confirm with Sales
+        ValidationResults validationResults = OrderManager.getStaticManager().createOrder(toOrder, destination);
+        if (!validationResults.isSuccess()) {
+            return Response.status(400).entity(validationResults).build();
+        }
+
+        Order order = (Order)validationResults.getValidatedObject();
         OrderManager.getStaticManager().confirmOrderWithSales(order.getId());
 
-        HashMap<String, String> result = new HashMap<>();
-        result.put("orderID", order.getId());
-        return Response.status(200).entity(result).build();
-         **/
-        return null; //temporary
+        return Response.status(200).entity(validationResults).build();
     }
 }

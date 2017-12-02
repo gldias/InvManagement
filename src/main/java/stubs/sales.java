@@ -14,7 +14,7 @@ public class sales {
      * Stub for confirming an order
      * @param id - the order ID
      */
-    public void confirmOrder(String id){
+    public void confirmOrder(int id){
     }
 
     public static sales getSales(){

@@ -34,7 +34,7 @@ public class OrderManager {
      *
      * @return created Order
      */
-    public ValidationResults createOrder(String id){
+    public ValidationResults createOrder(int id){
         Order o = new Order();
 
         Order testOrder = getOrder(id);
@@ -49,8 +49,9 @@ public class OrderManager {
         orders.add(o);
         orderMapper.insert(o);
 
-        //todo
-        return new ValidationResults();
+        ValidationResults results = new ValidationResults();
+        results.setValidatedObject(o);
+        return results;
     }
 
     /**
@@ -62,22 +63,22 @@ public class OrderManager {
      * @param items a hashmap of Products in the order (key) and their quantities (value)
      * @return created Order
      */
-    public ValidationResults createOrder(String order_id, HashMap<Item,Integer> items, String destination){
-
+    public ValidationResults createOrder(HashMap<Item,Integer> items, String destination){
+        //TODO: there is no error validation yet
         List<Item> ItemList = new ArrayList<>();
 
         for(Item i: ItemList){
 
         }
 
-        Order o = new Order(order_id, items, destination);
+        Order o = new Order(items, destination);
 
         orders.add(o);
         orderMapper.insert(o);
 
-        //todo
-        return new ValidationResults();
-        //autogen id?
+        ValidationResults results = new ValidationResults();
+        results.setValidatedObject(o);
+        return results;
     }
 
     /**
@@ -86,9 +87,9 @@ public class OrderManager {
      * @param id an Order's identifier
      * @return identified order
      */
-    public Order getOrder(String id){
+    public Order getOrder(int id){
         for(Order o : orders){
-            if(o.getId().equals(id)){
+            if(o.getId() == id){
                 return o;
             }
         }
@@ -112,7 +113,7 @@ public class OrderManager {
      */
     private ValidationResults updateOrder(Order order, HashMap<Item,Integer> items){
         for(Order o : orders){
-            if(order.getId().equals(o.getId())){
+            if(order.getId() == o.getId()){
                 o.setItems(items);
             }
         }
@@ -129,7 +130,7 @@ public class OrderManager {
      * @param items a hashmap listing the item ids the order is keeping track of
      * @return the updated order
      */
-    public ValidationResults updateOrder(String id, HashMap<Item,Integer> items){
+    public ValidationResults updateOrder(int id, HashMap<Item,Integer> items){
         Order order = getOrder(id);
 
         return updateOrder(order,items);
@@ -172,7 +173,7 @@ public class OrderManager {
      * @param quantity the quantity of the product to add
      * @return the updated order
      */
-    public ValidationResults addProductToOrder(String orderId, String SKU, int quantity){
+    public ValidationResults addProductToOrder(int orderId, String SKU, int quantity){
         Order order = getOrder(orderId);
 
         if(order == null){
@@ -233,7 +234,7 @@ public class OrderManager {
      * @param quantity the quantity of the product to remove
      * @return the updated order
      */
-    public ValidationResults removeProductFromOrder(String orderId, String SKU, int quantity){
+    public ValidationResults removeProductFromOrder(int orderId, String SKU, int quantity){
         Order order = getOrder(orderId);
 
         if(order == null){
@@ -288,7 +289,7 @@ public class OrderManager {
      * @param quantity the quantity of the product to add
      * @return the updated order
      */
-    public ValidationResults addPartToOrder(String orderId, String partId, int quantity){
+    public ValidationResults addPartToOrder(int orderId, String partId, int quantity){
         Order order = getOrder(orderId);
 
         if(order == null){
@@ -349,7 +350,7 @@ public class OrderManager {
      * @param quantity the quantity of the part to remove
      * @return the updated order
      */
-    public ValidationResults removePartFromOrder(String orderId, String partId, int quantity){
+    public ValidationResults removePartFromOrder(int orderId, String partId, int quantity){
         Order order = getOrder(orderId);
 
         if(order == null){
@@ -389,13 +390,13 @@ public class OrderManager {
      * @param orderId the id of the order to remove
      * @return the removed order
      */
-    public ValidationResults removeOrder(String orderId){
+    public ValidationResults removeOrder(int orderId){
         Order order = getOrder(orderId);
 
         return removeOrder(order);
     }
 
-    public void confirmOrderWithSales(String order_id){
+    public void confirmOrderWithSales(int order_id){
         //confirm order?
         sales.getSales().confirmOrder(order_id);
     }

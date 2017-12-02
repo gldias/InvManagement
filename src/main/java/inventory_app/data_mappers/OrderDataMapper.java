@@ -128,7 +128,7 @@ public class OrderDataMapper extends InventoryDataMapper {
             return null;
         }
 
-        Order toReturn = new Order("0000", new HashMap<>(), "ND");
+        Order toReturn = new Order(new HashMap<>(), "ND");
         HashMap<Item, Integer> hashMapToReturn = new HashMap<>();
         String id = "";
 
