@@ -10,6 +10,11 @@ import java.util.HashMap;
  */
 public class OrderDataMapper extends InventoryDataMapper {
 
+    /**
+     * Inserts an order into either the product_orders table or part_orders table
+     * @param o The order to be inserted
+     * @return True if operation was successful
+     */
     public boolean insert(Order o) {
         if (!connectToDB()) {
             close();
@@ -51,6 +56,11 @@ public class OrderDataMapper extends InventoryDataMapper {
         return true;
     }
 
+    /**
+     * Updates an existing order in the database
+     * @param o The order to be updated
+     * @return True if operation was successful
+     */
     public boolean update(Order o) {
         if (!connectToDB()) {
             close();
@@ -86,6 +96,11 @@ public class OrderDataMapper extends InventoryDataMapper {
         return true;
     }
 
+    /**
+     * Removes an order from the database
+     * @param o The order to remove from the database
+     * @return True if the operation was successful
+     */
     public boolean delete(Order o) {
         if (!connectToDB()) {
             close();
@@ -120,7 +135,6 @@ public class OrderDataMapper extends InventoryDataMapper {
      * @return The order object read from the database
      * FIXME: (12/1/2017) Order object needs a hashmap, which needs items as its keys,
      * FIXME: which means parts and products will need to be pulled from the InventoryManager.
-     * FIXME: Petition to make the hashmap use SKUs as its keys.
      */
     public Order findOrder(String orderId) {
         if (!connectToDB()) {
@@ -130,19 +144,19 @@ public class OrderDataMapper extends InventoryDataMapper {
 
         Order toReturn = new Order(new HashMap<>(), "ND");
         HashMap<Item, Integer> hashMapToReturn = new HashMap<>();
-        String id = "";
+        int id = 0;
 
         try {
             statement = connect.createStatement();
             String product_line = "SELECT * FROM product_orders" +
-                    " WHERE order_id = '" + orderId + "'";
+                    " WHERE order_id = " + orderId;
 
             String part_line = "SELECT * FROM part_orders" +
-                    " WHERE order_id = '" + orderId + "'";
+                    " WHERE order_id = " + orderId;
 
             resultSet = statement.executeQuery(product_line);
             while (resultSet.next()) {
-                id = resultSet.getString("order_id");
+                id = resultSet.getInt("order_id");
                 String productId = resultSet.getString("product_id");
                 int quantity = resultSet.getInt("quantity");
 
@@ -152,7 +166,7 @@ public class OrderDataMapper extends InventoryDataMapper {
 
             resultSet = statement.executeQuery(part_line);
             while (resultSet.next()) {
-                id = resultSet.getString("order_id");
+                id = resultSet.getInt("order_id");
                 String partId = resultSet.getString("part_id");
                 int quantity = resultSet.getInt("quantity");
 
@@ -170,229 +184,3 @@ public class OrderDataMapper extends InventoryDataMapper {
         return null;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-    private Connection connect;
-
-    private Statement statement;
-    private PreparedStatement preparedStatement;
-    private ResultSet resultSet;
-
-
-    /**
-     * Inserts an object into the Database
-     * @param o Object to be inserted
-     * @return True if operation is successful
-
-    @Override
-    public boolean insert(Object o) {
-        if (!connectToDB()) {
-            close();
-            return false;
-        }
-
-        String line = null;
-
-        Order order = (Order) o;
-        for (int i = 0; i < order.getItems().size(); i++) {
-            if (order.getItems().keySet().toArray()[i] instanceof Product) {
-                /* Print statements for debugging purposes
-                System.out.println(order.getId());
-                System.out.println(((Product)order.getItems().keySet().toArray()[0]).getSKU());
-                System.out.println((int)order.getItems().values().toArray()[i]);
-
-                line = "INSERT INTO product_orders ('order_id', 'product_id', 'quantity') VALUES(?, ?, ?)";
-                try {
-                    preparedStatement = connect.prepareStatement(line);
-                    preparedStatement.setString(1, order.getId());
-                    preparedStatement.setString(2, ((Product)order.getItems().keySet().toArray()[i]).getSKU());
-                    preparedStatement.setInt(3, (int)order.getItems().values().toArray()[i]);
-                    preparedStatement.executeUpdate();
-                } catch (SQLException e) {
-                    System.out.println("Insertion error...");
-                    return false;
-                }
-            }
-
-            else if (order.getItems().keySet().toArray()[i] instanceof Part) {
-                /*Print statements for debugging purposes
-                System.out.println(order.getId());
-                System.out.println(((Part)order.getItems().keySet().toArray()[0]).getId());
-                System.out.println((int)order.getItems().values().toArray()[i]);
-
-                line = "INSERT INTO part_orders ('order_id', 'part_id', 'quantity') VALUES(?, ?, ?)";
-                try {
-                    preparedStatement = connect.prepareStatement(line);
-
-                    preparedStatement.setString(1, order.getId());
-                    preparedStatement.setString(2, ((Part)order.getItems().keySet().toArray()[i]).getId());
-                    preparedStatement.setInt(3, (int)order.getItems().values().toArray()[i]);
-                    preparedStatement.executeUpdate();
-                } catch (SQLException e) {
-                    System.out.println("Insertion error...");
-                    return false;
-                }
-            }
-
-        }
-        close();
-
-        return true;
-    }
-
-
-    /**
-     * Updates an object already in the database
-     * @param o Object to be updated
-     * @return True if operation is successful
-
-    @Override
-    public boolean update(Object o) {
-        if (!connectToDB()) {
-            close();
-            return false;
-        }
-
-        String line = null;
-
-        Order order = (Order) o;
-
-        for (int i = 0; i < order.getItems().size(); i++) {
-            if (order.getItems().keySet().toArray()[i] instanceof Product) {
-                line = "UPDATE product_orders SET" +
-                        " quantity = " + order.getItems().values().toArray()[i] +
-                        " WHERE order_id = " + order.getId() +
-                        " AND product_id = " + ((Product) order.getItems().keySet().toArray()[i]).getSKU();
-            }
-
-            else if (order.getItems().keySet().toArray()[i] instanceof Part) {
-                line = "UPDATE part_orders SET" +
-                        " quantity = " + order.getItems().values().toArray()[i] +
-                        " WHERE order_id = " + order.getId() +
-                        " AND part_id = " + ((Part) order.getItems().keySet().toArray()[i]).getId();
-            }
-
-
-            try {
-                preparedStatement = connect.prepareStatement(line);
-                preparedStatement.executeUpdate();
-            } catch (SQLException e) {
-                System.out.println("Update error...");
-                return false;
-            }
-        }
-        close();
-
-        return true;
-    }
-
-    /**
-     * Removes an object from the Database
-     * @param o Object to be removed
-     * @return True if operation is successful
-
-    @Override
-    public boolean delete(Object o) {
-        if (!connectToDB()) {
-            close();
-            return false;
-        }
-
-        String line = null;
-        Order order = (Order) o;
-        if (order.getItems().keySet().toArray()[0] instanceof Product)
-            line = "DELETE FROM product_orders WHERE order_id = " + order.getId();
-
-        else if (order.getItems().keySet().toArray()[0] instanceof Part)
-            line = "DELETE FROM part_orders WHERE order_id = " + order.getId();
-
-
-        try {
-            preparedStatement = connect.prepareStatement(line);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Deletion error...");
-            return false;
-        } finally {
-            close();
-        }
-
-        return true;
-    }
-
-    /**
-     * Finds an object from the database
-     * @param string The SKU or id of the product/part
-     * @return True if operation is successful
-
-    public boolean find(String string) {
-        return false;
-    }
-
-
-    /**
-     * Makes a connection with the database.  Has to be called before each operation
-     * @return True if successful
-
-    private boolean connectToDB(){
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connect = DriverManager.getConnection(
-                    "jdbc:mysql://vm343a.se.rit.edu:3333/inventorymanagement?user=GroupA&password=SWEN343");
-        } catch (ClassNotFoundException e){
-            System.out.println("JConnector error...");
-            return false;
-        } catch (SQLException e){
-            System.out.println("Connection error...");
-            return false;
-        }
-
-        return true;
-    }
-
-
-    /**
-     * Closes the connection with the database
-
-    private void close() {
-        try {
-            if(resultSet != null){
-                resultSet.close();
-            }
-
-            if (statement != null) {
-                statement.close();
-            }
-
-            if (connect != null) {
-                connect.close();
-            }
-        } catch (Exception e) {
-            System.exit(3);
-        }
-
-        System.out.println("Closed...");
-    }
-}
-**/

@@ -5,7 +5,17 @@ import java.sql.*;
 import java.util.ArrayList;
 
 //TODO PartCategory necessary??
+
+/**
+ * Bridge between the part operations in the InventoryManager and the database
+ */
 public class PartDataMapper extends InventoryDataMapper {
+
+    /**
+     * Inserts a part into the database parts table
+     * @param part The part to be inserted
+     * @return True if operation was successful
+     */
     public boolean insert(Part part) {
         if (!connectToDB()) {
             close();
@@ -31,6 +41,11 @@ public class PartDataMapper extends InventoryDataMapper {
         return true;
     }
 
+    /**
+     * The part in the database to be updated
+     * @param part The part being updated with new info
+     * @return True if operation was successful
+     */
     public boolean update(Part part) {
         if (!connectToDB()) {
             close();
@@ -57,6 +72,11 @@ public class PartDataMapper extends InventoryDataMapper {
         return true;
     }
 
+    /**
+     * Removes a part from the database
+     * @param part The part to be removed
+     * @return True if the operation was successful
+     */
     public boolean delete(Part part) {
         if (!connectToDB()) {
             close();
@@ -78,6 +98,11 @@ public class PartDataMapper extends InventoryDataMapper {
         return true;
     }
 
+    /**
+     * Finds a part in the database by the given ID
+     * @param partId The ID of the part to be read
+     * @return The part object read by the database
+     */
     public Part findById(String partId){
         Part toReturn = new Part("0000", "DNE", 0, 0, 0.0);
 

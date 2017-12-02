@@ -7,7 +7,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 //TODO ProductCategory necessary??
+
+/**
+ * The bridge between the product operations in the InventoryManager and the database
+ */
 public class ProductDataMapper extends InventoryDataMapper {
+
+    /**
+     * Inserts a product into the database products table
+     * @param product The product to be inserted
+     * @return True if operation was successful
+     */
     public boolean insert(Product product) {
         if (!connectToDB()) {
             close();
@@ -43,6 +53,11 @@ public class ProductDataMapper extends InventoryDataMapper {
         return true;
     }
 
+    /**
+     * Updates a product already in the database
+     * @param product The new info for the product to be updated
+     * @return True if operation is successful
+     */
     public boolean update(Product product) {
         if (!connectToDB()) {
             close();
@@ -76,6 +91,11 @@ public class ProductDataMapper extends InventoryDataMapper {
         return true;
     }
 
+    /**
+     * Deletes a product from the database
+     * @param product The product to be deleted
+     * @return True if operation was successful
+     */
     public boolean delete(Product product) {
         if (!connectToDB()) {
             close();
@@ -97,6 +117,11 @@ public class ProductDataMapper extends InventoryDataMapper {
         return true;
     }
 
+    /**
+     * Finds the product info for the productSKU and returns the product
+     * @param productSKU The SKU of the product to be returned
+     * @return The product specified by the SKU
+     */
     public Product findBySKU(String productSKU) {
         Product toReturn = new Product("DNE", ProductCategory.FASHION, "F0000N", 0.0, 0);
 
@@ -134,6 +159,10 @@ public class ProductDataMapper extends InventoryDataMapper {
         return toReturn;
     }
 
+    /**
+     * Returns the whole product table
+     * @return The table of products.
+     */
     public ArrayList<Product> getTable() {
         ArrayList<Product> toReturn = new ArrayList<>();
 
