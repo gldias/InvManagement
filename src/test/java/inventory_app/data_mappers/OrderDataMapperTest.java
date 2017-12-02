@@ -24,7 +24,7 @@ public class OrderDataMapperTest {
         items0.put(product0, 50);
         items0.put(part0, 100);
 
-        order0.setId("9999");
+        order0.setId(9999);
         order0.setItems(items0);
     }
 
@@ -36,7 +36,7 @@ public class OrderDataMapperTest {
     @Test
     public void testUpdateOrder() {
         dm.insert(order0);
-        order0.setId("9998");
+        order0.setId(9998);
         assertEquals(true, dm.update(order0));
     }
 

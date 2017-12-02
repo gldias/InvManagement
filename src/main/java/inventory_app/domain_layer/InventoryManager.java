@@ -17,8 +17,8 @@ public class InventoryManager {
     Set<Part> parts;
     Set<Product> products;
 
-    mapperInterface partMapper;
-    mapperInterface productMapper;
+    PartDataMapper partMapper;
+    ProductDataMapper productMapper;
 
     private static InventoryManager staticManager = new InventoryManager();
 
@@ -28,8 +28,8 @@ public class InventoryManager {
         products = new HashSet<>();
 
         //todo replace these with actual Mappers
-        partMapper = new ItemDataMapper();
-        productMapper = new ItemDataMapper();
+        partMapper = new PartDataMapper();
+        productMapper = new ProductDataMapper();
     }
 
     /**

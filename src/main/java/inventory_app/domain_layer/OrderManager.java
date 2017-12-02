@@ -1,13 +1,10 @@
 package inventory_app.domain_layer;
 
-import inventory_app.data_mappers.InventoryDataMapper;
 import inventory_app.data_mappers.OrderDataMapper;
-import inventory_app.data_mappers.mapperInterface;
 import inventory_app.domain_layer.validation.ValidationResults;
 import stubs.manufacturing;
 import stubs.sales;
 
-import javax.validation.Valid;
 import java.util.*;
 
 /**

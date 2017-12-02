@@ -136,7 +136,7 @@ public class OrderDataMapper extends InventoryDataMapper {
      * FIXME: (12/1/2017) Order object needs a hashmap, which needs items as its keys,
      * FIXME: which means parts and products will need to be pulled from the InventoryManager.
      */
-    public Order findOrder(String orderId) {
+    public Order findOrder(int orderId) {
         if (!connectToDB()) {
             close();
             return null;
