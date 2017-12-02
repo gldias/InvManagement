@@ -8,23 +8,23 @@ import java.util.Map;
  * This class is used to represent Orders.
  */
 public class Order {
-    private String id;
+    private static int id = 0;
     private Map<Item, Integer> items = new HashMap<>();
     private String destination;
 
-    public Order(String id, HashMap<Item, Integer> items, String destination) {
-        this.id = id;
+    public Order(HashMap<Item, Integer> items, String destination) {
+        this.id = ++id;
         this.items = items;
         this.destination = destination;
     }
 
     public Order(){
-        this.id = "0";
+        this.id = ++id;
         this.items = new HashMap<>();
         this.destination = "ND";
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -44,7 +44,7 @@ public class Order {
         return 0;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -84,10 +84,12 @@ public class Order {
         }
 
         Order order = (Order) o;
-        return order.getId().equals(this.getId());
+        return order.getId() == this.getId();
     }
 
+    //TODO: Is the method below necessary?
+    /*
     public int hashCode(){
         return id.hashCode();
-    }
+    }*/
 }

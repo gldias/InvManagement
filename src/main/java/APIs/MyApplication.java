@@ -26,14 +26,14 @@ public class MyApplication extends Application {
         InventoryManager.getStaticManager().createPart("TestPart2", PartCategory.SCREEN, "0002", 0.01);
         InventoryManager.getStaticManager().createPart("TestPart3", PartCategory.ANTENNA, "0003", 0.01);
 
-        OrderManager.getStaticManager().createOrder("01");
-        OrderManager.getStaticManager().addPartToOrder("01","0001",200);
-        OrderManager.getStaticManager().addPartToOrder("01","0002",150);
+        OrderManager.getStaticManager().createOrder(1);
+        OrderManager.getStaticManager().addPartToOrder(1,"0001",200);
+        OrderManager.getStaticManager().addPartToOrder(1,"0002",150);
 
 
-        OrderManager.getStaticManager().createOrder("02");
-        OrderManager.getStaticManager().addProductToOrder("02","0001",20);
-        OrderManager.getStaticManager().addProductToOrder("02","0002",3);
+        OrderManager.getStaticManager().createOrder(2);
+        OrderManager.getStaticManager().addProductToOrder(2,"0001",20);
+        OrderManager.getStaticManager().addProductToOrder(2,"0002",3);
 
         OrderManager.getStaticManager().orderProductsFromManufacturing("0001", 7, "headgear");
 

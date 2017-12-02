@@ -78,4 +78,9 @@ public class Product extends Item {
     public int hashCode() {
         return SKU.hashCode();
     }
+
+    @Override
+    public String toString(){
+        return "" + SKU + ", " + getName() + ", " + getQuantity() + ", " + getWeight();
+    }
 }
