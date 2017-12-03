@@ -1,6 +1,10 @@
 package stubs;
 
 import APIs.ProductController;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import org.json.JSONObject;
 
 import static org.eclipse.jetty.webapp.Origin.API;
 
@@ -69,18 +73,40 @@ public class manufacturing {
      * @return boolean representing whether they received parts or not
      */
     public boolean sendParts(String partID, int quantity){
-        // Only fails when manufacturing can not confirm they received parts
+        boolean success = false;
+        try {
 
-        int index = sendPartsSuccessCursor;
+            Client client = Client.create();
 
-        sendPartsSuccessCursor++;
+            WebResource webResource = client
+                    .resource("http://manufacturing.kennuware.com:8080/ReceiveMaterials?rid=" + partID +
+                            "&q=" + quantity);
 
-        //loops cursor
-        if(sendPartsSuccessCursor > 4){
-            sendPartsSuccessCursor = 0;
+            String input = "{\"singer\":\"Metallica\",\"title\":\"Fade To Black\"}";
+
+            ClientResponse response = webResource.type("application/json")
+                    .post(ClientResponse.class, input);
+
+            if (response.getStatus() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + response.getStatus());
+            }
+
+            System.out.println("Output from Server .... \n");
+            String output = response.getEntity(String.class);
+            System.out.println(output);
+
+            //Retrieve response boolean
+            JSONObject obj = new JSONObject(output);
+            success = obj.getBoolean("confirm");
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
         }
 
-        return occasionalFailure(index);
+        return success;
     }
 
     public static manufacturing getManufacturing(){
