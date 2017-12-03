@@ -30,10 +30,10 @@ public class ProductController {
             return Response.status(400).entity(validationResults).build();
         }
 
-        HashMap<String, Integer> result = new HashMap<>();
+        HashMap<String, String> result = new HashMap<>();
 
         for (Product p : products) {
-            result.put(p.getName(), p.getQuantity());
+            result.put(p.getName(), p.getSKU());
         }
 
         return Response.status(200).entity(result).build();
