@@ -2,6 +2,7 @@ package inventory_app.domain_layer;
 
 import inventory_app.data_mappers.OrderDataMapper;
 import inventory_app.domain_layer.validation.ValidationResults;
+import stubs.FakeOrderMapper;
 import stubs.manufacturing;
 import stubs.sales;
 
@@ -19,11 +20,18 @@ public class OrderManager {
 
     private static int idCount = 1;
 
-    private static OrderManager staticManagerO = new OrderManager();
+    private static OrderManager staticManagerO = new OrderManager(new OrderDataMapper());
+
+    private static OrderManager testManagerO = new OrderManager(new FakeOrderMapper());
 
     public OrderManager(){
         orders = new HashSet<>();
         orderMapper = new OrderDataMapper();
+    }
+
+    public OrderManager(OrderDataMapper odm){
+        orders = new HashSet<>();
+        orderMapper = odm;
     }
 
     /**
@@ -414,5 +422,9 @@ public class OrderManager {
 
     public static OrderManager getStaticManager(){
         return staticManagerO;
+    }
+
+    public static OrderManager getTestManager(){
+        return testManagerO;
     }
 }
