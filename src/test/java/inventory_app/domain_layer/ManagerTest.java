@@ -8,7 +8,7 @@ public class ManagerTest {
 
     @Before
     public void setUp(){
-        manager = InventoryManager.getStaticManager();
+        manager = InventoryManager.getTestManager();
         manager.createProduct("Light Up Bracelet", ProductCategory.FASHION,"F0001N",0.2);
         manager.createProduct("Reversible Jacket", ProductCategory.COMFORT,"C0001N",8.1);
         manager.createProduct("Fitness Bracelet", ProductCategory.HEALTHY,"H0001N", 0.3);

@@ -104,7 +104,7 @@ public class PartDataMapper extends InventoryDataMapper {
      * @return The part object read by the database
      */
     public Part findById(String partId){
-        Part toReturn = new Part("0000", "DNE", 0, 0, 0.0);
+        Part toReturn = null;
 
         if (!connectToDB()) {
             close();

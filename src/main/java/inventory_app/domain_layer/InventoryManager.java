@@ -2,8 +2,11 @@ package inventory_app.domain_layer;
 
 import inventory_app.data_mappers.*;
 import inventory_app.domain_layer.validation.*;
+import stubs.FakePartMapper;
+import stubs.FakeProductMapper;
 
 import javax.validation.Valid;
+import java.sql.Connection;
 import java.util.*;
 
 /**
@@ -15,17 +18,18 @@ public class InventoryManager {
 
     //data duplication necessary for performance
     //Set<Part> parts;
-    Set<Product> products;
 
     PartDataMapper partMapper;
     ProductDataMapper productMapper;
 
-    private static InventoryManager staticManager = new InventoryManager();
+    private static InventoryManager staticManager = new InventoryManager(new PartDataMapper(),new ProductDataMapper());
+
+    private static InventoryManager testManager = new InventoryManager(new FakePartMapper(), new FakeProductMapper());
 
     public InventoryManager(){
         //maybe change these to hashmaps? with SKU as the key?
         //parts = new HashSet<>();
-        products = new HashSet<>();
+        //products = new HashSet<>();
 
         //todo replace these with actual Mappers
         partMapper = new PartDataMapper();
@@ -37,14 +41,12 @@ public class InventoryManager {
      *
      * @param _partMapper
      */
-    public InventoryManager(PartDataMapper _partMapper){
+    public InventoryManager(PartDataMapper _partMapper, ProductDataMapper _productMapper){
         //maybe change these to hashmaps? with SKU as the key?
-        //parts = new HashSet<>();
-        products = new HashSet<>();
 
         //todo replace these with actual Mappers
         partMapper = _partMapper;
-        productMapper = new ProductDataMapper();
+        productMapper = _productMapper;
     }
 
     /**
@@ -53,7 +55,6 @@ public class InventoryManager {
     public Product createProduct(){
         Product p = new Product();
 
-        products.add(p);
         productMapper.insert(p);
         return p;
     }
@@ -63,7 +64,6 @@ public class InventoryManager {
         ValidationResults vr = validateProduct(product);
 
         if(vr.isSuccess()){
-            products.add(product);
             productMapper.insert(product);
         }
 
@@ -93,19 +93,14 @@ public class InventoryManager {
      */
     public Product getProduct(String SKU){
 
-        for(Product p : products){
-            if(SKU.equals(p.getSKU())){
-                return p;
-            }
-        }
-        return null;
+        return productMapper.findBySKU(SKU);
     }
 
     /**
      * Shows all products
      */
-    public Set<Product> getProducts(){
-        return products;
+    public ArrayList<Product> getProducts(){
+        return productMapper.getTable();
     }
 
     /**
@@ -172,7 +167,6 @@ public class InventoryManager {
      */
     private ValidationResults deleteProduct(Product product){
 
-        products.remove(product);
         productMapper.delete(product);
 
         ValidationResults vr = new ValidationResults();
@@ -324,14 +318,13 @@ public class InventoryManager {
      * @return the product whose quantity increased
      */
     private ValidationResults addProducts(Product product, int quantity){
-        if(!products.contains(product)){
+        if(!productMapper.getTable().contains(product)){
             //throw exception here?
             return new ValidationResults("Product does not exist");
         }
 
         product.addQuantity(quantity);
 
-        products.add(product);
         productMapper.update(product);
 
         return new ValidationResults();
@@ -362,14 +355,13 @@ public class InventoryManager {
      * @return the product whose quantity decreased
      */
     private ValidationResults removeProducts(Product product, int quantity){
-        if(!products.contains(product)){
+        if(!productMapper.getTable().contains(product)){
             //throw exception here?
             return new ValidationResults("Product does not exist");
         }
 
         product.subtractQuantity(quantity);
 
-        products.add(product);
         productMapper.update(product);
 
         return new ValidationResults();
@@ -436,7 +428,7 @@ public class InventoryManager {
      * @return the part whose quantity decreased
      */
     private ValidationResults removeParts(Part part, int quantity){
-        if(getParts().contains(part)){
+        if(!getParts().contains(part)){
             return new ValidationResults("Part does not exist");
         }
 
@@ -527,5 +519,9 @@ public class InventoryManager {
 
     public static InventoryManager getStaticManager() {
         return staticManager;
+    }
+
+    public static InventoryManager getTestManager() {
+        return testManager;
     }
 }

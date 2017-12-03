@@ -123,7 +123,7 @@ public class ProductDataMapper extends InventoryDataMapper {
      * @return The product specified by the SKU
      */
     public Product findBySKU(String productSKU) {
-        Product toReturn = new Product("DNE", ProductCategory.FASHION, "F0000N", 0.0, 0);
+        Product toReturn = null;
 
         if(!connectToDB()) {
             close();
