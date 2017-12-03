@@ -43,4 +43,8 @@ public abstract class InventoryDataMapper {
 
         System.out.println("Closed...");
     }
+
+    protected Connection getConnection(){
+        return connect;
+    }
 }
