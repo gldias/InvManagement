@@ -41,19 +41,19 @@
     <div class="container t">
       <div class="form-group center-block">
        <form action="pserv" method="post">
-        <label>
-            Name <input type="text" class="text-input" name="pname">
-        </label><br>
-        <label>
-            Category <input type="text" class="text-input" name="pcat">
-        </label><br>
-        <label>
-           SKU <input type="text" class="text-input" name="psku">
-        </label><br>
-        <label>
-            Weight <input type="number" class="number-input" name="pweight">
-        </label><br>
-        <button type="submit" class="btn btn-Primary" value="newProd" name="prodButton">Create New Product</button><br>
+            <label>
+                Name <input type="text" class="text-input" name="pname">
+            </label><br>
+            <label>
+                Category <input type="text" class="text-input" name="pcat">
+            </label><br>
+            <label>
+                SKU <input type="text" class="text-input" name="psku">
+            </label><br>
+            <label>
+                Weight <input type="number" class="number-input" name="pweight">
+            </label><br>
+            <button type="submit" class="btn btn-Primary" value="newProd" name="prodButton">Create New Product</button><br>
         </form>
       </div>
   </div>
