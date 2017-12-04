@@ -46,10 +46,7 @@ public class Product extends Item {
     }
 
     public boolean getRefurbished(){
-        if(SKU.charAt(5) == 'R') {
-            return true;
-        }
-        return false;
+        return SKU.charAt(5) == 'R';
     }
 
     //TODO delete after fixing classes that use this setter

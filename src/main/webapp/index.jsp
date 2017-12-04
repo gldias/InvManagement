@@ -40,7 +40,7 @@
     <h1>Inventory Management</h1>
     <div class="container t">
       <div class="form-group center-block">
-       <form action="${pageContext.request.contextPath}/productservlet" method="post">
+       <form action="pserv" method="post">
         <label>
             Name <input type="text" class="text-input" name="pname">
         </label><br>
@@ -53,7 +53,7 @@
         <label>
             Weight <input type="number" class="number-input" name="pweight">
         </label><br>
-        <button type="submit" class="btn btn-Primary" method="post" value="newProd" name="prodButton">Create New Product</button><br>
+        <button type="submit" class="btn btn-Primary" value="newProd" name="prodButton">Create New Product</button><br>
         </form>
       </div>
   </div>

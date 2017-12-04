@@ -7,5 +7,5 @@ public interface Validator {
      *
      * @return
      */
-    public ValidationResults validate(Object o);
+    ValidationResults validate(Object o);
 }
