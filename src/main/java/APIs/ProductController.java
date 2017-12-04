@@ -30,10 +30,17 @@ public class ProductController {
             return Response.status(400).entity(validationResults).build();
         }
 
-        HashMap<String, String> result = new HashMap<>();
+        ArrayList<HashMap<String, String>> result = new ArrayList<>();
+        //HashMap<String, String> result = new HashMap<>();
 
-        for (Product p : products) {
-            result.put(p.getName(), p.getSKU());
+        //for (Product p : products) {
+        //    result.put(p.getName(), p.getSKU());
+        //}
+        for (int i = 0; i < products.size(); i++) {
+            HashMap<String, String> productInfo = new HashMap<>();
+            productInfo.put("Name", products.get(i).getName());
+            productInfo.put("SKU", products.get(i).getSKU());
+            result.add(i, productInfo);
         }
 
         return Response.status(200).entity(result).build();

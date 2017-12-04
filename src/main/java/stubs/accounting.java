@@ -1,5 +1,13 @@
 package stubs;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import org.json.JSONObject;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 /**
  * Stub for API calls inventory_app would make to the accounting silo
  */
@@ -20,18 +28,41 @@ public class accounting {
      */
     public boolean checkFunds(double amount){
 
-        //check to make sure amount positive
-        if(amount < 0 - epsilon) {
-            return false;
+        boolean success = false;
+        try {
+
+            Client client = Client.create();
+
+            WebResource webResource = client
+                    .resource("http://accounting.kennuware.com/api/balance/3");
+
+            ClientResponse response = webResource.type("application/xml")
+                    .get(ClientResponse.class);
+
+            if (response.getStatus() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + response.getStatus());
+            }
+
+            System.out.println("Output from Server .... \n");
+            String output = response.getEntity(String.class);
+            System.out.println(output);
+
+            String balance = output.substring(13, output.length()-2);
+            double result = Double.parseDouble(balance);
+
+            if (result >= amount) {
+                success = true;
+            }
+
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
         }
 
-        //make sure there is enough left in the budget
-        if(amount <= funds){
-            funds -= amount;
-            return true;
-        }
-
-        return false;
+        return success;
     }
 
     public static accounting getAccounting(){
