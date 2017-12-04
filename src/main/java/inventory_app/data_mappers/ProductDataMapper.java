@@ -133,7 +133,7 @@ public class ProductDataMapper extends InventoryDataMapper {
         try {
             statement = connect.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM products WHERE product_id = '" +
-                    productSKU.substring(1, 4) + "'");
+                    productSKU.substring(1, 5) + "'");
             resultSet.next();
             String id = resultSet.getString("product_id");
             String name = resultSet.getString("name");
