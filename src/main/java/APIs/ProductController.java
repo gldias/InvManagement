@@ -8,10 +8,36 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 @Path("request")
 public class ProductController {
+
+    /**
+     * Gets name and SKU for all products
+     * @return product information in JSON format
+     */
+    @GET
+    @Path("/products/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProducts() {
+        ArrayList<Product> products = InventoryManager.getStaticManager().getProducts();
+
+        if (products == null) {
+            ValidationResults validationResults = new ValidationResults("No products available");
+            return Response.status(400).entity(validationResults).build();
+        }
+
+        HashMap<String, String> result = new HashMap<>();
+
+        for (Product p : products) {
+            result.put(p.getName(), p.getSKU());
+        }
+
+        return Response.status(200).entity(result).build();
+    }
 
     /**
      * Gets product information for a given SKU

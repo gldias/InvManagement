@@ -27,6 +27,8 @@ repositories {
 dependencies {
     compile 'com.sparkjava:spark-core:2.6.0'
     compile 'commons-dbutils:commons-dbutils:1.7'
+    // https://mvnrepository.com/artifact/com.sun.jersey/jersey-client
+    compile group: 'com.sun.jersey', name: 'jersey-client', version: '1.9.1'
     compile 'org.glassfish.jersey.containers:jersey-container-servlet:2.14'
     compile 'org.json:json:20141113'
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
