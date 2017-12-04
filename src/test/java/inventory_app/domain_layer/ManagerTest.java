@@ -10,8 +10,8 @@ public class ManagerTest {
     public void setUp(){
         manager = InventoryManager.getTestManager();
         manager.createProduct("Light Up Bracelet", ProductCategory.FASHION,"F0001N",0.2);
-        manager.createProduct("Reversible Jacket", ProductCategory.COMFORT,"C0001N",8.1);
-        manager.createProduct("Fitness Bracelet", ProductCategory.HEALTHY,"H0001N", 0.3);
+        manager.createProduct("Reversible Jacket", ProductCategory.COMFORT,"C0002N",8.1);
+        manager.createProduct("Fitness Bracelet", ProductCategory.HEALTHY,"H0003N", 0.3);
         manager.createProduct("Loogle Glass", ProductCategory.ACTIVE,"A0002N",0.2);
         manager.createProduct("Necklace Thing", ProductCategory.BRAINY, "B0001N", 0.9);
 

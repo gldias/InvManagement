@@ -1,6 +1,7 @@
 package inventory_app.domain_layer;
 
 import inventory_app.domain_layer.validation.ValidationResults;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ public class OrderManagerTest extends ManagerTest{
 
     @Before
     public void setUp2() throws Exception {
-        orders = new OrderManager();
+        orders = OrderManager.getTestManager();
         System.out.println("setup complete");
     }
 
@@ -27,34 +28,33 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     private Part createPartOrder(){
-        HashMap<Item,Integer> items = new HashMap<>();
 
-        Part testPart = new Part();
-        items.put(testPart,3);
+        orders.createOrder(1);
+        //todo now
+        ValidationResults vr = orders.addPartToOrder(1,"0003",3);
+        Part newPart = (Part) vr.getValidatedObject();
 
-
-        orders.createOrder(items,"Grandma's house");
-
-        return testPart;
+        return newPart;
     }
 
     private Product createProductOrder(){
         HashMap<Item,Integer> items = new HashMap<>();
 
-        Product testProduct = new Product();
-        items.put(testProduct,3);
+        orders.createOrder(2);
+        ValidationResults vr = orders.addProductToOrder(2,"B0001N", 3);
 
+        Product p = (Product) vr.getValidatedObject();
 
-        orders.createOrder(items,"Grandma's house");
-
-        return testProduct;
+        return p;
     }
 
     @Test
     public void testCreateOrderCreates() throws Exception {
         Item testItem = createPartOrder();
 
-        assertTrue(orders.getOrder(1).getItems().containsKey(testItem));
+        assertTrue(orders.getOrder(1)
+                .getItems()
+                .containsKey(testItem));
 
         orders.removeOrder(1);
     }
@@ -67,7 +67,7 @@ public class OrderManagerTest extends ManagerTest{
         //NOTE: using "0000" for getQuantity is bad because it couples the test to implementation details
         //      (default construction)
         orders.getOrder(1);
-        assertEquals(3,orders.getOrder(1).getQuantity("0000"));
+        assertEquals(3,orders.getOrder(1).getQuantity("0003"));
 
         orders.removeOrder(1);
 
@@ -82,7 +82,8 @@ public class OrderManagerTest extends ManagerTest{
     }
 
     private Part updatePartOrder(){
-        createPartOrder();
+        orders.createOrder(1).getValidatedObject();
+        orders.addPartToOrder(1,"0001",5);
 
         HashMap<Item,Integer> items = new HashMap<>();
 
@@ -143,9 +144,10 @@ public class OrderManagerTest extends ManagerTest{
 
         createPartOrder();
 
-        orders.addPartToOrder(2,"0002",21);
+        orders.addPartToOrder(1,"0002",21);
 
-        assertEquals(21 ,orders.getOrder(1).getQuantity("0002"));
+        assertEquals(21 ,orders.getOrder(1)
+                .getQuantity("0002"));
 
     }
 
@@ -197,12 +199,15 @@ public class OrderManagerTest extends ManagerTest{
         orders.addProductToOrder(2,"F0001N",3);
 
         try {
-            orders.removeProductFromOrder(2, "C0001N", 3);
+            orders.removeProductFromOrder(2, "C0002N", 3);
         } catch(Exception e){
 
         }
 
-        assertEquals(2 ,orders.getOrder(2).getItems().size());
+        assertEquals(2 ,
+                orders.getOrder(2)
+                        .getItems()
+                        .size());
 
     }
 
@@ -234,17 +239,21 @@ public class OrderManagerTest extends ManagerTest{
     @Test
     public void testRemovePartFromOrderBadId() throws Exception {
 
-        createPartOrder();
+        orders.createOrder(1);
 
         orders.addPartToOrder(1,"0001",3);
+        orders.addPartToOrder(1,"0002",3);
 
         try {
-            orders.removePartFromOrder(1, "0002", 3);
+            orders.removePartFromOrder(1, "0003", 3);
         } catch(Exception e){
 
         }
 
-        assertEquals(2 ,orders.getOrder(1).getItems().size());
+        assertEquals(2 ,
+                orders.getOrder(1)
+                        .getItems()
+                        .size());
 
     }
 
@@ -294,11 +303,11 @@ public class OrderManagerTest extends ManagerTest{
     @Test
     public void testAddNewOrderValid(){
 
-        ValidationResults vr = orders.createOrder(1);
+        ValidationResults vr = orders.createOrder(2);
 
         assertTrue(vr.isSuccess());
 
-        orders.removeOrder(1);
+        orders.removeOrder(2);
 
     }
 
@@ -398,7 +407,7 @@ public class OrderManagerTest extends ManagerTest{
     @Test
     public void addPartToOrderInvalidOrder(){
 
-        ValidationResults vr = orders.addPartToOrder(1,"0001",1);
+        ValidationResults vr = orders.addPartToOrder(3,"0001",1);
 
         assertFalse(vr.isSuccess());
     }
@@ -571,5 +580,14 @@ public class OrderManagerTest extends ManagerTest{
         orders.removeOrder(1);
 
     }
+
+    @After
+    public void tearDown(){
+        orders.removeOrder(1);
+        orders.removeOrder(2);
+        orders.removeOrder(3);
+    }
+
+
 
 }

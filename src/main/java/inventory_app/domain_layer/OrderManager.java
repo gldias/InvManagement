@@ -14,24 +14,27 @@ import java.util.*;
  * All order related CRUD operations are done through this class
  */
 public class OrderManager {
-    Set<Order> orders;
 
     OrderDataMapper orderMapper;
 
+    InventoryManager inventoryManager;
+
     private static int idCount = 1;
 
-    private static OrderManager staticManagerO = new OrderManager(new OrderDataMapper());
+    private static OrderManager staticManagerO = new OrderManager(new OrderDataMapper(),
+            InventoryManager.getStaticManager());
 
-    private static OrderManager testManagerO = new OrderManager(new FakeOrderMapper());
+    private static OrderManager testManagerO = new OrderManager(new FakeOrderMapper(),
+            InventoryManager.getTestManager());
 
-    public OrderManager(){
-        orders = new HashSet<>();
+    private OrderManager(){
         orderMapper = new OrderDataMapper();
+        inventoryManager = InventoryManager.getStaticManager();
     }
 
-    public OrderManager(OrderDataMapper odm){
-        orders = new HashSet<>();
+    private OrderManager(OrderDataMapper odm, InventoryManager im){
         orderMapper = odm;
+        inventoryManager = im;
     }
 
     /**
@@ -50,8 +53,6 @@ public class OrderManager {
 
 
         o.setId(id);
-
-        orders.add(o);
         orderMapper.insert(o);
 
         ValidationResults results = new ValidationResults();
@@ -77,8 +78,6 @@ public class OrderManager {
         }
 
         Order o = new Order(items, destination);
-
-        orders.add(o);
         orderMapper.insert(o);
 
         ValidationResults results = new ValidationResults();
@@ -93,13 +92,7 @@ public class OrderManager {
      * @return identified order
      */
     public Order getOrder(int id){
-        for(Order o : orders){
-            if(o.getId() == id){
-                return o;
-            }
-        }
-
-        return null;
+        return orderMapper.findOrder(id);
     }
 
     /**
@@ -107,7 +100,7 @@ public class OrderManager {
      * @return a collection of orders
      */
     public Collection<Order> getOrders(){
-        return this.orders;
+        return orderMapper.getTable();
     }
 
     /**
@@ -117,7 +110,7 @@ public class OrderManager {
      * @return the updated order
      */
     private ValidationResults updateOrder(Order order, HashMap<Item,Integer> items){
-        for(Order o : orders){
+        for(Order o : getOrders()){
             if(order.getId() == o.getId()){
                 o.setItems(items);
             }
@@ -137,7 +130,6 @@ public class OrderManager {
      */
     public ValidationResults updateOrder(int id, HashMap<Item,Integer> items){
         Order order = getOrder(id);
-
         return updateOrder(order,items);
     }
 
@@ -166,8 +158,10 @@ public class OrderManager {
             order.getItems().put(product, quantity);
         }
 
-        //todo
-        return new ValidationResults();
+        ValidationResults vr = new ValidationResults();
+        vr.setValidatedObject(product);
+
+        return vr;
     }
 
     /**
@@ -184,8 +178,6 @@ public class OrderManager {
         if(order == null){
             return new ValidationResults(String.format("Order %s is invalid",orderId));
         }
-
-        InventoryManager inventoryManager = InventoryManager.getStaticManager();
 
         Product product = inventoryManager.getProduct(SKU);
 
@@ -246,8 +238,6 @@ public class OrderManager {
             return new ValidationResults(String.format("Order %s is invalid",orderId));
         }
 
-        InventoryManager inventoryManager = InventoryManager.getStaticManager();
-
         Product product = inventoryManager.getProduct(SKU);
 
         if(product == null){
@@ -282,8 +272,11 @@ public class OrderManager {
             order.getItems().put(part, quantity);
         }
 
-        //todo
-        return new ValidationResults();
+        ValidationResults vr = new ValidationResults();
+
+        vr.setValidatedObject(part);
+
+        return vr;
     }
 
     /**
@@ -300,8 +293,6 @@ public class OrderManager {
         if(order == null){
             return new ValidationResults(String.format("Order %s is invalid",orderId));
         }
-
-        InventoryManager inventoryManager = InventoryManager.getStaticManager();
 
         Part part = inventoryManager.getPart(partId);
 
@@ -362,8 +353,6 @@ public class OrderManager {
             return new ValidationResults(String.format("Order %s is invalid",orderId));
         }
 
-        InventoryManager inventoryManager = InventoryManager.getStaticManager();
-
         Part part = inventoryManager.getPart(partId);
 
         if(part == null){
@@ -380,7 +369,7 @@ public class OrderManager {
      * @return the removed order
      */
     private ValidationResults removeOrder(Order order){
-        boolean orderExisted = this.orders.remove(order);
+        boolean orderExisted = orderMapper.delete(order);
 
         if(!orderExisted){
             return new ValidationResults(String.format("Given order does not exist"));
@@ -398,6 +387,10 @@ public class OrderManager {
     public ValidationResults removeOrder(int orderId){
         Order order = getOrder(orderId);
 
+        if(order == null){
+            return new ValidationResults(String.format("Order %d does not exist",orderId));
+        }
+
         return removeOrder(order);
     }
 
@@ -414,7 +407,7 @@ public class OrderManager {
         boolean success =  manufacturing.getManufacturing().sendParts(part_id,quantity);
 
         if(success){
-            InventoryManager.getStaticManager().removeParts(part_id,quantity);
+            inventoryManager.removeParts(part_id,quantity);
         }
 
         return success;

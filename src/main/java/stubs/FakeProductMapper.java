@@ -51,13 +51,13 @@ public class FakeProductMapper extends ProductDataMapper {
     }
 
     @Override
-    public Product findBySKU(String partId){
+    public Product findBySKU(String productSKU){
 
-        if(!fakeDb.containsKey(partId)){
+        if(!fakeDb.containsKey(productSKU)){
             return null;
         }
 
-        return fakeDb.get(partId);
+        return fakeDb.get(productSKU);
     }
 
     @Override

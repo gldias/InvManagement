@@ -3,6 +3,7 @@ package inventory_app.data_mappers;
 import inventory_app.domain_layer.*;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -181,6 +182,14 @@ public class OrderDataMapper extends InventoryDataMapper {
             close();
         }
 
+
+
+        return null;
+    }
+
+    public ArrayList<Order> getTable(){
+
+        //in progress
         return null;
     }
 }
