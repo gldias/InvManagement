@@ -43,8 +43,8 @@ public class InventoryManagerTest extends ManagerTest{
     @Test
     public void testUpdateProductSuccess() throws Exception {
         manager.updateProduct("Reversible Jacket",
-                ProductCategory.COMFORT, "C0001N",10.0);
-        Product product = manager.getProduct("C0001N");
+                ProductCategory.COMFORT, "C0002N",10.0);
+        Product product = manager.getProduct("C0002N");
         assertEquals("Reversible Jacket", product.getName());
         assertEquals(10.0,product.getWeight(),.1);
     }
@@ -60,8 +60,8 @@ public class InventoryManagerTest extends ManagerTest{
 
     @Test
     public void testDeleteProductSuccess() throws Exception {
-        manager.deleteProduct("H0001N");
-        Product product = manager.getProduct("H0001N");
+        manager.deleteProduct("H0003N");
+        Product product = manager.getProduct("H0003N");
 
         assertEquals(null, product);
     }
@@ -426,8 +426,8 @@ public class InventoryManagerTest extends ManagerTest{
     @After
     public void tearDown(){
         manager.deleteProduct("F0001N");
-        manager.deleteProduct("C0001N");
-        manager.deleteProduct("H0001N");
+        manager.deleteProduct("C0002N");
+        manager.deleteProduct("H0003N");
         manager.deleteProduct("A0002N");
         manager.deleteProduct("B0001");
 

@@ -3,6 +3,7 @@ package stubs;
 import inventory_app.data_mappers.OrderDataMapper;
 import inventory_app.domain_layer.Order;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,5 +53,16 @@ public class FakeOrderMapper extends OrderDataMapper {
         }
 
         return fakeDb.get(orderId);
+    }
+
+    @Override
+    public ArrayList<Order> getTable(){
+        ArrayList<Order> output = new ArrayList<>();
+
+        for(Order o : fakeDb.values()){
+            output.add(o);
+        }
+
+        return output;
     }
 }

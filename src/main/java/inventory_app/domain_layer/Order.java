@@ -9,23 +9,24 @@ import java.util.Map;
  */
 public class Order {
     private static int id = 0;
+    private int ownId;
     private Map<Item, Integer> items = new HashMap<>();
     private String destination;
 
     public Order(HashMap<Item, Integer> items, String destination) {
-        this.id = ++id;
+        ownId = ++id;
         this.items = items;
         this.destination = destination;
     }
 
     public Order(){
-        this.id = ++id;
+        ownId = ++id;
         this.items = new HashMap<>();
         this.destination = "ND";
     }
 
     public int getId() {
-        return id;
+        return ownId;
     }
 
     public int getQuantity(String id){
@@ -45,7 +46,7 @@ public class Order {
     }
 
     public void setId(int id) {
-        this.id = id;
+        ownId = id;
     }
 
     public String getDestination() {

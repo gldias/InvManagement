@@ -26,7 +26,7 @@ public class InventoryManager {
 
     private static InventoryManager testManager = new InventoryManager(new FakePartMapper(), new FakeProductMapper());
 
-    public InventoryManager(){
+    private InventoryManager(){
         //maybe change these to hashmaps? with SKU as the key?
         //parts = new HashSet<>();
         //products = new HashSet<>();
@@ -41,7 +41,7 @@ public class InventoryManager {
      *
      * @param _partMapper
      */
-    public InventoryManager(PartDataMapper _partMapper, ProductDataMapper _productMapper){
+    private InventoryManager(PartDataMapper _partMapper, ProductDataMapper _productMapper){
         //maybe change these to hashmaps? with SKU as the key?
 
         //todo replace these with actual Mappers
