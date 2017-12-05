@@ -5,7 +5,7 @@ import java.sql.SQLException;
 public class DatabaseLocking extends InventoryDataMapper{
 
     /**
-     * Add a lock to the database for a part. The letter P is added before and after to fill the id properly
+     * Add a lock to the database for a part.
      * @param id - a part id
      * @return - true if added properly
      */
@@ -16,7 +16,7 @@ public class DatabaseLocking extends InventoryDataMapper{
         }
 
         String line = "INSERT INTO id_locks VALUES" +
-                "'P" + id + "P'";
+                "'" + id + "'";
 
         try {
             preparedStatement = connect.prepareStatement(line);
@@ -59,7 +59,7 @@ public class DatabaseLocking extends InventoryDataMapper{
     }
 
     /**
-     * Remove a lock from the database for a part. The letter P is added before and after to fill the id properly
+     * Remove a lock from the database for a part.
      * @param id - a part id
      * @return - true if removed properly
      */
@@ -70,7 +70,7 @@ public class DatabaseLocking extends InventoryDataMapper{
         }
 
         String line = "DELETE FROM id_locks WHERE" +
-                "'P" + id + "P'";
+                "'" + id + "'";
 
         try {
             preparedStatement = connect.prepareStatement(line);
@@ -96,7 +96,8 @@ public class DatabaseLocking extends InventoryDataMapper{
             return false;
         }
 
-        String line = "DELETE FROM id_locks WHERE id_lock = '" + SKU + "'";
+        String line = "DELETE FROM id_locks WHERE id_lock = " +
+                "'" + SKU + "'";
 
         try {
             preparedStatement = connect.prepareStatement(line);
