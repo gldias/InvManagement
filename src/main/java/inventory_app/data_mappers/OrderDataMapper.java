@@ -29,15 +29,15 @@ public class OrderDataMapper extends InventoryDataMapper {
             if (o.getItems().keySet().toArray()[i] instanceof Product) {
                 Product currentProduct = (Product)o.getItems().keySet().toArray()[i];
                 line = "INSERT INTO product_orders VALUES" +
-                        "('" + o.getId() + "'" +
-                        ", '" + currentProduct.getSKU().substring(1,5) + "'" +
+                        "(" + o.getId() +
+                        ", '" + currentProduct.getSKU() + "'" +
                         ", " + o.getItems().values().toArray()[i] + ")";
             }
 
             else if (o.getItems().keySet().toArray()[i] instanceof Part) {
                 Part currentPart = (Part)o.getItems().keySet().toArray()[i];
                 line = "INSERT INTO part_orders VALUES" +
-                        "('" + o.getId() + "'" +
+                        "(" + o.getId() +
                         ", '" + currentPart.getId() + "'" +
                         ", " + o.getItems().values().toArray()[i] + ")";
             }
@@ -74,15 +74,15 @@ public class OrderDataMapper extends InventoryDataMapper {
             if (o.getItems().keySet().toArray()[i] instanceof Product) {
                 Product currentProduct = (Product)o.getItems().keySet().toArray()[i];
                 line = "UPDATE product_orders SET " +
-                        "product_id = '" + currentProduct.getSKU().substring(1,5) + "'" +
+                        "product_id = '" + currentProduct.getSKU() + "'" +
                         ", quantity = " + o.getItems().values().toArray()[i] +
-                        " WHERE order_id = '" + o.getId() + "'";
+                        " WHERE order_id = " + o.getId();
             } else if (o.getItems().keySet().toArray()[i] instanceof Part) {
                 Part currentPart = (Part)o.getItems().keySet().toArray()[i];
                 line = "UPDATE part_orders SET " +
                         "part_id = '" + currentPart.getId() + "'" +
                         ", quantity = " + o.getItems().values().toArray()[i] +
-                        " WHERE order_id = '" + o.getId() + "'";
+                        " WHERE order_id = " + o.getId();
             }
             try {
                 preparedStatement = connect.prepareStatement(line);
@@ -112,9 +112,9 @@ public class OrderDataMapper extends InventoryDataMapper {
 
         for (int i = 0; i < o.getItems().size(); i++) {
             if (o.getItems().keySet().toArray()[i] instanceof Product) {
-                line = "DELETE FROM product_orders WHERE order_id = '" + o.getId() + "'";
+                line = "DELETE FROM product_orders WHERE order_id = " + o.getId();
             } else if (o.getItems().keySet().toArray()[i] instanceof Part) {
-                line = "DELETE FROM part_orders WHERE order_id = '" + o.getId() + "'";
+                line = "DELETE FROM part_orders WHERE order_id = " + o.getId();
             }
             try {
                 preparedStatement = connect.prepareStatement(line);
@@ -178,13 +178,14 @@ public class OrderDataMapper extends InventoryDataMapper {
             toReturn.setItems(hashMapToReturn);
         } catch(SQLException e) {
             System.out.println("OrderDataMapper findById error...");
+            return null;
         } finally {
             close();
         }
 
 
 
-        return null;
+        return toReturn;
     }
 
     public ArrayList<Order> getTable(){

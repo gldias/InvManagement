@@ -14,7 +14,7 @@ public class ProductDataMapperTest {
     public void setUp() {
         product0.setName("product0");
         product0.setCategory(ProductCategory.FASHION);
-        product0.setSKU("F0007N");
+        product0.setSKU("T0001N");
         product0.setWeight(1);
     }
 
@@ -39,7 +39,6 @@ public class ProductDataMapperTest {
     @Test
     @After
     public void testDelete() {
-        productDM.insert(product0);
         assertEquals(true, productDM.delete(product0));
     }
 }
