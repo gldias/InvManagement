@@ -26,7 +26,7 @@ public class sales {
 
 
     /**
-     * Stub for updating an order status when is it being shipped
+     * Updates an order status when is it being shipped
      * @param id - the order ID
      */
     public void updateOrderStatusShipping(int id){
@@ -58,7 +58,7 @@ public class sales {
     }
 
     /**
-     * Stub for updating an order status when it is delivered
+     * Updates an order status when it is delivered
      * @param id - the order ID
      */
     public void updateOrderStatusDelivered(int id){

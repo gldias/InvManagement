@@ -46,21 +46,36 @@ public class manufacturing {
      * @return boolean representing whether manufacturing started or not
      */
     public boolean orderRequest(String productID, int quantity, String orderType){
+        boolean success = false;
+        try {
 
-        int index = orderSuccessCursor;
+            Client client = Client.create();
 
-        orderSuccessCursor++;
+            WebResource webResource = client
+                    .resource("http://manufacturing.kennuware.com:8080/OrderRequest");
 
-        //loops cursor
-        if(orderSuccessCursor > 4){
-            orderSuccessCursor = 0;
-        }
+            String input = "{\"pid\":" + productID + ",\"q\":" + quantity + ",\"oid\":" + orderType + "}";
 
-        boolean success = occasionalFailure(index);
+            ClientResponse response = webResource.type("application/json")
+                    .post(ClientResponse.class, input);
 
-        if(success){
-            new ProductController().sendOrderFulfillment(String.format("{ " +
-                    "\"product_sku\": \"%s\", \"quantity\": %d, \"flag\": \"internal\"}",productID,quantity));
+            if (response.getStatus() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + response.getStatus());
+            }
+
+            System.out.println("Output from Server .... \n");
+            String output = response.getEntity(String.class);
+            System.out.println(output);
+
+            //Retrieve response boolean
+            JSONObject obj = new JSONObject(output);
+            success = obj.getBoolean("confirm");
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
         }
 
         return success;
@@ -79,10 +94,9 @@ public class manufacturing {
             Client client = Client.create();
 
             WebResource webResource = client
-                    .resource("http://manufacturing.kennuware.com:8080/ReceiveMaterials?rid=" + partID +
-                            "&q=" + quantity);
+                    .resource("http://manufacturing.kennuware.com:8080/ReceiveMaterials");
 
-            String input = "{\"singer\":\"Metallica\",\"title\":\"Fade To Black\"}";
+            String input = "{\"rid\":" + partID + ",\"q\":" + quantity + "}";
 
             ClientResponse response = webResource.type("application/json")
                     .post(ClientResponse.class, input);

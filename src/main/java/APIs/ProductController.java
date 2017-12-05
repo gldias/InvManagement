@@ -31,11 +31,7 @@ public class ProductController {
         }
 
         ArrayList<HashMap<String, String>> result = new ArrayList<>();
-        //HashMap<String, String> result = new HashMap<>();
 
-        //for (Product p : products) {
-        //    result.put(p.getName(), p.getSKU());
-        //}
         for (int i = 0; i < products.size(); i++) {
             HashMap<String, String> productInfo = new HashMap<>();
             productInfo.put("Name", products.get(i).getName());
