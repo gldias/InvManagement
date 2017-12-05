@@ -65,6 +65,15 @@ public class Order {
         this.items = items;
     }
 
+    public void addItems(Item item, Integer quantity){
+        if(items.containsKey(item)){
+            getItems().put(item, items.get(item) + quantity);
+        }
+        else{
+            getItems().put(item, quantity);
+        }
+    }
+
     /**
      * Calculates the total weight of the items in the order
      * NOTE: currently not functional (no use for this yet)
