@@ -159,6 +159,9 @@ public class ProductController {
         Order order = (Order)validationResults.getValidatedObject();
         OrderManager.getStaticManager().confirmOrderWithSales(order.getId());
 
-        return Response.status(200).entity(validationResults).build();
+        HashMap<String, Boolean> result = new HashMap<>();
+        result.put("success", new Boolean(true));
+
+        return Response.status(200).entity(result).build();
     }
 }
