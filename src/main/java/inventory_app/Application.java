@@ -55,7 +55,7 @@ public class Application{
             WebResource webResource = client
                     .resource("http://inventory.kennuware.com/inventory/request/newOrder");
 
-            String input = "{\"product_sku\":\"A0002R\",\"quantity\": 4,\"purpose\":\"business\",\"destination\":\"nanya\"}";
+            String input = "{\"product_sku\":\"A0002N\",\"quantity\": 4,\"purpose\":\"business\",\"destination\":\"nanya\"}";
 
             ClientResponse response = webResource.type("application/json")
                     .post(ClientResponse.class, input);
