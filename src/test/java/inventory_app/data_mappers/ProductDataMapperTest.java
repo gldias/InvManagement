@@ -52,6 +52,8 @@ public class ProductDataMapperTest {
         assertTrue(products.contains(product1));
         assertTrue(products.contains(product2));
 
+        productDM.delete(product1);
+        productDM.delete(product2);
     }
 
     @Test
