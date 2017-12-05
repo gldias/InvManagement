@@ -25,6 +25,12 @@ public class Order {
         this.destination = "ND";
     }
 
+    public Order(int id){
+        ownId = id;
+        this.items = new HashMap<>();
+        this.destination = "ND";
+    }
+
     public int getId() {
         return ownId;
     }

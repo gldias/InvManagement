@@ -5,6 +5,7 @@ import inventory_app.domain_layer.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * OrderDataMapper is the bridge between storing orders in the domain and in the Database.
@@ -189,8 +190,68 @@ public class OrderDataMapper extends InventoryDataMapper {
     }
 
     public ArrayList<Order> getTable(){
+        if (!connectToDB()) {
+            close();
+            return null;
+        }
 
-        //in progress
+        Map<Integer,Order> orderMap = new HashMap<>();
+        HashMap<Item, Integer> hashMapToReturn = new HashMap<>();
+        int id = 0;
+
+        try {
+
+            statement = connect.createStatement();
+            String product_line = "SELECT * FROM product_orders;";
+
+            String part_line = "SELECT * FROM part_orders;";
+
+            resultSet = statement.executeQuery(product_line);
+            while (resultSet.next()) {
+                id = resultSet.getInt("order_id");
+                if(!orderMap.containsKey(id)){
+                    orderMap.put(id,new Order(id));
+                }
+
+                String productId = resultSet.getString("product_id");
+                Product product = InventoryManager.getStaticManager().getProduct(productId);
+
+                int quantity = resultSet.getInt("quantity");
+
+                orderMap.get(id).addItems(product,quantity);
+            }
+
+            resultSet = statement.executeQuery(part_line);
+            while (resultSet.next()) {
+                id = resultSet.getInt("order_id");
+                if(!orderMap.containsKey(id)){
+                    orderMap.put(id,new Order(id));
+                }
+
+                String partId = resultSet.getString("part_id");
+                Part part = InventoryManager.getStaticManager().getPart(partId);
+
+                int quantity = resultSet.getInt("quantity");
+
+                orderMap.get(id).addItems(part,quantity);
+            }
+
+            ArrayList<Order> toReturn = new ArrayList<>();
+            for(Order o : orderMap.values()){
+                toReturn.add(o);
+            }
+
+            return toReturn;
+
+        } catch(SQLException e) {
+            System.out.println("OrderDataMapper findById error...");
+        } finally {
+            close();
+        }
+
+
+
         return null;
+
     }
 }
