@@ -35,30 +35,61 @@
 </nav>
 
 <div class="container body-content">
-    <h1>Products</h1>
-    <table class="table table-bordered" >
-        <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>SKU</th>
-            <th>Weight</th>
-            <th>Quantity</th>
-        </tr>
-        <%
-            InventoryManager manager = InventoryManager.getStaticManager();
-            for(Product p : manager.getProducts()){
-        %>
-        <tr>
-            <td><%=p.getName()%></td>
-            <td><%=p.getCategory()%></td>
-            <td><%=p.getSKU()%></td>
-            <td><%=p.getWeight()%></td>
-            <td><%=p.getQuantity()%></td>
-        </tr>
-        <%
-            }
-        %>
-    </table>
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>
+                    Products
+                </h4>
+            </div>
+            <table class="table table-fixed">
+                <thead>
+                <tr>
+                    <th class="col-xs-4">Name</th><th class="col-xs-2">Category</th><th class="col-xs-2">SKU</th><th class="col-xs-2">Weight</th><th class="col-xs-2">Quantity</th>
+                </tr>
+                </thead>
+                <tbody><%InventoryManager manager = InventoryManager.getStaticManager();for(Product p : manager.getProducts()){%>
+                <tr>
+                    <td class="col-xs-4"><%=p.getName()%></td>
+                    <td class="col-xs-2"><%=p.getCategory()%></td>
+                    <td class="col-xs-2"><%=p.getSKU()%></td>
+                    <td class="col-xs-2"><%=p.getWeight()%></td>
+                    <td class="col-xs-2"><%=p.getQuantity()%></td>
+                </tr>
+                <%
+                    }
+                %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <%
+        // Example for using forms to create a new item
+    %>
+    <div class="container">
+        <div class="container">
+            <div class="form-group center-block">
+                <form action="pserv" method="post">
+                    <label>
+                        Name <input type="text" class="text-input" name="pname">
+                    </label><br>
+                    <label>
+                        Category <input type="text" class="text-input" name="pcat">
+                    </label><br>
+                    <label>
+                        SKU <input type="text" class="text-input" name="psku">
+                    </label><br>
+                    <label>
+                        Weight <input type="number" class="number-input" name="pweight">
+                    </label><br>
+                    <button type="submit" class="btn btn-Primary" value="newProd" name="prodButton">Create Product</button><br>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 </body>
 </html>

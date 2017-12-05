@@ -11,4 +11,13 @@
         <servlet-name>productservlet</servlet-name>
         <url-pattern>/pserv</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>partservlet</servlet-name>
+        <servlet-class>inventory_app.domain_layer.PartServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>partservlet</servlet-name>
+        <url-pattern>/partserv</url-pattern>
+    </servlet-mapping>
 </web-app>

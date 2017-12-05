@@ -34,31 +34,91 @@
 </nav>
 
 <div class="container body-content">
-    <h1>Parts</h1>
-    <table class="table table-bordered" >
-        <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>ID</th>
-            <th>Weight</th>
-            <th>Quantity</th>
-        </tr>
-        <%
-            InventoryManager manager = InventoryManager.getStaticManager();
-            // Part is already a type in Java so we have to be explicit about our casts here
-            for(inventory_app.domain_layer.Part p : manager.getParts()){
-        %>
-        <tr>
-            <td><%=p.getName()%></td>
-            <td><%=p.getCategory()%></td>
-            <td><%=p.getId()%></td>
-            <td><%=p.getWeight()%></td>
-            <td><%=p.getQuantity()%></td>
-        </tr>
-        <%
-            }
-        %>
-    </table>
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>
+                    Parts
+                </h4>
+            </div>
+            <table class="table table-fixed">
+                <thead>
+                <tr>
+                    <th class="col-xs-4">Name</th><th class="col-xs-2">Category</th><th class="col-xs-2">ID</th><th class="col-xs-2">Weight</th><th class="col-xs-2">Quantity</th>
+                </tr>
+                </thead>
+                <tbody><%InventoryManager manager = InventoryManager.getStaticManager();
+                    // Part is already a type in Java so we have to be explicit about our casts here
+                    for(inventory_app.domain_layer.Part p : manager.getParts()){%>
+                <tr>
+                    <td class="col-xs-4"><%=p.getName()%></td>
+                    <td class="col-xs-2"><%=p.getCategory()%></td>
+                    <td class="col-xs-2"><%=p.getId()%></td>
+                    <td class="col-xs-2"><%=p.getWeight()%></td>
+                    <td class="col-xs-2"><%=p.getQuantity()%></td>
+                </tr>
+                <%
+                    }
+                %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="container">
+            <div class="form-group center-block">
+                <form action="partserv" method="post">
+                    <label>
+                        Part ID <input type="text" class="text-input" name="pID">
+                    </label><br>
+                    <label>
+                        Quantity <input type="number" class="number-input" name="pQuant">
+                    </label><br>
+                    <button type="submit" class="btn btn-Primary" value="buyPart" name="partButtonBuy">Buy Parts</button><br>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="container">
+            <div class="form-group center-block">
+                <form action="partserv" method="post">
+                    <label>
+                        Name <input type="text" class="text-input" name="pname">
+                    </label><br>
+                    <label>
+                        Category <input type="text" class="text-input" name="pcat">
+                    </label><br>
+                    <label>
+                        ID <input type="text" class="text-input" name="pID2">
+                    </label><br>
+                    <label>
+                        Weight <input type="number" class="number-input" name="pweight">
+                    </label><br>
+                    <button type="submit" class="btn btn-Primary" value="newPart" name="prodButtonCreate">Create Part</button><br>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="container">
+            <div class="form-group center-block">
+                <form action="partserv" method="post">
+                    <label>
+                        Part ID <input type="text" class="text-input" name="pID3">
+                    </label><br>
+                    <label>
+                        Quantity <input type="number" class="number-input" name="pQuant2">
+                    </label><br>
+                    <button type="submit" class="btn btn-Primary" value="sendPart" name="partButtonSend">Send Parts</button><br>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 </body>
 </html>

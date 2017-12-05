@@ -34,37 +34,41 @@
         </div>
     </div>
 </nav>
-
 <div class="container body-content">
-    <h1>Orders</h1>
-    <table class="table table-bordered" >
-        <tr>
-            <th>Order ID</th>
-            <th>Destination</th>
-            <th>Items</th>
-        </tr>
-        <%
-            // jsp may be the most unreadable thing I've ever worked with
-            OrderManager manager = OrderManager.getStaticManager();
-            for(Order o : manager.getOrders()){
-        %>
-        <tr>
-            <td><%=o.getId()%></td>
-            <td><%=o.getDestination()%></td>
-            <td>
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>
+                    Orders
+                </h4>
+            </div>
+            <table class="table table-fixed">
+                <thead>
+                <tr>
+                    <th class="col-xs-4">Order ID</th><th class="col-xs-2">Destination</th><th class="col-xs-4">Items</th>
+                </tr>
+                </thead>
+                <tbody>
                 <%
-                    for(Item i : o.getItems().keySet()){
+                    // jsp may be the most unreadable thing I've ever worked with
+                    OrderManager manager = OrderManager.getStaticManager();
+                    for(Order o : manager.getOrders()){
                 %>
-                <p><%=i.getName()%> : <%=o.getItems().get(i)%> <br> </p>
+                <tr>
+                    <td class="col-xs-4"><%=o.getId()%></td>
+                    <td class="col-xs-2"><%=o.getDestination()%></td>
+                    <td class="col-xs-4"><%for(Item i : o.getItems().keySet()){%><p><%=i.getName()%> : <%=o.getItems().get(i)%> <br> </p><%}%></td>
+                </tr>
                 <%
                     }
                 %>
-            </td>
-        </tr>
-        <%
-            }
-        %>
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 </body>
 </html>
