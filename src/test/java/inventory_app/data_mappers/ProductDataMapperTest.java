@@ -3,6 +3,9 @@ package inventory_app.data_mappers;
 
 import inventory_app.domain_layer.*;
 import org.junit.*;
+
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 public class ProductDataMapperTest {
@@ -34,6 +37,21 @@ public class ProductDataMapperTest {
     public void testFind() {
         productDM.insert(product0);
         assertEquals(product0, productDM.findBySKU(product0.getSKU()));
+    }
+
+    @Test
+    public void testGetTable() {
+        Product product1 = new Product(), product2 = new Product();
+        product1.setSKU("T0002N");
+        product2.setSKU("T0003N");
+        productDM.insert(product1);
+        productDM.insert(product2);
+
+        ArrayList<Product> products = productDM.getTable();
+
+        assertTrue(products.contains(product1));
+        assertTrue(products.contains(product2));
+
     }
 
     @Test
