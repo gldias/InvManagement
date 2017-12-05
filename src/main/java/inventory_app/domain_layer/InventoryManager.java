@@ -92,6 +92,10 @@ public class InventoryManager {
      * @param SKU
      */
     public Product getProduct(String SKU){
+        ValidationResults vr = new SKUValidator().validate(SKU);
+        if(!vr.isSuccess()){
+            return null;
+        }
 
         return productMapper.findBySKU(SKU);
     }
