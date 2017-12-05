@@ -1,10 +1,13 @@
 package inventory_app.data_mappers;
 
 import inventory_app.domain_layer.*;
+import inventory_app.domain_layer.validation.ValidationResults;
 import org.junit.*;
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 public class OrderDataMapperTest {
@@ -44,6 +47,31 @@ public class OrderDataMapperTest {
     public void testFind() {
         dm.insert(order0);
         assertEquals(order0, dm.findOrder(order0.getId()));
+    }
+
+    @Test
+    public void testGetTablesIncludesAllTables() {
+
+        Map<Item,Integer> orderContents = new HashMap<>();
+        orderContents.put(new Part("0001","p1",1,1.0),1);
+
+        Order o1 = new Order();
+        o1.setItems(orderContents);
+
+        dm.insert(o1);
+
+        Order o2 = new Order();
+        o2.setItems(orderContents);
+
+        dm.insert(o2);
+
+        ArrayList<Order> orderTable = dm.getTable();
+
+        assertTrue(orderTable.contains(o1));
+        assertTrue(orderTable.contains(o2));
+
+        dm.delete(o1);
+        dm.delete(o2);
     }
 
     @Test
