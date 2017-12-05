@@ -25,6 +25,12 @@ public class Order {
         this.destination = "ND";
     }
 
+    public Order(int id){
+        ownId = id;
+        this.items = new HashMap<>();
+        this.destination = "ND";
+    }
+
     public int getId() {
         return ownId;
     }
@@ -63,6 +69,15 @@ public class Order {
 
     public void setItems(Map<Item, Integer> items) {
         this.items = items;
+    }
+
+    public void addItems(Item item, Integer quantity){
+        if(items.containsKey(item)){
+            getItems().put(item, items.get(item) + quantity);
+        }
+        else{
+            getItems().put(item, quantity);
+        }
     }
 
     /**

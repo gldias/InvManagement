@@ -148,13 +148,10 @@ public class ProductDataMapper extends InventoryDataMapper {
             while(resultSet.next()){
                 String id = resultSet.getString("product_id");
                 String name = resultSet.getString("name");
-                int newQuantity = resultSet.getInt("new_quantity");
-                int refurbQuantity = resultSet.getInt("refurb_quantity");
-                String category = resultSet.getString("category");
+                int quantity = resultSet.getInt("quantity");
                 double weight = resultSet.getDouble("weight");
 
-                toReturn.add(new Product(name, ProductCategory.ACTIVE, category + id + "N", weight, newQuantity));
-                toReturn.add(new Product(name, ProductCategory.ACTIVE, category + id + "R", weight, refurbQuantity));
+                toReturn.add(new Product(name, ProductCategory.ACTIVE, id, weight, quantity));
             }
         } catch(SQLException e) {
             System.out.println("PartDataMapper getTable error...");

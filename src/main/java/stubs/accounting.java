@@ -22,7 +22,7 @@ public class accounting {
     }
 
     /**
-     * Stub for checking funds when making a parts order
+     * Checks funds when making a parts order
      * @param amount - the amount of money being requested
      * @return bool - whether there are enough funds do the order or not
      */
@@ -54,6 +54,46 @@ public class accounting {
             if (result >= amount) {
                 success = true;
             }
+
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        return success;
+    }
+
+    /**
+     * Withdraws funds when making a parts order
+     * @param amount - the amount of money being requested
+     * @return bool - whether there are enough funds do the order or not
+     */
+    public boolean withdraw(double amount){
+        boolean success = false;
+        try {
+
+            Client client = Client.create();
+
+            WebResource webResource = client
+                    .resource("http://accounting.kennuware.com/api/withdraw");
+
+            String input = "{\"reason\":\"Buying parts for inventory\",\"amount\":" + amount + ",\"RequestingSilo\":" + 3 + "}";
+
+            ClientResponse response = webResource.type("application/json")
+                    .post(ClientResponse.class, input);
+
+            if (response.getStatus() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : "
+                        + response.getStatus());
+            }
+
+            System.out.println("Output from Server .... \n");
+            String output = response.getEntity(String.class);
+            System.out.println(output);
+
+            success = true;
 
 
         } catch (Exception e) {

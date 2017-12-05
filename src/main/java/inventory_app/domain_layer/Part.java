@@ -18,7 +18,6 @@ public class Part extends Item {
      * Used to make a new product to add to the database
      *
      * @param _id - 4-character part identifier
-     * @param _category - part category
      * @param _name - part name. Used in Item superclass
      * @param _price - part purchase price
      * @param _weight - part weight. Used in Item superclass
